@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<!-- vim: set noexpandtab : -->
+<rfc ipr="none">
+	<front>
+		<title abbrev="FOSP">The Federated Object Sharing Protocol</title>
+		<author initials="F.K." surname="Maurer" fullname="Felix K. Maurer">
+			<address>
+				<email>felix.maurer@student.kit.edu</email>
+			</address>
+		</author>
+		<date month="March" year="2014" />
+		<area>Internet</area>
+		<keyword>FOSP</keyword>
+		<abstract>
+			<t>This document defines the Federated Object Sharing Protocol (FOSP). 
+				FOSP is a protocol that allows sharing arbitrary data, 
+				setting access rights on the shared data and receiving notifications on changes. 
+				Furthermore, all features of FOSP can be used in a federated network, 
+				e.g. between multiple independed providers. 
+				It was designed to be the most simple solution that combines all these features.</t>
+		</abstract>
+	</front>
+	<middle>
+		<section anchor="intro" title="Introduction">
+			<section anchor="purpose" title="Purpose">
+				<t>TODO</t>
+				<t>The federated object storage protocol tries to solve three problems:
+					<list style="numbers">
+						<t>How to store data in a network and support standart operations on it.</t>
+						<t>How to enforce access control on the data, for useres from different hosts, without central authentication.</t>
+						<t>How to notify users when data is added, removed or has changed.</t>
+					</list>
+				</t>
+				<t>Additionally we want to keep following constraints:
+					<list style="numbers">
+						<t>The protocol needs tp be data agnostic and should support structured, unstructured and metadata.</t>
+						<t>The protocol must be as simple as possible, it must be easy to implement and programms that use it should be easy to deploy.</t>
+					</list>
+				</t>
+			</section>
+			<section anchor="overview" title="Overview">
+				<t>The FOSP protocol is mostly a request/response protocol. 
+					A user connects to the server of his or her provider, using a client and then both can exchange messages. 
+					Request messages are sent from the client to the server to manipulate or retrieve data. 
+					Servers respond by sending a response message.
+				</t>
+				<t>The information units stored on the server have a well defined structure and we call them objects. 
+					They are furthermore organized into trees. 
+					Each user is identified uniquely by a name and the domain name of his or her provider, similar to an Email address. 
+					For each user there exists a tree of objects, stored on the server(s) of his or her provider.
+				</t>
+			</section>
+			<section anchor="conventions" title="Conventions">
+				<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+					"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+					document are to be interpreted as described in <xref target="refs.rfc2119">RFC 2119</xref>.
+				</t>
+			</section>
+			<section anchor="requirements" title="Requirements">
+				<t>FOSP builds on existing protocols and data formats. 
+					The transport protocol for FOSP messages currently is the WebSocket protocol, tough other options may be added in the future. 
+					Objects are serialized into the JSON notations. 
+					Besides these technical dependencies, FOSP is inspired by WebDAV and XMPP and has similarities to LDAP.
+				</t>
+			</section>
+			<section anchor="terminology" title="Terminology">
+				<t>This document uses a number of terminologies to refer to concepts found in FOSP.
+					<list style="hanging">
+						<t hangText="provider">An entity that provides storage space on the Internet for the date of users. 
+							It is identified by a DNS domain name.
+						</t>
+						<t hangText="server">A FOSP server stores the data of users of a certain provider. 
+							Multiple servers can be deployed to deliver the data of a provider to implement fault tolerance and load balancing.
+						</t>
+						<t hangText="client">A FOSP client is a program a user uses to communicate with a FOSP server. 
+							It facilitates accessing the data of the user that is stored on the server.
+						</t>
+						<t hangText="message">A message is the basic unit of communication in FOSP. 
+							Messages come in three different flavours.
+						</t>
+						<t hangText="request">A request is a message sent from a client to a server. 
+							It is used to retrieve or alter data.
+						</t>
+						<t hangText="response">A response is a message sent from a server to a client. 
+							It is always sent as an answer to a request and contains the status of the request and possibly data.
+						</t>
+						<t hangText="notification">A notification is a message that is sent by servers when changes happen to an object.
+						</t>
+					</list>
+				</t>
+			</section>
+		</section>
+		<section anchor="nettop" title="Network Topology">
+			<t>The network of the agents that use the protocol is, like the smtp network, federated.</t>
+			<section anchor="participants" title="Participants">
+				<t>There are two kind of agents in the network, clients and servers.</t>
+			</section>
+			<section anchor="msgflow" title="Message Flow">
+			</section>
+		</section>
+		<section anchor="messages" title="Messages">
+			<section anchor="msg-format" title="Format">
+				<t>**WARNING: To simplify the definition for the moment, only ASCII characters are allow. This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**</t>
+				<t>Also the header definition will be subject to change after determining acceptable characters.
+					For the resource identifier, we will probably refer to the IRI definition in the future.</t>
+				<figure anchor="fosp-abnf">
+					<preamble />
+					<artwork><![CDATA[
+message         = request / response / notification
+
+request         = request-type SP ( resource-id / "*" )
+                  SP sequence-number CRLF headers [ CRLF body ]
+
+request-type    = "CONNECT" / "AUTHENTICATE" / "REGISTER" / "CREATE"
+                  / "SELECT" / "UPDATE" / "DELETE" / "READ" / "WRITE"
+
+response        = response-type SP response-status
+                  SP sequence-number CRLF headers [ CRLF body ]
+
+response-type   = "SUCCEDED" / "FAILED"
+
+notification    = event-type SP resource-id CRLF headers [ CRLF body ]
+
+event-type      = "CREATED" / "UPDATED" / "DELETED"
+
+headers         = *( header CRLF )
+
+header          = header-key ":" SP header-value
+
+header-key      = ALPHA *( ALPHANUM / "-" ) ( ALPHANUM )
+
+header-value    = 1*( ALPHANUM / "/" / "-" / "<" / ">" / "="
+                  / "+" / "_" / ";" / "!" / "~" / "*" / "." )
+
+resource-id     = user-name "@" domain [ path ]
+
+user-name       = ALPHA *( ALPHANUM / "_" / "-" / "+" / "." )
+                  ( ALPHANUM )
+
+domain          = domain-part *( "." domain-part ) [ "." ]
+
+domain-part     = ALPHANUM / ( ALPHANUM *( ALPHANUM / "-" / "_" )
+                  ALPHANUM )
+
+path            = "/" / 1*( "/" path-part )
+
+path-part       = 1*( ALPHANUM / "\" / "." / "+" / "*" / "-" / "_"
+                  / ";" / ":" / "!" / "~" / "=" / "<" / ">" )
+
+ALPHANUM        = ALPHA / DIGIT
+						]]></artwork>
+					<postamble />
+				</figure>
+			</section>
+			<section anchor="msg-serialization" title="Serialization">
+			</section>
+		</section>
+		<section anchor="objects" title="Objects">
+			<section anchor="obj-format" title="Format">
+			</section>
+			<section anchor="obj-serialization" title="serialization">
+			</section>
+			<section anchor="obj-trees" title="Trees">
+			</section>
+			<section anchor="fields" title="Standart Fields">
+			</section>
+			<section anchor="std-objs" title="Standart Objects">
+			</section>
+		</section>
+		<section anchor="policies" title="Policies">
+		</section>
+	</middle>
+	<back>
+		<references>
+			<reference anchor="refs.rfc2119">
+				<front>
+					<title>Key words for use in RFCs to Indicate Requirement Levels</title>
+					<author initials="S." surname="Bradner" fullname="Scott Bradner">
+						<organization>Havard University</organization>
+					</author>
+					<date month="March" year="1997" />
+				</front>
+				<seriesInfo name="RFC" value="2119" />
+				<seriesInfo name="BCP" value="14" />
+			</reference>
+		</references>
+	</back>
+</rfc>

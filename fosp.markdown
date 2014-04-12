@@ -1,3 +1,4 @@
+<!-- vim: set spell spelllang=en_us: -->
 # FOSP
 ### Federated object storage protocol
 
@@ -18,6 +19,7 @@ It was designed to be the most simple solution that combines all these features.
 
 ##### Purpose
 
+TODO
 ...
 The federated object storage protocol tries to solve three problems:
 1. How to store data in a network and support standart operations on it.
@@ -29,12 +31,57 @@ Additionally we want to keep certain constraints:
 
 ##### Overview
 The FOSP protocol is mostly a request/response protocol.
-A user connects to the server of his or her provider, using a client.
+A user connects to the server of his or her provider, using a client and then both can exchange messages.
+Request messages are sent from the client to the server to manipulate or retrieve data.
+Servers respond by sending a response message.
 
+The information units stored on the server have a well defined structure and we call them objects.
+They are furthermore organized into trees.
+Each user is identified uniquely by a name and the domain name of his or her provider, similar to an Email address.
+For each user there exists a tree of objects, stored on the server(s) of his or her provider.
 
 ##### Requirements
+FOSP builds on existing protocols and data formats.
+The transport protocol for FOSP messages currently is the WebSocket protocol, tough other options may be added in the future.
+Objects are serialized into the JSON notations.
+Besides these technical dependencies, FOSP is inspired by WebDAV and XMPP and has similarities to LDAP.
 
 ##### Terminology
+This document uses a number of terminologies to refer to concepts found in FOSP.
+
+- provider
+
+  An entity that provides storage space on the Internet for the date of users.
+  It is identified by a DNS domain name.
+
+- server
+
+  A FOSP server stores the data of users of a certain provider.
+  Multiple servers can be deployed to deliver the data of a provider to implement fault tolerance and load balancing.
+
+- client
+
+  A FOSP client is a program a user uses to communicate with a FOSP server.
+  It facilitates accessing the data of the user that is stored on the server.
+
+- message
+
+  A message is the basic unit of communication in FOSP.
+  Messages come in three different flavours.
+
+- request
+
+  A request is a message sent from a client to a server.
+  It is used to retrieve or alter data.
+
+- response
+
+  A response is a message sent from a server to a client.
+  It is always sent as an answer to a request and contains the status of the request and possibly data.
+
+- notification
+
+  A notification is a message that is sent by servers when changes happen to an object.
 
 
 #### Network topology
