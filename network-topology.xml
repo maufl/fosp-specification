@@ -1,0 +1,23 @@
+<t>In the FOSP network, agents are either clients or servers. Each server belongs to
+	one provider that is identified by a domain name. For load balancing purposes,
+	more than one server per domain might be used. To keep the examples simple,
+	we nevertheless assume that there is one server per provider and use the term
+	provider and server interchangeable. A user connects, using a client, to the server
+	of their provider. We refer to this server as the home server
+	of the user.
+</t>
+<t>To manipulate or access data, the user sends requests. A request can
+	act upon a resource. If the resource is not managed by the server the user is con-
+	nected to, the server will relay the request to the responsible server. Hence, FOSP
+	servers may open connections to other FOSP servers.
+</t>
+<!--
+<figure anchor="fosp-nettop">
+	<preamble />
+	<artwork><![CDATA[
+
+		]]>
+	</artwork>
+	<postamble />
+</figure>
+-->

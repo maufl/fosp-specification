@@ -1,0 +1,38 @@
+<figure anchor="fosp-obj-example">
+	<preamble />
+	<artwork>
+<![CDATA[
+{
+  btime: "2007-03-01T13:00:00Z",
+  mtime: "2008-05-11T15:30:00Z",
+  owner: "alice@wonderland.lit",
+  acl: {
+    owner: ["read-data", "write-data", "read-acl", "write-acl",
+      "read-subscriptions", "write-subscriptions",
+      "read-children", "write-children", "delete-children"],
+    users: {
+      alice@wonderland.lit: [
+        "read-data",
+        "not-write-data",
+        "read-acl",
+        "write-acl",
+        "read-subscriptions",
+        "not-write-subscriptions"
+      ]
+    }
+  },
+  subscriptions: {
+    users: {
+      alice@wonderland.lit: {
+        events: [ "created", "updated" ],
+        depth: 1
+      }
+    }
+  },
+  type: "text/plain",
+  data: "Just plain text"
+}
+]]>
+	</artwork>
+	<postamble />
+</figure>

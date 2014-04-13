@@ -1,0 +1,48 @@
+<figure anchor="fosp-abnf">
+	<preamble />
+	<artwork type="abnf"><![CDATA[
+message       = request / response / notification
+
+request       = request-type SP ( resource-id / "*" )
+                SP sequence-number CRLF headers [ CRLF body ]
+
+request-type  = "CONNECT" / "AUTHENTICATE" / "REGISTER" / "CREATE"
+                / "SELECT" / "UPDATE" / "DELETE" / "READ" / "WRITE"
+
+response      = response-type SP response-status
+                SP sequence-number CRLF headers [ CRLF body ]
+
+response-type = "SUCCEDED" / "FAILED"
+
+notification  = event-type SP resource-id CRLF headers [ CRLF body ]
+
+event-type    = "CREATED" / "UPDATED" / "DELETED"
+
+headers       = *( header CRLF )
+
+header        = header-key ":" SP header-value
+
+header-key    = ALPHA *( ALPHANUM / "-" ) ( ALPHANUM )
+
+header-value  = 1*( ALPHANUM / "/" / "-" / "<" / ">" / "="
+                / "+" / "_" / ";" / "!" / "~" / "*" / "." )
+
+resource-id   = user-name "@" domain [ path ]
+
+user-name     = ALPHA *( ALPHANUM / "_" / "-" / "+" / "." )
+                ( ALPHANUM )
+
+domain        = domain-part *( "." domain-part ) [ "." ]
+
+domain-part   = ALPHANUM / ( ALPHANUM *( ALPHANUM / "-" / "_" )
+                  ALPHANUM )
+
+path          = "/" / 1*( "/" path-part )
+
+path-part     = 1*( ALPHANUM / "\" / "." / "+" / "*" / "-" / "_"
+                / ";" / ":" / "!" / "~" / "=" / "<" / ">" )
+
+ALPHANUM      = ALPHA / DIGIT
+		]]></artwork>
+	<postamble />
+</figure>
