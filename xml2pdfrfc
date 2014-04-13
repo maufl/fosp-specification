@@ -1,0 +1,480 @@
+#!/bin/sh
+
+###
+### XML2PDFRFC - XML conversion to Postscript and PDF
+###
+### Version 0.5 alpha
+###
+### Written in 2005 by Jari Arkko
+### Donated to the public domain.
+###
+###
+### Usage:
+###
+###   xml2pdfrfc file.xml
+###
+###   Output will be placed in file.ps and file.pdf.
+###   The software assumes availability of "xml2rfc.tcl",
+###   "convert", "groff", "pstops", and "pstopdf" programs
+###   in the path.
+###
+
+###
+### Argument checking
+###
+
+if [ x$1 = x ]
+then
+  echo 'xml2pdfrfc: Missing arguments -- exit'
+  exit 1
+fi
+
+input=$1
+input_fixed=tmp-$input
+html=`echo $input | sed s/[.]xml/.html/`
+roff=`echo $input | sed s/[.]xml/.nr/`
+ps=`echo $input | sed s/[.]xml/.ps/`
+pdf=`echo $input | sed s/[.]xml/.pdf/`
+temp=/tmp/$$.tmp
+rm -f $temp
+
+###
+### Dependencies to other programs
+###
+
+XML2RFC=xml2rfc.tcl
+CONVERT=convert
+GROFF=groff
+PSTOPS=pstops
+PSTOPDF=ps2pdf
+
+###
+### Pre-process XML so that we can annotate its
+### pictures and artwork appropriately
+###
+
+awk '
+BEGIN {
+  RS="<";
+  first = 1;
+}
+
+function printrecstart() {
+  if (first) {
+    first = 0;
+  } else {
+    printf("<");
+  }
+}
+
+function printrec(f) {
+  printrecstart();
+  printf("%s", f);
+}
+
+function handleartwork(f,src) {
+  if (length(f) == 0) {
+    return(f);
+  } else if (substr(f,1,4) == "src=") {
+    #printf("remaining string is now -%s-\n", f);
+    src = substr(f,5);
+    for (i = 1; i <= length(src); i++) {
+      if (i > 1 && (substr(src,i,1) == sprintf("%c",34) ||
+                    substr(src,i,1) == sprintf("%c",39))) {
+        srcother = "";
+        remains = substr(src,i+1);
+        src = substr(src,1,i);
+        i = length(src) + 1;
+      }
+    }
+    mid = 1;
+    while (length(remains) > 0 && substr(remains,1,1) != ">") {
+      if (substr(remains,1,1) != " " && substr(remains,1,1) != "\n") {
+        if (mid) {
+	  srcother = srcother ",";
+	  mid = 0;
+	}
+        srcother = srcother substr(remains,1,1);
+      } else {
+        mid = 1;
+      }
+      remains = substr(remains,2);
+    }
+    return(substr(f,1,5) handleartwork(substr(f,6),src srcother));
+  } else if (substr(f,1,1) == ">") {
+    return(">XML2PDFRFC-BEGINARTWORK(" src ")" substr(f,2));
+  } else {
+    return(substr(f,1,1) handleartwork(substr(f,2),src));
+  }
+}
+
+/^artwork.*/ {
+  printrecstart();
+  printf("%s",handleartwork($0,""));
+  next;
+}
+
+/^.artwork.*/ {
+  printf("XML2PDFRFC-ENDARTWORK");
+  printrec($0);
+  next;
+}
+
+/.*/ {
+  printrec($0);
+  next;
+}
+
+END {
+}
+' < $input > $input_fixed
+
+###
+### Run XML2RFC to convert to .nr
+###
+
+if $XML2RFC $input_fixed $roff
+then
+  #echo 'xml2pdfrfc: Errors in xml2rfc -- exit'
+  #exit 1
+  nop=nop
+fi
+
+###
+### Edit the resulting .nr for prettier output and placement
+### of pictures and artwork
+###
+
+n=`wc -l $roff | cut -f1 -d' '`
+l=`expr $n - 8`
+#echo 'n = '$n
+#echo 'l = '$l
+rm -f $temp
+tail --lines=$l $roff > $temp
+(echo '.pl 10.0i';
+ echo '.ps 10';
+ echo '.ll 6.5i';
+ echo '.lt 6.5i';
+ echo '.nr LL 6.5i';
+ echo '.nr LT 6.5i';
+ echo '.ds RF [Page %]';
+ echo '.de bb';
+ echo '.ps +1';
+ echo '.ft B';
+ echo '.it 1 eb';
+ echo '..';
+ echo '.de eb';
+ echo '.ft R';
+ echo '.ps -1';
+ echo '..';
+ echo '.ta 6.5iR';
+ cat $temp |
+ awk '
+function converttab(s) {
+  if (length(s) == 0) {
+    return(s);
+  } else if (length(s) > 1 &&
+             substr(s,1,2) == "  ") {
+    while (length(s) > 0 && substr(s,1,1) == " ") {
+      s = substr(s,2);
+    }
+    return("	" s);
+  } else {
+    return(substr(s,1,1) converttab(substr(s,2)));
+  }
+}
+
+function handletocline(s) {
+  if (length(s) == 0) {
+    return(s);
+  } else if (substr(s,1,3) == ". .") {
+    while (length(s) > 0 &&
+           (substr(s,1,1) == "." || substr(s,1,1) == " ")) {
+      s = substr(s,2);
+    }
+    return("	" s);
+  } else {
+    return(substr(s,1,1) handletocline(substr(s,2)));
+  }
+}
+
+function tabs(n) {
+  if (n < 3) return("");
+  else return("	" tabs(n-3));
+}
+
+function before(s,p) {
+  if (length(s) == 0) {
+    return("");
+  } else if (length(s) >= length(p) && substr(s,1,length(p)) == p) {
+    return("");
+  } else {
+    return(substr(s,1,1) before(substr(s,2),p));
+  }
+}
+
+function after(s,p) {
+  if (length(s) == 0) {
+    return("");
+  } else if (length(s) >= length(p) && substr(s,1,length(p)) == p) {
+    return(substr(s,length(p)+1));
+  } else {
+    return(after(substr(s,2),p));
+  }
+}
+
+function isalpha(c) {
+    return((c >= "a" && c <= "z") ||
+           (c >= "A" && c <= "Z"));
+}
+
+BEGIN {
+  ce = 0;
+  ti = 0;
+}
+
+/^[.]ce$/ {
+  ce = 1;
+  print $0;
+  ti = 0;
+  next;
+}
+
+/^.*[.] [.] [.][ ]*[0-9]+$/ {
+  print handletocline($0);
+  ti = 0;
+  next;
+}
+
+/^[.]in [0-9]+$/ {
+  print $0;
+  currentin = 0 + substr($0,5);
+  next;
+}
+
+/^[.]ti [0-9]+$/ {
+  print $0;
+  ti = 0 + substr($0,5);
+  next;
+}
+
+/^o  .*$/ {
+  if (ti > 0) {
+    printf(".ta T %d\n", currentin-ti);
+    printf("o%s%s\n", "	", substr($0,4));
+    ti = 0;
+    next;
+  }
+}
+
+/^[0-9.]+\\0 .*$/ {
+  if (ti > 0) {
+    printf(".ta T %d\n",currentin-ti);
+    printf("%s%s%s\n", before($0," "), "	", after($0," "));
+    ti = 0;
+    next;
+  }
+}
+
+/^[[][0-9.]+]  .*$/ {
+  if (ti > 0) {
+    printf(".ta T %d\n",currentin-ti);
+    printf("%s%s%s\n", before($0,"  "), "	", after($0,"  "));
+    ti = 0;
+    next;
+  }
+}
+
+/^XML2PDFRFC-BEGINARTWORK.*/ {
+  split($0,artcomps,"[(,)]");
+  if (artcomps[2] == "") {
+    printf(".ft C\n\n");
+    picwork = 0;
+  } else {
+    picwork = 1;
+    file = artcomps[2];
+    #printf("debug: $0 = %s.\n", $0);
+    #printf("debug: artcomps[1] = %s.\n", artcomps[1]);
+    #printf("debug: artcomps[2] = %s.\n", artcomps[2]);
+    #printf("debug: artcomps[3] = %s.\n", artcomps[3]);
+    while (substr(file,1,1) == sprintf("%c", 39) ||
+           substr(file,1,1) == sprintf("%c", 92)) file = substr(file,2);
+    while (!isalpha(substr(file,length(file),1))) file = substr(file,1,length(file) - 1);
+    if (length(file) > 4 && substr(file,length(file)-3) == ".eps") {
+      # ok!
+    } else if (length(file) > 4 &&
+               (substr(file,length(file)-3) == ".png" ||
+	        substr(file,length(file)-3) == ".jpg")) {
+      # need to convert
+      oldfile = file;
+      file = "tmp-" substr(oldfile,1,length(oldfile)-4) ".eps";
+      system("'$CONVERT' " oldfile " " file);
+    } else {
+      printf("xml2pdfrfc error: Unrecognized picture format %s.\n", file);
+    }
+    width = 15;
+    printf(".PSPIC %s %.2fc\n", file, width);
+  }
+  next;
+}
+
+/^XML2PDFRFC-ENDARTWORK.*/ {
+  if (picwork) {
+    picwork = 0;
+  } else {
+    printf(".ft R\n");
+  }
+  next;
+}
+
+/.*/ {
+  if (picwork) {
+    next;
+  } else if (ce) {
+    print $0;
+    next;
+  } else {
+    print converttab($0);
+  }
+  ti = 0;
+}
+
+END {
+}' |
+ sed s/FORMFEED//) > $roff
+
+if fgrep 'xml2pdfrfc error' $roff
+then
+  echo 'xml2pdfrfc: exit'
+  exit 1
+fi
+
+###
+### Run GROFF to get Postscript
+###
+
+#echo 'Doing groff...'
+$GROFF -Tps -dpaper=letter -P-pletter -ms < $roff > $ps
+rm -f $temp
+#echo 'Doing pstops...'
+$PSTOPS '1:(0,-10mm)' $ps $temp
+rm -f $ps
+cp $temp $ps
+
+###
+### Run PS2PDF to get PDF
+###
+
+#echo 'Doing ps2pdf...'
+$PSTOPDF $ps $pdf
+
+exit 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################## Old Crap ####################################################
+
+if [ $input -nt $html ]
+then
+  if $XML2RFC $input $html
+  then
+    #echo 'xml2pdfrfc: Errors in xml2rfc -- exit'
+    #exit 1
+    nop=nop
+  fi
+fi
+
+title=`awk < $input '
+
+function afteroneof(x,c1,c2) {
+  if (length(x) == 0) {
+     return x;
+  } else if (substr(x,1,1) == c1) {
+     return(substr(x,2));
+  } else if (substr(x,1,1) == c2) {
+     return(substr(x,2));
+  } else {
+     return(afteroneof(substr(x,2),c1,c2));
+  }
+}
+
+function beforeoneof(x,c1,c2) {
+  if (length(x) == 0) {
+     return x;
+  } else if (substr(x,1,1) == c1) {
+     return("");
+  } else if (substr(x,1,1) == c2) {
+     return("");
+  } else {
+     return(substr(x,1,1) beforeoneof(substr(x,2),c1,c2));
+  }
+}
+
+BEGIN {
+  RS="<";
+  done=0;
+}
+
+/^title[ 	]+abbrev=..*/ {
+    if (!done) {
+        chars = sprintf("%c%c",39,34);
+	result = beforeoneof(afteroneof($0,substr(chars,1,1),substr(chars,2,1)),
+		             substr(chars,1,1),substr(chars,2,1));
+	printf("%s", result);
+        done = 1;
+    }
+}
+
+/^title[ 	]*>.*/ {
+    if (!done) {
+	result = beforeoneof(afteroneof($0,">",">"),"<","<");
+	printf("%s", result);
+        done = 1;
+    }
+}
+
+/.*/ {
+  next;
+}
+
+END {
+  if (!done) {
+    printf("unknown title");
+  }
+}
+'`
+
+awk < $html '
+BEGIN {
+}
+
+/.*;TOC&nbsp;.*/ {
+  next;
+}
+
+/.*/ {
+  print $0
+}
+
+END {
+}' |
+sed 's@<hr />@@g' > $temp
+
+htmldoc --webpage \
+	-f $pdf \
+	--linkstyle plain \
+	--header ' td' \
+	--footer '  1' \
+	$temp
+
