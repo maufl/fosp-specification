@@ -30,14 +30,14 @@
 		<section anchor="overview" title="Overview">
 			<?rfc include="overview.xml" ?>
 		</section>
+		<section anchor="data-structure" title="Data structure">
+			<?rfc include="data-structure.xml"?>
+		</section>
 		<section anchor="nettop" title="Network Topology">
 			<?rfc include="network-topology.xml"?>
 		</section>
 		<section anchor="messages" title="Messages">
 			<?rfc include="messages.xml"?>
-		</section>
-		<section anchor="data-structure" title="Data structure">
-			<?rfc include="data-structure.xml"?>
 		</section>
 		<section anchor="policies" title="Policies">
 			<?rfc include="policies.xml"?>
