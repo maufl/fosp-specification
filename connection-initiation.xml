@@ -1,7 +1,9 @@
+<!-- vim: set spelllang=en_us spell sw=3 st=3 ts=3 noexpandtab: -->
 <t>First, the agent that wants to open a new connection has to find out which server
 	to connect to and on which port. The server responsible for a certain domain is the
-	server with the IP address that is assigned to the DNS A record of the do-
-	main name and the port is 1337. In the future, a better approach of discovering the
+	server with the IP address that is assigned to the DNS A record of the domain name 
+	and the port is 1337 for insecure connections and 1338 for secure connections (e.g. ws:// or wss://).
+	In the future, a better approach of discovering the
 	server will be necessary and probably done by using DNS SRV records.
 </t>
 <t>After opening a connection to a server, the initiator first sends a CONNECT

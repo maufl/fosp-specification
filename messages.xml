@@ -1,15 +1,20 @@
+<!-- vim: set spelllang=en_us spell sw=3 st=3 ts=3 noexpandtab: -->
 <t>Messages are the basic unit of communication in the FOSP network.
 	There are three different types of messages which serve different purposes.
 	After being serialized, each message is transported over a WebSocket connection inside of one WebSocket text message or binary message.
 </t>
 <section anchor="msg-type" title="Types">
-	<t>Each message has a specific type, which determines the kind of purpose this mes-
-		sage serves. The type is implicitly given in the way that the content of the message
-		determines it’s type. For now there are only three types of messages needed to sup-
-		port all functionality. The types are requests, responses and notifications. Should
-		there be the need for additional types of messages, a new one can be added in
-		later versions of the protocol. All messages can have headers and a body, similar
-		to HTTP messages and are distinguished by their main attributes.
+	<t>Each message has a specific type, which determines the kind of purpose this message serves.
+		The type is implicitly given in the way that the content of the message determines it’s type.
+		For now there are only three types of messages needed to support all functionality.
+		The types are requests, responses and notifications.
+		Should there be the need for additional types of messages, a new one can be added in later versions of the protocol.
+	</t>
+	<t>All messages can have headers and a body, similar to HTTP messages and are distinguished by their main attributes.
+		Requests and notifications usually act on, or are emitted from an object or an attachemnt.
+		The identifier of the object or attachemnt is then part of the request.
+		If a request does not act upon an object, the identifier is replaced with an asterisk.
+		Furthermore, each request and response carries an sequence number that makes it possible to to assign one response to one request.
 	</t>
 	<section anchor="msg-type-request" title="Request">
 		<t>Requests are sent from clients to servers to authenticate or manipulate objects.
@@ -32,10 +37,9 @@
 				<t hangText="READ">download the attached file of an object</t>
 				<t hangText="WRITE">upload a file as an attachment to an object</t>
 			</list>
-			The content of the body depends on the type of request. For example, the body
-			of a SELECT or DELETE request is empty and the body of a CREATE request
-			contains the new object. In general the body is a JSON object or array, except for
-			the WRITE request that has the byte representation of the file as the body.
+			The content of the body depends on the type of request.
+			For example, the body of a SELECT or DELETE request is empty and the body of a CREATE request contains the new object.
+			In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
 		</t>
 	</section>
 	<section anchor="msg-type-response" title="Response">
@@ -48,9 +52,9 @@
 					it responds to.
 				</t>
 			</list>
-			The body of a response depends on the request that is answered. For a CREATE or
-			DELETE request it would be empty, for a SELECT request it would be the object
-			that was requested. In case of a READ request it would contain the file.
+			The body of a response depends on the request that is answered.
+			For a CREATE or DELETE request it would be empty, for a SELECT request it would be the object that was requested.
+			In case of a READ request it would contain the file.
 		</t>
 	</section>
 	<section anchor="msg-type-notification" title="Notification">
@@ -60,10 +64,9 @@
 				<t>an event which is one of “CREATED”, “UPDATED” or “DELETED”.</t>
 				<t>a resource identifier.</t>
 			</list>
-			The notifications are sent when a request triggers an event, for example CRE-
-			ATE triggers a CREATED event. If the event equals DELETED then the body
-			of the notification must be empty. Otherwise it should contain the new version
-			of the object.
+			The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
+			If the event equals DELETED then the body of the notification must be empty.
+			Otherwise it should contain the new version of the object.
 		</t>
 	</section>
 </section>
@@ -77,10 +80,11 @@
 	<?rfc include="fig-message-abnf.xml"?>
 </section>
 <section anchor="msg-serialization" title="Serialization">
-	<t>Messages are serialized into a blob of bytes. Most of the message is text in UTF-
-		8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not
-		interpreted at all. The second case occurs when an attached file is up- or down-
-		loaded. The beginning and end, e.g. the length of a message must be determined
-		from lenght of the WebSocket message.
+	<t>Messages are serialized into a blob of bytes.
+		Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
+		The second case occurs when an attached file is up- or downloaded.
+		The beginning and end, e.
+		g.
+		the length of a message must be determined from lenght of the WebSocket message.
 	</t>
 </section>

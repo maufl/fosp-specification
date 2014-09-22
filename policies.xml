@@ -1,21 +1,16 @@
-<t>Besides implementing the technical specification of the protocol, the server has
-	to enforce a set of policies. These policies describe how the server interprets the
-	objects to enforces access control and send notifications for subscriptions. They
-	also define constraints on certain attributes of objects and constraints on whether
-	or not a message should be forwarded.
+<!-- vim: set spelllang=en_us spell sw=3 st=3 ts=3 noexpandtab: -->
+<t>Besides implementing the technical specification of the protocol, the server has to enforce a set of policies.
+	These policies describe how the server interprets the objects to enforces access control and send notifications for subscriptions.
+	They also define constraints on certain attributes of objects and constraints on whether or not a message should be forwarded.
 </t>
 <section anchor="access-control" title="Access control">
-	<t>As stated in the previous section, each object can save access control information.
-		A valid entry in the access control list consists of the identifier of a user or a group
-		of users and a list of rights. Manipulation of different parts of the object can re-
-		quire different rights, for example, altering access control information requires
-		the “acl-write” right. Because the objects are part of a tree, we can use inheritance
-		to set access rights for a whole subtree by setting the appropriate access control
-		information on the root of the subtree. This way the rights on an object are the
-		sum of the rights on this object and all it’s ancestors. To still be able to have less
-		rights on a child object, rights can be prefix with “not-” to explicitly remove a
-		right, for example “not-acl-write”. The server must enforce access control for an
-		object in the following way.
+	<t>As stated in <xref target="data-structure-fields" />, each object can save access control information.
+		A valid entry in the access control list consists of the identifier of a user or a group of users and a list of rights.
+		Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “acl-write” right.
+		Because the objects are part of a tree, we can use inheritance to set access rights for a whole subtree by setting the appropriate access control information on the root of the subtree.
+		This way the rights on an object are the sum of the rights on this object and all it’s ancestors.
+		To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-acl-write”.
+		The server must enforce access control for an object in the following way.
 		<list style="numbers">
 			<t>Check if the right in question is set on the current object</t>
 			<t>If it is set positive (e.g. not prefixed with “not-”) grant access</t>
@@ -26,70 +21,52 @@
 	</t>
 </section>
 <section anchor="subscriptions" title="Subscriptions">
-	<t>Similar to the access control information, subscriptions can be set on objects so
-		that a user will be notified when changes occur. A subscription consists of an
-		identifier of a user, a list of events to subscribe to and a “depth”. The depth is used
-		to subscribe to events from all child objects to a certain depth. When a change
-		happens on an object, the server must use the following algorithm to determine
-		which users must be notified.
+	<t>Similar to the access control information, subscriptions can be set on objects so that a user will be notified when changes occur.
+		A subscription consists of an identifier of a user, a list of events to subscribe to and a “depth”.
+		The depth is used to subscribe to events from all child objects to a certain depth.
+		When a change happens on an object, the server must use the following algorithm to determine which users must be notified.
 		<list style="numbers">
-			<t>Read the “subscriptions” from the current object.</t>
-			<t>For each subscription: If the event that occurred is in the list of subscribed
-				events and the distance of the current object to the object where the event
-				occurred is smaller or equal to the “depth” of the subscription or the “depth”
-				is equal to “-1”, add the user of this subscription to the list of users that
-				should be notified. The distance between two objects is 0 if they are the
-				same object, 1 if one is the parent of the other and so on.
+			<t>Read the “subscriptions” from the current object.
 			</t>
-			<t>Go to the parent of the current object and repeat from step 1. unless the
+			<t>For each subscription: If the event that occurred is in the list of subscribed events and the distance of the current object to the object where the event occurred is smaller or equal to the “depth” of the subscription or the “depth” is equal to “-1”, add the user of this subscription to the list of users that should be notified.
+				The distance between two objects is 0 if they are the same object, 1 if one is the parent of the other and so on.
+			</t>
+			<t>Go to the parent of the current object and repeat from step 1.
+				unless the
 				current object is the root object
 			</t>
 		</list>
-		An important aspect to consider when sending notifications that include the new
-		version of the object, is that every user who will be notified might be allowed to
-		only see different parts of the object. Therefore, the server has to calculate the view
-		of the object per user to prevent leaking of data a user might not be allowed to see.
+		An important aspect to consider when sending notifications that include the new version of the object, is that every user who will be notified might be allowed to only see different parts of the object.
+		Therefore, the server has to calculate the view of the object per user to prevent leaking of data a user might not be allowed to see.
 	</t>
 </section>
 <section anchor="pol-attachments" title="Attachments">
-	<t>As explained in Section 4.3.3, each object can have a file as attachment. However,
-		attachments will likely not be stored together with objects, but in a storage that is
-		more suitable for files. Depending on how the server implements operations on
-		attachments, it is possible that there exists an attachment for an object in the stor-
-		age but the object itself is missing the “attachment” field. In any case the behavior
-		of the server should be consistent. Hence, if there is no attachment field in the
-		object then the attachment should be deleted and an attachment should only be
-		readable if there is an attachment field in the object.
+	<t>As explained in <xref target="data-structure-attachments" />, each object can have a file as attachment.
+		However, attachments will likely not be stored together with objects, but in a storage that is more suitable for files.
+		Depending on how the server implements operations on attachments, it is possible that there exists an attachment for an object in the storage but the object itself is missing the “attachment” field.
+		In any case the behavior of the server should be consistent.
+		Hence, if there is no attachment field in the object then the attachment should be deleted and an attachment should only be readable if there is an attachment field in the object.
 	</t>
 </section>
 <section anchor="pol-auth-reg" title="Authentication and Registration">
-	<t>When a client connects to a server, it has to provide credentials to the server, so
-		that the user of the client can be authenticated. These are send in the body of the
-		AUTHENTICATE request and can simply be an object containing the name and
-		the password of the user. The schema of authentication is not limited thought as
-		the body can contain arbitrary structured data. Server to server authentication is
-		done using the DNS. When a server receives a connection from another server it
-		verifies that the domain of the connecting server resolves to the same IP address
-		the connection comes from.
+	<t>When a client connects to a server, it has to provide credentials to the server, so that the user of the client can be authenticated.
+		These are send in the body of the AUTHENTICATE request and can simply be an object containing the name and the password of the user.
+		The schema of authentication is not limited thought as the body can contain arbitrary structured data.
+		Server to server authentication is done using the DNS.
+		When a server receives a connection from another server it verifies that the domain of the connecting server resolves to the same IP address the connection comes from.
 	</t>
-	<t>The REGISTER request should be supported by all servers, but can be dis-
-		abled to prevent automatic creation of accounts by autonomous programs. It is
-		also not required that the REGISTER command is the only way to create an ac-
-		count on a server. For example, there could be sign up forms on websites or a
-		server of a company could be connected to a directory service and fetch the login
-		informations from there.
+	<t>The REGISTER request should be supported by all servers, but can be disabled to prevent automatic creation of accounts by autonomous programs.
+		It is also not required that the REGISTER command is the only way to create an acount on a server.
+		For example, there could be sign up forms on websites or a server of a company could be connected to a directory service and fetch the login informations from there.
 	</t>
 </section>
 <section anchor="pol-msg-forw" title="Message forwarding">
-	<t>A server does not need to accept forwarded requests from other servers, if it
-		shouldn’t be part of the federated network. This allows FOSP to be used in co-
-		operate environments or other closed environments where federation with the
-		outside world is not allowed.
+	<t>A server does not need to accept forwarded requests from other servers, if it shouldn’t be part of the federated network.
+		This allows FOSP to be used in cooperate environments or other closed environments where federation with the outside world is not allowed.
 	</t>
-	<t>In any case, a server must never accept a forwarded request if the user of
-		the request is not on the domain of the server that forwarded the request. For
-		example, if server A, that is authoritative for domain “example.net”, authenticates
-		to server B and then forwards a request of user “alice@wonderland.lit”, server B
-		must close the connection.
+	<t>In any case, a server must never accept a forwarded request if the user of the request is not on the domain of the server that forwarded the request.
+		For example, if server A, that is authoritative for domain “example.
+		net”, authenticates to server B and then forwards a request of user “alice@wonderland.
+		lit”, server B must close the connection.
 	</t>
 </section>
