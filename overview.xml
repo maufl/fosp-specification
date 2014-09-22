@@ -1,0 +1,50 @@
+<!-- vim: set spelllang=en_us spell sw=3 st=3 ts=3 noexpandtab: -->
+<section anchor="overview-user-and-provider" title="User and providers">
+	<t>In the FOSP world, data is created by users.
+		Users store their content on the server of providers and can share it by setting the appropriate access rights for other users.
+		Each user is registered with one provider.
+		The user has an unique name at the provider that togther with the domain name of the provider forms his or her identifier, similar to an Email address.
+		However users can still share their content with friends that are registered with different providers.
+	</t>
+	<t>The FOSP protocol is mostly a request/response protocol.
+		A user connects to the server of his or her provider, using a client and then both can exchange messages.
+		Request messages are sent from the client to the server to manipulate or retrieve data.
+		Servers respond by sending a response message.
+	</t>
+</section>
+<section anchor="overview-network-topology" title="Network topology">
+	<t>The network topology is similar to the SMTP or XMPP network.
+		A provider operates one or more server that handle the domain of the provider.
+		A user can use a client to connect to a server of a provide where he or she is registered and request data.
+		The server can connect to a server of a different provider to forward request it can not process itself.
+	</t>
+</section>
+<section anchor="overview-messages" title="Messages">
+	<t>Server and clients communicate by sending messages over a persisten connection.
+		There are for now three different kind of messages that serve different purposes.
+	</t>
+	<t>Requests are sent from the client to the server to retrieve, alter or delete data.
+		The server either processes the request or if it cannot, forwards it to a server of a different provider that can process the request.
+	</t>
+	<t>After processing a request, the server sents a response.
+		If the request has been forwarded, the response will take the same path back to the client, through the server that forwarded the request.
+	</t>
+	<t>Whenever an object or attachment has been modified, notifications can be sent to users who have subscribed for these events.
+		These notifications might also be forwarded by the server.
+	</t>
+</section>
+<section anchor="overview-data-structure" title="Trees, Objects and Attachments">
+	<t>The information units that can be stored on the server have a well defined structure and we call them objects.
+		An object is basically an dictionary or hashmap with a selection of predefined keys.
+		Most of the key-value pairs have a special meaning, for example there is a key value pair that stores the access conrol list.
+		They adhere to the JSON specification.
+	</t>
+	<t>All objects are ordered into trees.
+		For each user, one such tree exists and the root object of the tree is named like the user.
+		Each object can thus be uniquely identified by its path, e.g. alice@wonderlant.lit/social/me.
+	</t>
+	<t>To store data that can not be expressed in JSON, each object can have an attachment.
+		The attachement hast the same name and path as the object.
+		It is modified using special requests.
+	</t>
+</section>
