@@ -143,19 +143,19 @@
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">F. Maurer</td></tr>
-<tr><td class="header">Internet-Draft</td><td class="header">September 22, 2014</td></tr>
-<tr><td class="header">Expires: March 26, 2015</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">September 2014</td></tr>
+<tr><td class="header">Expires: March 5, 2015</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />The Federated Object Sharing Protocol<br />fosp-00</h1>
 
 <h3>Abstract</h3>
 
 <p>This document describes the Federated Object Sharing Protocol (FOSP).
-				FOSP is a protocol that allows sharing arbitrary data,
-				setting access rights on the shared data and receiving notifications on changes.
-				Furthermore, all features of FOSP can be used in a federated network,
-				e.g. between multiple independed providers.
-				It was designed to be the most simple solution that combines all these features.
+      FOSP is a protocol that allows sharing arbitrary data,
+      setting access rights on the shared data and receiving notifications on changes.
+      Furthermore, all features of FOSP can be used in a federated network,
+      e.g. between multiple independned providers.
+      It was designed to be the most simple solution that combines all these features.
 </p>
 <h3>Status of this Memo</h3>
 <p>
@@ -174,7 +174,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on March 26, 2015.</p>
+This Internet-Draft will expire on March 5, 2015.</p>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -192,40 +192,50 @@ Terminology<br />
 Overview<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#overview-user-and-provider">2.1.</a>&nbsp;
 User and providers<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#overview-network-topology">2.2.</a>&nbsp;
-Network topology<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#overview-data-structure">2.2.</a>&nbsp;
+Trees, Objects and Attachments<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#overview-messages">2.3.</a>&nbsp;
 Messages<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#overview-data-structure">2.4.</a>&nbsp;
-Trees, Objects and Attachments<br />
-<a href="#nettop">3.</a>&nbsp;
-Network Topology<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#overview-network-topology">2.4.</a>&nbsp;
+Network topology<br />
+<a href="#data-structure">3.</a>&nbsp;
+Data structure<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#objects">3.1.</a>&nbsp;
+Objects<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#obj-trees">3.2.</a>&nbsp;
+Trees<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#data-structure-attachments">3.3.</a>&nbsp;
+Attachments<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#data-structure-fields">3.4.</a>&nbsp;
+Object attributes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#std-objs">3.5.</a>&nbsp;
+Provisioned Objects<br />
 <a href="#messages">4.</a>&nbsp;
 Messages<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type">4.1.</a>&nbsp;
 Types<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request">4.1.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request">4.2.</a>&nbsp;
 Request<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-response">4.1.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-connect">4.2.1.</a>&nbsp;
+Connect<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-register">4.2.2.</a>&nbsp;
+Register<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-authenticate">4.2.3.</a>&nbsp;
+Authenticate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-select">4.2.4.</a>&nbsp;
+Select<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-create">4.2.5.</a>&nbsp;
+Create<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-response">4.3.</a>&nbsp;
 Response<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-notification">4.1.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-notification">4.4.</a>&nbsp;
 Notification<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-format">4.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-format">4.5.</a>&nbsp;
 Format<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-serialization">4.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-serialization">4.6.</a>&nbsp;
 Serialization<br />
-<a href="#data-structure">5.</a>&nbsp;
-Data structure<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#objects">5.1.</a>&nbsp;
-Objects<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#obj-trees">5.2.</a>&nbsp;
-Trees<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#data-structure-attachments">5.3.</a>&nbsp;
-Attachments<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#data-structure-fields">5.4.</a>&nbsp;
-Standard Fields<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#std-objs">5.5.</a>&nbsp;
-Standart Objects<br />
+<a href="#nettop">5.</a>&nbsp;
+Network Topology<br />
 <a href="#policies">6.</a>&nbsp;
 Policies<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">6.1.</a>&nbsp;
@@ -258,26 +268,26 @@ Introduction</h3>
 Purpose</h3>
 
 <p>The Federated Object Storage Protocol (FOSP) is an application-level protocol
-		for exchanging structured and unstructured data generated by users of different providers.
-		It is designed to fullfill the needs of online social networks by combining necessary features into one simple protocol.
-	
+    for exchanging structured and unstructured data generated by users of different providers.
+    It is designed to fulfill the needs of online social networks by combining necessary features into one simple protocol.
+    
 </p>
 <p>FOSP aims to provide three core features:
-		</p>
+    </p>
 <ol class="text">
-<li>Store data online and support standart operations on it.
+<li>Store data online and support standard operations on it.
 </li>
-<li>Enforce access control on the data, for useres from different hosts, without central authentication.
+<li>Enforce access control on the data, for users from different hosts, without central authentication.
 </li>
 <li>Notify users when data is added, removed or has changed.
 </li>
 </ol><p>
-	
+    
 </p>
 <p>Furthermore, some non-functional requirements are imposed.
-		The protocol needs to be data agnostic and should support structured, unstructured and metadata.
-		It also must be as simple as possible, e.g. it must be easy to implement and it should be possible to write easy to deploy applications for it.
-	
+    The protocol needs to be data agnostic and should support structured, unstructured and metadata.
+    It also must be as simple as possible, e.g. it must be easy to implement and it should be possible to write easy to deploy applications for it.
+    
 </p>
 <a name="conventions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -285,9 +295,9 @@ Purpose</h3>
 Conventions</h3>
 
 <p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-		"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-		document are to be interpreted as described in <a class='info' href='#refs.rfc2119'>RFC 2119<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> [refs.rfc2119].
-	
+    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+    document are to be interpreted as described in <a class='info' href='#refs.rfc2119'>RFC 2119<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> [refs.rfc2119].
+    
 </p>
 <a name="requirements"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -295,10 +305,10 @@ Conventions</h3>
 Requirements</h3>
 
 <p>FOSP builds on existing protocols and data formats.
-		The transport protocol for FOSP messages currently is the WebSocket protocol, tough other options may be added in the future.
-		Objects are serialized into the JavaScript Object Notation (JSON).
-		Besides these technical dependencies, FOSP is inspired by WebDAV and XMPP and has similarities to LDAP.
-	
+    The transport protocol for FOSP messages currently is the WebSocket protocol, tough other options may be added in the future.
+    Objects are serialized into the JavaScript Object Notation (JSON).
+    Besides these technical dependencies, FOSP is inspired by WebDAV and XMPP and has similarities to LDAP.
+    
 </p>
 <a name="terminology"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -306,44 +316,53 @@ Requirements</h3>
 Terminology</h3>
 
 <p>This document uses a number of terminologies to refer to concepts found in FOSP.
-		</p>
+    </p>
 <blockquote class="text"><dl>
 <dt>provider</dt>
 <dd>An entity that provides storage space on the Internet for the data of users.
-				It is identified by a DNS domain name.
-			
+      It is identified by a fully qualified domain name.
+      
 </dd>
 <dt>server</dt>
 <dd>A FOSP server stores the data of users of a certain provider.
-				Multiple servers can be deployed to deliver the data of a provider to implement fault tolerance and load balancing.
-			
+      For fault tolerance and load balancing purposes, a provider might deploy multiple servers.
+      
 </dd>
 <dt>client</dt>
 <dd>A FOSP client is a program a user uses to communicate with a FOSP server.
-				It facilitates accessing the data of the user that is stored on the server.
-			
+      It facilitates accessing the data of the user that is stored on the server.
+      
 </dd>
 <dt>message</dt>
 <dd>A message is the basic unit of communication in FOSP.
-				Messages come in three different flavours.
-			
+      Messages come in three different flavours.
+      
 </dd>
 <dt>request</dt>
 <dd>A request is a message sent from a client to a server.
-				It is used to retrieve or alter data.
-			
+      It is used to retrieve or alter data.
+      
 </dd>
 <dt>response</dt>
 <dd>A response is a message sent from a server to a client.
-				It is always sent as an answer to a request and contains the status of the request and possibly data.
-			
+      It is always sent as an answer to a request and contains the status of the request and possibly data.
+      
 </dd>
 <dt>notification</dt>
 <dd>A notification is a message that is sent by servers when changes happen to an object.
-			
+      
+</dd>
+<dt>object</dt>
+<dd>An object is the basic unit of data in FOSP.
+      It consists of structured data expressed in JSON.
+      
+</dd>
+<dt>attachment</dt>
+<dd>An attachment is a binary or text file that is associated with an object.
+      
 </dd>
 </dl></blockquote><p>
-	
+    
 </p>
 <a name="overview"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -356,132 +375,256 @@ Overview</h3>
 User and providers</h3>
 
 <p>In the FOSP world, data is created by users.
-		Users store their content on the server of providers and can share it by setting the appropriate access rights for other users.
-		Each user is registered with one provider.
-		The user has an unique name at the provider that togther with the domain name of the provider forms his or her identifier, similar to an Email address.
-		However users can still share their content with friends that are registered with different providers.
-	
+  Users store their content on the server of providers and can share it by setting the appropriate access rights for other users.
+  Each user is registered with one provider.
+  The user has an unique name at the provider that together with the domain name of the provider forms his or her identifier, similar to an Email address.
+  However users can still share their content with friends that are registered with different providers.
+  
 </p>
-<p>The FOSP protocol is mostly a request/response protocol.
-		A user connects to the server of his or her provider, using a client and then both can exchange messages.
-		Request messages are sent from the client to the server to manipulate or retrieve data.
-		Servers respond by sending a response message.
-	
+<p>Providers are companies or individuals that provide storage for users.
+  A provider is identified by a fully qualified domain name.
+  Similar to Email and XMPP, everybody can be a provider by simply hosting his or her own FOSP server.
+  The servers of different providers communicate to allow users of different providers to share data.
+  
 </p>
-<a name="overview-network-topology"></a><br /><hr />
+<a name="overview-data-structure"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.2.2"></a><h3>2.2.&nbsp;
-Network topology</h3>
+Trees, Objects and Attachments</h3>
 
-<p>The network topology is similar to the SMTP or XMPP network.
-		A provider operates one or more server that handle the domain of the provider.
-		A user can use a client to connect to a server of a provide where he or she is registered and request data.
-		The server can connect to a server of a different provider to forward request it can not process itself.
-	
+<p>The basic data units that can be stored on the server have a well defined structure and we call them objects.
+  We chose this name because they are objects in the sense of the JSON specification.
+  Other familiar terms for a JSON object might be dictionary, hashmap of associative array.
+  They consist of key-value pairs where each key is a string and each value is one of the values allowed by JSON.
+  Most of the key-value pairs have a special meaning, for example there is a key-value pair that stores the access conrol list.
+  
+</p>
+<p>All objects are part of a tree.
+  For each user, one such tree exists and the root object of the tree is named like the user.
+  Each object can thus be uniquely identified by its path, e.g. alice@wonderlant.lit/social/me.
+  
+</p>
+<p>To store data that can not be expressed in JSON, each object can have an attachment.
+  The attachement is addressed in the same way as the object but is modified using special requests.
+  
 </p>
 <a name="overview-messages"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.2.3"></a><h3>2.3.&nbsp;
 Messages</h3>
 
-<p>Server and clients communicate by sending messages over a persisten connection.
-		There are for now three different kind of messages that serve different purposes.
-	
+<p>The communication between FOSP clients and servers is segmented into messages.
+  There a three different kind of messages: requests, responses and notifications.
+  
 </p>
-<p>Requests are sent from the client to the server to retrieve, alter or delete data.
-		The server either processes the request or if it cannot, forwards it to a server of a different provider that can process the request.
-	
+<p>To create, alter or delete objects and attachments, a client sends a request to the server.
+  When the request is processed, the server sends a response.
+  If the request concerns an object that the server does not store, it may be forwarded to a server that does store it.
+  
 </p>
-<p>After processing a request, the server sents a response.
-		If the request has been forwarded, the response will take the same path back to the client, through the server that forwarded the request.
-	
+<p>As users and clients might be interested in changes to objects and attachments, they can subscribe to events on objects.
+  When a server makes changes to objects or attachments, it can send notifications to clients that inform about events that happened.
+  
 </p>
-<p>Whenever an object or attachment has been modified, notifications can be sent to users who have subscribed for these events.
-		These notifications might also be forwarded by the server.
-	
-</p>
-<a name="overview-data-structure"></a><br /><hr />
+<a name="overview-network-topology"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.2.4"></a><h3>2.4.&nbsp;
-Trees, Objects and Attachments</h3>
+Network topology</h3>
 
-<p>The information units that can be stored on the server have a well defined structure and we call them objects.
-		An object is basically an dictionary or hashmap with a selection of predefined keys.
-		Most of the key-value pairs have a special meaning, for example there is a key value pair that stores the access conrol list.
-		They adhere to the JSON specification.
-	
+<p>FOSP follows the client-server paradigm.
+  The network topology is similar to the SMTP or XMPP network.
+  A provider operates one or more server that handle the domain of the provider.
+  A user can use a client to connect to a server of a provide where he or she is registered and request data.
+  The server can connect to a server of a different provider to forward request it can not process itself.
+  
 </p>
-<p>All objects are ordered into trees.
-		For each user, one such tree exists and the root object of the tree is named like the user.
-		Each object can thus be uniquely identified by its path, e.g. alice@wonderlant.lit/social/me.
-	
-</p>
-<p>To store data that can not be expressed in JSON, each object can have an attachment.
-		The attachement hast the same name and path as the object.
-		It is modified using special requests.
-	
-</p>
-<a name="nettop"></a><br /><hr />
+<a name="data-structure"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3"></a><h3>3.&nbsp;
-Network Topology</h3>
+Data structure</h3>
 
-<p>In the FOSP network, agents are either clients or servers.
-	Each server belongs to one provider that is identified by a domain name.
-	For load balancing purposes, more than one server per domain might be used.
-	To keep the examples simple, we nevertheless assume that there is one server per provider and use the term provider and server interchangeable.
-	A user connects, using a client, to the server of their provider.
-	We refer to this server as the home server of the user.
+<a name="objects"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
+Objects</h3>
 
+<p>We refer to the basic unit of data, that can be manipulated in the FOSP network, as an object.
+    An object consists of key-value pairs.
+    The constraints for keys and values are the ones described by the JSON specification.
+    Each object has by default specific key value pairs that have a special meaning, for example, the key “owner” contains the identifier of the user who created the object.
+    When transferring objects in messages, the object is serialized according to the JSON specification.
+    In the rest of the document we will refer to a key-value pair of an object either as an attribute or a field of an object.
+    
 </p>
-<p>To manipulate or access data, the user sends requests.
-	A request can act upon a resource.
-	If the resource is not managed by the server the user is connected to, the server will relay the request to the responsible server.
-	Hence, FOSP servers may open connections to other FOSP servers.
+<a name="obj-trees"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
+Trees</h3>
 
+<p>In FOSP, all objects are part of a tree of objects.
+    Therefore, all objects have a parent object, except for the root object of a tree.
+    Consequently, all objects can have child objects.
+    For each user there exists one tree of objects and the root node of this tree is named like the identifier of the user.
+    The tree of the user is stored on the servers that are responsible for the domain of the provider where the user is registered.
+    
+</p>
+<a name="data-structure-attachments"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.3"></a><h3>3.3.&nbsp;
+Attachments</h3>
+
+<p>As files, like pictures and documents, are also shared via social networks, FOSP supports saving binary files.
+    For each object, one file can be saved as an attachment.
+    This way, files can be addressed with the same schema and the objects they are attached to can provide the meta-data.
+    If an object has a belonging file, it is extended by a new attribute named “attachment”.
+    In this attribute, the "size", file "name", and MIME "type" of the file is saved.
+    The attached file is read and written using special requests.
+    
+</p>
+<a name="data-structure-fields"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
+Object attributes</h3>
+
+<p>Most attributes of an object have a well defined meaning.
+    The servers have to ensure that the content of these attributes adheres to the specification and that users do not make changes that are not allowed.
+    <a class='info' href='#fig-object-example'>Figure&nbsp;1</a>&nbsp;shows an example of an objects with all the fields described here.
+    Currently we define the following attributes and their values:
+    </p>
+<blockquote class="text">
+<p>The “owner” field is set by the server on creation of the object and contains the identifier of the user who created the object as a string.
+      It determines the ownership of this object and is used when enforcing access rights.
+      
+</p>
+<p>The “btime” (birth time) field is set by the server to the date of creation of the object.
+      It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
+      Users must not be able to change its content.
+      
+</p>
+<p>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
+      It is saved just like “btime”.
+      In the future it might be used to allow client side caching similar to ETags in HTTP.
+      
+</p>
+<p>The “data” field is where the user should save the payload and may contain any valid value.
+      The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
+      These two fields are the only fields where the user can save arbitrary data.
+      
+</p>
+</blockquote><p>
+    
+</p>
+<p>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
+    
+</p>
+<p>The “acl” field saves information about access rights in form of an object.
+    It is read by the server to enforce access control.
+    </p>
+<blockquote class="text">
+<p>The acl object can have the following fields: “owner”, “users”, “groups”, “other” 
+</p>
+<p>The value of the “owner” and “other” field is a set of rights
+</p>
+<p>A set of rights is an array of strings where each string identifies a certain right.
+      For example, the string ”read-acl” stands for the right to read the “acl” field.
+      
+</p>
+<p>The value of the “users” and “groups” field is an object.
+      In these objects, each key identifies a user or a group and the related value is a set of rights.
+      
+</p>
+</blockquote><p>
+    
+</p>
+<p>The “subscriptions” field saves information about subscriptions.
+    It is read by the server to determine which users have to be notified on changes to an object.
+    </p>
+<blockquote class="text">
+<p>It contains an object and each key is the identifier of a user.
+</p>
+<p>The value is an object with the fields: “events” and “depth”
+</p>
+<p>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity 
+</p>
+</blockquote><p>
+    
+</p>
+<p>The “attachment” field is only present if this object has an attachment.
+    It contains an object with three fields.
+    </p>
+<blockquote class="text">
+<p>The “name” field contains a string with the file name.
+      
+</p>
+<p>The “size” field contains the number of bytes of the attached file.
+</p>
+<p>The “type” field contains a string with the mime-type of the attached file.
+      
+</p>
+</blockquote><p>
+    
 </p><br /><hr class="insert" />
-<a name="fig-network-topology"></a>
+<a name="fig-object-example"></a>
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 
-+--------------+    +--------------+
-|alice@        |    |queen@        |
-|wonderland.lit|    |wonderland.lit|
-+------------+-+    +-+------------+
-             |        |
-             |        |
-             |        |
-          +--v--------v--+
-          |wonderland.lit|
-          |              |
-          +---+------^---+
-              |      |
-              |      |
-          +---v------+---+
-          |realworld.lit |
-          |              |
-          +--^-----------+
-             |
-             |
- +-----------+--+
- | sister@      |
- | realworld.lit|
- +--------------+
+{
+  btime: "2007-03-01T13:00:00Z",
+  mtime: "2008-05-11T15:30:00Z",
+  owner: "alice@wonderland.lit",
+  acl: {
+    owner: ["read-data", "write-data", "read-acl", "write-acl",
+      "read-subscriptions", "write-subscriptions",
+      "read-children", "write-children", "delete-children"],
+    users: {
+      alice@wonderland.lit: [
+        "read-data",
+        "not-write-data",
+        "read-acl",
+        "write-acl",
+        "read-subscriptions",
+        "not-write-subscriptions"
+      ]
+    }
+  },
+  subscriptions: {
+    users: {
+      alice@wonderland.lit: {
+        events: [ "created", "updated" ],
+        depth: 1
+      }
+    }
+  },
+  type: "text/plain",
+  data: "Just plain text"
+}
 
 </pre></div>
 <p>
 </p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;1&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
+<a name="std-objs"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.5"></a><h3>3.5.&nbsp;
+Provisioned Objects</h3>
+
+<p>Some objects in the tree of a user will be used by the server to obtain configurations.
+    For example alice@wonderland.
+    lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.
+    lit.
+    These objects can will be created by the server when the user first registers with it.
+    
+</p>
 <a name="messages"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;
 Messages</h3>
 
 <p>Messages are the basic unit of communication in the FOSP network.
-	There are three different types of messages which serve different purposes.
-	After being serialized, each message is transported over a WebSocket connection inside of one WebSocket text message or binary message.
-
+  There are three different types of messages which serve different purposes.
+  After being serialized, each message is transported over a WebSocket connection inside of one WebSocket text message or binary message.
+  
 </p>
 <a name="msg-type"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -489,128 +632,160 @@ Messages</h3>
 Types</h3>
 
 <p>Each message has a specific type, which determines the kind of purpose this message serves.
-		The type is implicitly given in the way that the content of the message determines it’s type.
-		For now there are only three types of messages needed to support all functionality.
-		The types are requests, responses and notifications.
-		Should there be the need for additional types of messages, a new one can be added in later versions of the protocol.
-	
+    The type is implicitly given in the way that the content of the message determines it’s type.
+    For now there are only three types of messages needed to support all functionality.
+    The types are requests, responses and notifications.
+    Should there be the need for additional types of messages, a new one can be added in later versions of the protocol.
+    
 </p>
 <p>All messages can have headers and a body, similar to HTTP messages and are distinguished by their main attributes.
-		Requests and notifications usually act on, or are emitted from an object or an attachemnt.
-		The identifier of the object or attachemnt is then part of the request.
-		If a request does not act upon an object, the identifier is replaced with an asterisk.
-		Furthermore, each request and response carries an sequence number that makes it possible to to assign one response to one request.
-	
+    Requests and notifications usually act on, or are emitted from an object or an attachemnt.
+    The identifier of the object or attachemnt is then part of the request.
+    If a request does not act upon an object, the identifier is replaced with an asterisk.
+    Furthermore, each request and response carries an sequence number that makes it possible to to assign one response to one request.
+    
 </p>
 <a name="msg-type-request"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1.1"></a><h3>4.1.1.&nbsp;
+<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
 Request</h3>
 
 <p>Requests are sent from clients to servers to authenticate or manipulate objects.
-			A request consists of ...
-			</p>
+    A request consists of ...
+    </p>
 <blockquote class="text">
 <p>a request type
 </p>
 <p>optionally an identifier of a resource that it manipulates
 </p>
-<p>a sequence number
+<p>a sequence number that is used to match the request with its response
 </p>
 </blockquote><p>
-			The request type is one of the following ...
-			</p>
-<blockquote class="text"><dl>
-<dt>CONNECT</dt>
-<dd>used to initiate a connection
-</dd>
-<dt>REGISTER</dt>
-<dd>used to create a new FOSP user
-</dd>
-<dt>AUTHENTICATE</dt>
-<dd>used to authenticate
-</dd>
-<dt>SELECT</dt>
-<dd>retrieves an object
-</dd>
-<dt>CREATE</dt>
-<dd>adds a new object
-</dd>
-<dt>UPDATE</dt>
-<dd>changes an existing object
-</dd>
-<dt>DELETE</dt>
-<dd>removes an object and all its children
-</dd>
-<dt>LIST</dt>
-<dd>returns a list of children of an object
-</dd>
-<dt>READ</dt>
-<dd>download the attached file of an object
-</dd>
-<dt>WRITE</dt>
-<dd>upload a file as an attachment to an object
-</dd>
-</dl></blockquote><p>
-			The content of the body depends on the type of request.
-			For example, the body of a SELECT or DELETE request is empty and the body of a CREATE request contains the new object.
-			In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
-		
+    The content of the body depends on the type of request.
+    For example, the body of a SELECT or DELETE request is empty and the body of a CREATE request contains the new object.
+    In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
+    
+</p>
+<p>The request types are described in the following section.
+</p>
+<a name="msg-type-request-connect"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2.1"></a><h3>4.2.1.&nbsp;
+Connect</h3>
+
+<p>The CONNECT request is the first request that is sent from a client or server that initiates a new connection.
+      It does not act upon an object and thus the resource identifier is set to an asterisk.
+      The body of this request is used to negotiate the protocol version and maybe in the future other protocol parameters and services that the server might provide.
+      It contains an simple JSON object that, for the moment, has only one field named "version" and the value of this field is the string "0.1".
+      
+</p>
+<p>The response status code will indicate whether the connection was successfully opened or not.
+</p>
+<p>All following request types can only be sent after a successful CONNECT request.
+</p>
+<a name="msg-type-request-register"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2.2"></a><h3>4.2.2.&nbsp;
+Register</h3>
+
+<p>The REGISTER request can be sent to create a new user on the server.
+      The resource identifier for this request is also always the asterisk as it does not act upon a request.
+      The body contains a JSON object with a "name" and "password" field.
+      
+</p>
+<p>If the user account can be created the server will do that and afterwards sent a response with a status code indicating success.
+      
+</p>
+<a name="msg-type-request-authenticate"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2.3"></a><h3>4.2.3.&nbsp;
+Authenticate</h3>
+
+<p>The AUTHENTICATE request is usually the second request after the CONNECT request.
+      Like the REGISTER request, the resource identifier is an asterisk and the body contains an object with a "name" and a "password" field.
+      
+</p>
+<p>The server verifies that the password is correct for the given user and sents a success response or a failed response otherwise.
+      All future request will then be made in the name of this authenticated user.
+      
+</p>
+<a name="msg-type-request-select"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2.4"></a><h3>4.2.4.&nbsp;
+Select</h3>
+
+<p>The SELECT request is used to retrieve an object.
+      The resource identifier in the request denotes the object that should be returned.
+      The body of the request is empty.
+      
+</p>
+<p>The server will first check the rights of the current user on this object.
+      Then it might either sent a response with an status that indicates an error or it might sent a success response that contains the requested object in its body.
+      Even when the request was successfull, not the whole object might be returned because the user might have the right to read some fields but not others.
+      
+</p>
+<a name="msg-type-request-create"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2.5"></a><h3>4.2.5.&nbsp;
+Create</h3>
+
+<p>The CREATE request is used to store new objects on the server.
+      
 </p>
 <a name="msg-type-response"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1.2"></a><h3>4.1.2.&nbsp;
+<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
 Response</h3>
 
 <p>Responses are sent from servers to clients when a request has been processed.
-			A response has ...
-			</p>
+    A response has ...
+    </p>
 <blockquote class="text">
 <p>a type, either “SUCCEEDED” or “FAILED”.
 </p>
 <p>a status code, an integer greater zero.
 </p>
 <p>a sequence number which must match the sequence number of the request
-					it responds to.
-				
+      it responds to.
+      
 </p>
 </blockquote><p>
-			The body of a response depends on the request that is answered.
-			For a CREATE or DELETE request it would be empty, for a SELECT request it would be the object that was requested.
-			In case of a READ request it would contain the file.
-		
+    The body of a response depends on the request that is answered.
+    For a CREATE or DELETE request it would be empty, for a SELECT request it would be the object that was requested.
+    In case of a READ request it would contain the file.
+    
 </p>
 <a name="msg-type-notification"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1.3"></a><h3>4.1.3.&nbsp;
+<a name="rfc.section.4.4"></a><h3>4.4.&nbsp;
 Notification</h3>
 
 <p>Notifications are sent from servers to clients when objects change and the client
-			has subscribed to those changes. A notification consists of ...
-			</p>
+    has subscribed to those changes. A notification consists of ...
+    </p>
 <blockquote class="text">
 <p>an event which is one of “CREATED”, “UPDATED” or “DELETED”.
 </p>
 <p>a resource identifier.
 </p>
 </blockquote><p>
-			The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
-			If the event equals DELETED then the body of the notification must be empty.
-			Otherwise it should contain the new version of the object.
-		
+    The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
+    If the event equals DELETED then the body of the notification must be empty.
+    Otherwise it should contain the new version of the object.
+    
 </p>
 <a name="msg-format"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+<a name="rfc.section.4.5"></a><h3>4.5.&nbsp;
 Format</h3>
 
 <p>**WARNING: To simplify the definition for the moment, only ASCII characters are used.
-		This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**
-	
+    This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**
+    
 </p>
 <p>Also the header definition will be subject to change after determining acceptable characters.
-		For the resource identifier, we will probably refer to the IRI definition in the future.
-	
+    For the resource identifier, we will probably refer to the IRI definition in the future.
+    
 </p><br /><hr class="insert" />
 <a name="fosp-abnf"></a>
 
@@ -664,217 +839,92 @@ Format</h3>
 
 <a name="msg-serialization"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
+<a name="rfc.section.4.6"></a><h3>4.6.&nbsp;
 Serialization</h3>
 
 <p>Messages are serialized into a blob of bytes.
-		Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
-		The second case occurs when an attached file is up- or downloaded.
-		The beginning and end, e.
-		g.
-		the length of a message must be determined from lenght of the WebSocket message.
-	
+    Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
+    The second case occurs when an attached file is up- or downloaded.
+    The beginning and end, e.
+    g.
+    the length of a message must be determined from lenght of the WebSocket message.
+    
 </p>
-<a name="data-structure"></a><br /><hr />
+<a name="nettop"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
-Data structure</h3>
+Network Topology</h3>
 
-<a name="objects"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
-Objects</h3>
-
-<p>We refer to the basic unit of data, that can be manipulated in the FOSP network, as an object.
-		An object consists of key-value pairs.
-		The constraints for keys and values are the ones described by the JSON specification.
-		Each object has by default specific key value pairs that have a special meaning, for example, the key “owner” contains the identifier of the user who created the object.
-		When transfering objects in messages, the object is serialized according to the JSON specification.
-	
+<p>In the FOSP network, agents are either clients or servers.
+  Each server belongs to one provider that is identified by a domain name.
+  For load balancing purposes, more than one server per domain might be used.
+  To keep the examples simple, we nevertheless assume that there is one server per provider and use the term provider and server interchangeable.
+  A user connects, using a client, to the server of their provider.
+  We refer to this server as the home server of the user.
+  
 </p>
-<a name="obj-trees"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.2"></a><h3>5.2.&nbsp;
-Trees</h3>
-
-<p>In FOSP, all objects are part of a tree of objects.
-		Therefore, all objects have a parent object, except for the root object of a tree.
-		Consequently, all objects can have child objects.
-		For each user there exists one tree of objects and the root node of this tree is named like the identifier of the user.
-		The tree of the user is stored on the servers that are responsible for the domain where the user is registered.
-	
-</p>
-<a name="data-structure-attachments"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.3"></a><h3>5.3.&nbsp;
-Attachments</h3>
-
-<p>As files, like pictures and documents, are also shared via social networks, FOSP supports saving binary files.
-		For each object, one file can be saved as an attachment.
-		This way, files can be addressed with the same schema and the objects they are attached to can provide the meta-data.
-		If an object has a belonging file, it is extended by a new attributes named “attachment”.
-		In this attribute, the size, file name, and mime-type of the file is saved.
-		The attached file is read and written using special requests.
-	
-</p>
-<a name="data-structure-fields"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.4"></a><h3>5.4.&nbsp;
-Standard Fields</h3>
-
-<p>Most attributes of an object have a well defined meaning.
-		The servers have to ensure that the content of these attributes adheres to the specification and that users do not make changes that are not allowed.
-		<a class='info' href='#fig-object-example'>Figure&nbsp;3</a>&nbsp;shows an example of an objects with all the fields described here.
-		Currently we define the following attributes and their values: </p>
-<blockquote class="text">
-<p>The “owner” field is set by the server on creation of the object and contains the identifier of the user who created the object as a string.
-				It determines the ownership of this object and is used when enforcing access rights.
-			
-</p>
-<p>The “btime” (birth time) field is set by the server to the date of creation of the object.
-				It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
-				Users should not be able to change its content.
-				It was added because it’s an information that is usually of interest to users.
-			
-</p>
-<p>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
-				It is saved just like “btime”.
-				In the future it will be used to allow client side caching similar to ETags in HTTP.
-			
-</p>
-<p>We recommend that users should not be allowed to add or alter arbitrary fields except for the “data” and “type” field.
-				The “data” field is where the user should save the payload and may contain any valid value.
-				The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
-			
-</p>
-</blockquote><p>
-	
-</p>
-<p>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
-	
-</p>
-<p>The “acl” field saves information about access rights.
-		It is read by the server to enforce access control.
-		</p>
-<blockquote class="text">
-<p>The acl object can have the following fields: “owner”, “users”, “groups”, “other” 
-</p>
-<p>The value of the “owner” and “other” field is a set of rights
-</p>
-<p>A set of rights is an array of strings where each string identifies a certain right.
-				For example, the string ”read-acl” stands for the right to read the “acl” field.
-			
-</p>
-<p>The value of the “users” and “groups” field is an object.
-				In these objects, each key identifies a user or a group and the related value is a set of rights.
-			
-</p>
-</blockquote><p>
-	
-</p>
-<p>The “subscriptions” field saves information about subscriptions.
-		It is read by the server to determine which users have to be notified on changes to an object.
-		</p>
-<blockquote class="text">
-<p>It contains an object and each key is the identifier of a user.
-			
-</p>
-<p>The value is an object with the fields: “events” and “depth”
-</p>
-<p>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity 
-</p>
-</blockquote><p>
-	
-</p>
-<p>The “attachment” field is only present if this object has an attachment.
-		It contains an object with three fields.
-		</p>
-<blockquote class="text">
-<p>The “name” field contains a string with the file name.
-			
-</p>
-<p>The “size” field contains the number of bytes of the attached file.
-</p>
-<p>The “mime-type” field contains a string with the mime-type of the attached file.
-			
-</p>
-</blockquote><p>
-	
+<p>To manipulate or access data, the user sends requests.
+  A request can act upon a resource.
+  If the resource is not managed by the server the user is connected to, the server will relay the request to the responsible server.
+  Hence, FOSP servers may open connections to other FOSP servers.
+  
 </p><br /><hr class="insert" />
-<a name="fig-object-example"></a>
+<a name="fig-network-topology"></a>
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 
-{
-  btime: "2007-03-01T13:00:00Z",
-  mtime: "2008-05-11T15:30:00Z",
-  owner: "alice@wonderland.lit",
-  acl: {
-    owner: ["read-data", "write-data", "read-acl", "write-acl",
-      "read-subscriptions", "write-subscriptions",
-      "read-children", "write-children", "delete-children"],
-    users: {
-      alice@wonderland.lit: [
-        "read-data",
-        "not-write-data",
-        "read-acl",
-        "write-acl",
-        "read-subscriptions",
-        "not-write-subscriptions"
-      ]
-    }
-  },
-  subscriptions: {
-    users: {
-      alice@wonderland.lit: {
-        events: [ "created", "updated" ],
-        depth: 1
-      }
-    }
-  },
-  type: "text/plain",
-  data: "Just plain text"
-}
++--------------+    +--------------+
+|alice@        |    |queen@        |
+|wonderland.lit|    |wonderland.lit|
++------------+-+    +-+------------+
+             |        |
+             |        |
+             |        |
+          +--v--------v--+
+          |wonderland.lit|
+          |              |
+          +---+------^---+
+              |      |
+              |      |
+          +---v------+---+
+          |realworld.lit |
+          |              |
+          +--^-----------+
+             |
+             |
+ +-----------+--+
+ | sister@      |
+ | realworld.lit|
+ +--------------+
 
 </pre></div>
 <p>
 </p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;3&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
-<a name="std-objs"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.5"></a><h3>5.5.&nbsp;
-Standart Objects</h3>
-
-<p>Some objects in the tree of a user will be used by the server to obtain configurations.
-		For example alice@wonderland.
-		lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.
-		lit.
-	
-</p>
 <a name="policies"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
 Policies</h3>
 
 <p>Besides implementing the technical specification of the protocol, the server has to enforce a set of policies.
-	These policies describe how the server interprets the objects to enforces access control and send notifications for subscriptions.
-	They also define constraints on certain attributes of objects and constraints on whether or not a message should be forwarded.
-
+  These policies describe how the server interprets the objects to enforces access control and send notifications for subscriptions.
+  They also define constraints on certain attributes of objects and constraints on whether or not a message should be forwarded.
+  
 </p>
 <a name="access-control"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.1"></a><h3>6.1.&nbsp;
 Access control</h3>
 
-<p>As stated in <a class='info' href='#data-structure-fields'>Section&nbsp;5.4<span> (</span><span class='info'>Standard Fields</span><span>)</span></a>, each object can save access control information.
-		A valid entry in the access control list consists of the identifier of a user or a group of users and a list of rights.
-		Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “acl-write” right.
-		Because the objects are part of a tree, we can use inheritance to set access rights for a whole subtree by setting the appropriate access control information on the root of the subtree.
-		This way the rights on an object are the sum of the rights on this object and all it’s ancestors.
-		To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-acl-write”.
-		The server must enforce access control for an object in the following way.
-		</p>
+<p>As stated in <a class='info' href='#data-structure-fields'>Section&nbsp;3.4<span> (</span><span class='info'>Object attributes</span><span>)</span></a>, each object can save access control information.
+    A valid entry in the access control list consists of the identifier of a user or a group of users and a list of rights.
+    Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “acl-write” right.
+    Because the objects are part of a tree, we can use inheritance to set access rights for a whole subtree by setting the appropriate access control information on the root of the subtree.
+    This way the rights on an object are the sum of the rights on this object and all it’s ancestors.
+    To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-acl-write”.
+    The server must enforce access control for an object in the following way.
+    </p>
 <ol class="text">
 <li>Check if the right in question is set on the current object
 </li>
@@ -887,7 +937,7 @@ Access control</h3>
 <li>If the current object is already the root object, deny access
 </li>
 </ol><p>
-	
+    
 </p>
 <a name="subscriptions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -895,39 +945,39 @@ Access control</h3>
 Subscriptions</h3>
 
 <p>Similar to the access control information, subscriptions can be set on objects so that a user will be notified when changes occur.
-		A subscription consists of an identifier of a user, a list of events to subscribe to and a “depth”.
-		The depth is used to subscribe to events from all child objects to a certain depth.
-		When a change happens on an object, the server must use the following algorithm to determine which users must be notified.
-		</p>
+    A subscription consists of an identifier of a user, a list of events to subscribe to and a “depth”.
+    The depth is used to subscribe to events from all child objects to a certain depth.
+    When a change happens on an object, the server must use the following algorithm to determine which users must be notified.
+    </p>
 <ol class="text">
 <li>Read the “subscriptions” from the current object.
-			
+      
 </li>
 <li>For each subscription: If the event that occurred is in the list of subscribed events and the distance of the current object to the object where the event occurred is smaller or equal to the “depth” of the subscription or the “depth” is equal to “-1”, add the user of this subscription to the list of users that should be notified.
-				The distance between two objects is 0 if they are the same object, 1 if one is the parent of the other and so on.
-			
+      The distance between two objects is 0 if they are the same object, 1 if one is the parent of the other and so on.
+      
 </li>
 <li>Go to the parent of the current object and repeat from step 1.
-				unless the
-				current object is the root object
-			
+      unless the
+      current object is the root object
+      
 </li>
 </ol><p>
-		An important aspect to consider when sending notifications that include the new version of the object, is that every user who will be notified might be allowed to only see different parts of the object.
-		Therefore, the server has to calculate the view of the object per user to prevent leaking of data a user might not be allowed to see.
-	
+    An important aspect to consider when sending notifications that include the new version of the object, is that every user who will be notified might be allowed to only see different parts of the object.
+    Therefore, the server has to calculate the view of the object per user to prevent leaking of data a user might not be allowed to see.
+    
 </p>
 <a name="pol-attachments"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.3"></a><h3>6.3.&nbsp;
 Attachments</h3>
 
-<p>As explained in <a class='info' href='#data-structure-attachments'>Section&nbsp;5.3<span> (</span><span class='info'>Attachments</span><span>)</span></a>, each object can have a file as attachment.
-		However, attachments will likely not be stored together with objects, but in a storage that is more suitable for files.
-		Depending on how the server implements operations on attachments, it is possible that there exists an attachment for an object in the storage but the object itself is missing the “attachment” field.
-		In any case the behavior of the server should be consistent.
-		Hence, if there is no attachment field in the object then the attachment should be deleted and an attachment should only be readable if there is an attachment field in the object.
-	
+<p>As explained in <a class='info' href='#data-structure-attachments'>Section&nbsp;3.3<span> (</span><span class='info'>Attachments</span><span>)</span></a>, each object can have a file as attachment.
+    However, attachments will likely not be stored together with objects, but in a storage that is more suitable for files.
+    Depending on how the server implements operations on attachments, it is possible that there exists an attachment for an object in the storage but the object itself is missing the “attachment” field.
+    In any case the behavior of the server should be consistent.
+    Hence, if there is no attachment field in the object then the attachment should be deleted and an attachment should only be readable if there is an attachment field in the object.
+    
 </p>
 <a name="pol-auth-reg"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -935,16 +985,16 @@ Attachments</h3>
 Authentication and Registration</h3>
 
 <p>When a client connects to a server, it has to provide credentials to the server, so that the user of the client can be authenticated.
-		These are send in the body of the AUTHENTICATE request and can simply be an object containing the name and the password of the user.
-		The schema of authentication is not limited thought as the body can contain arbitrary structured data.
-		Server to server authentication is done using the DNS.
-		When a server receives a connection from another server it verifies that the domain of the connecting server resolves to the same IP address the connection comes from.
-	
+    These are send in the body of the AUTHENTICATE request and can simply be an object containing the name and the password of the user.
+    The schema of authentication is not limited thought as the body can contain arbitrary structured data.
+    Server to server authentication is done using the DNS.
+    When a server receives a connection from another server it verifies that the domain of the connecting server resolves to the same IP address the connection comes from.
+    
 </p>
 <p>The REGISTER request should be supported by all servers, but can be disabled to prevent automatic creation of accounts by autonomous programs.
-		It is also not required that the REGISTER command is the only way to create an acount on a server.
-		For example, there could be sign up forms on websites or a server of a company could be connected to a directory service and fetch the login informations from there.
-	
+    It is also not required that the REGISTER command is the only way to create an acount on a server.
+    For example, there could be sign up forms on websites or a server of a company could be connected to a directory service and fetch the login informations from there.
+    
 </p>
 <a name="pol-msg-forw"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -952,14 +1002,14 @@ Authentication and Registration</h3>
 Message forwarding</h3>
 
 <p>A server does not need to accept forwarded requests from other servers, if it shouldn’t be part of the federated network.
-		This allows FOSP to be used in cooperate environments or other closed environments where federation with the outside world is not allowed.
-	
+    This allows FOSP to be used in cooperate environments or other closed environments where federation with the outside world is not allowed.
+    
 </p>
 <p>In any case, a server must never accept a forwarded request if the user of the request is not on the domain of the server that forwarded the request.
-		For example, if server A, that is authoritative for domain “example.
-		net”, authenticates to server B and then forwards a request of user “alice@wonderland.
-		lit”, server B must close the connection.
-	
+    For example, if server A, that is authoritative for domain “example.
+    net”, authenticates to server B and then forwards a request of user “alice@wonderland.
+    lit”, server B must close the connection.
+    
 </p>
 <a name="con-init"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -967,27 +1017,27 @@ Message forwarding</h3>
 Connection Initiation</h3>
 
 <p>First, the agent that wants to open a new connection has to find out which server
-	to connect to and on which port. The server responsible for a certain domain is the
-	server with the IP address that is assigned to the DNS A record of the domain name 
-	and the port is 1337 for insecure connections and 1338 for secure connections (e.g. ws:// or wss://).
-	In the future, a better approach of discovering the
-	server will be necessary and probably done by using DNS SRV records.
-
+  to connect to and on which port. The server responsible for a certain domain is the
+  server with the IP address that is assigned to the DNS A record of the domain name 
+  and the port is 1337 for insecure connections and 1338 for secure connections (e.g. ws:// or wss://).
+  In the future, a better approach of discovering the
+  server will be necessary and probably done by using DNS SRV records.
+  
 </p>
 <p>After opening a connection to a server, the initiator first sends a CONNECT
-	request that has to be answered with a SUCCEEDED response if the connection
-	is accepted. The body of the request contains information about the supported
-	version of the protocol and could in the future be used to negotiate more pa-
-	rameters of the connection. The response, if successful, contains the version the
-	server supports and could also be used to advertise additional services provided
-	by the server.
-
+  request that has to be answered with a SUCCEEDED response if the connection
+  is accepted. The body of the request contains information about the supported
+  version of the protocol and could in the future be used to negotiate more pa-
+  rameters of the connection. The response, if successful, contains the version the
+  server supports and could also be used to advertise additional services provided
+  by the server.
+  
 </p>
 <p>If the connection is opened by a client to a server, a new user can then be
-	registered with the REGISTER request. Finally, the initiator has to authenticate
-	to the server he connects to. The specific mechanism of authentication depends
-	on whether a client connects to a server or a server connects to another server.
-
+  registered with the REGISTER request. Finally, the initiator has to authenticate
+  to the server he connects to. The specific mechanism of authentication depends
+  on whether a client connects to a server or a server connects to another server.
+  
 </p>
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>

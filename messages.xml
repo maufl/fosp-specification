@@ -1,90 +1,134 @@
-<!-- vim: set spelllang=en_us spell sw=3 st=3 ts=3 noexpandtab: -->
-<t>Messages are the basic unit of communication in the FOSP network.
-	There are three different types of messages which serve different purposes.
-	After being serialized, each message is transported over a WebSocket connection inside of one WebSocket text message or binary message.
-</t>
-<section anchor="msg-type" title="Types">
-	<t>Each message has a specific type, which determines the kind of purpose this message serves.
-		The type is implicitly given in the way that the content of the message determines it’s type.
-		For now there are only three types of messages needed to support all functionality.
-		The types are requests, responses and notifications.
-		Should there be the need for additional types of messages, a new one can be added in later versions of the protocol.
-	</t>
-	<t>All messages can have headers and a body, similar to HTTP messages and are distinguished by their main attributes.
-		Requests and notifications usually act on, or are emitted from an object or an attachemnt.
-		The identifier of the object or attachemnt is then part of the request.
-		If a request does not act upon an object, the identifier is replaced with an asterisk.
-		Furthermore, each request and response carries an sequence number that makes it possible to to assign one response to one request.
-	</t>
-	<section anchor="msg-type-request" title="Request">
-		<t>Requests are sent from clients to servers to authenticate or manipulate objects.
-			A request consists of ...
-			<list>
-				<t>a request type</t>
-				<t>optionally an identifier of a resource that it manipulates</t>
-				<t>a sequence number</t>
-			</list>
-			The request type is one of the following ...
-			<list style="hanging">
-				<t hangText="CONNECT">used to initiate a connection</t>
-				<t hangText="REGISTER">used to create a new FOSP user</t>
-				<t hangText="AUTHENTICATE">used to authenticate</t>
-				<t hangText="SELECT">retrieves an object</t>
-				<t hangText="CREATE">adds a new object</t>
-				<t hangText="UPDATE">changes an existing object</t>
-				<t hangText="DELETE">removes an object and all its children</t>
-				<t hangText="LIST">returns a list of children of an object</t>
-				<t hangText="READ">download the attached file of an object</t>
-				<t hangText="WRITE">upload a file as an attachment to an object</t>
-			</list>
-			The content of the body depends on the type of request.
-			For example, the body of a SELECT or DELETE request is empty and the body of a CREATE request contains the new object.
-			In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
-		</t>
-	</section>
-	<section anchor="msg-type-response" title="Response">
-		<t>Responses are sent from servers to clients when a request has been processed.
-			A response has ...
-			<list>
-				<t>a type, either “SUCCEEDED” or “FAILED”.</t>
-				<t>a status code, an integer greater zero.</t>
-				<t>a sequence number which must match the sequence number of the request
-					it responds to.
-				</t>
-			</list>
-			The body of a response depends on the request that is answered.
-			For a CREATE or DELETE request it would be empty, for a SELECT request it would be the object that was requested.
-			In case of a READ request it would contain the file.
-		</t>
-	</section>
-	<section anchor="msg-type-notification" title="Notification">
-		<t>Notifications are sent from servers to clients when objects change and the client
-			has subscribed to those changes. A notification consists of ...
-			<list>
-				<t>an event which is one of “CREATED”, “UPDATED” or “DELETED”.</t>
-				<t>a resource identifier.</t>
-			</list>
-			The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
-			If the event equals DELETED then the body of the notification must be empty.
-			Otherwise it should contain the new version of the object.
-		</t>
-	</section>
-</section>
-<section anchor="msg-format" title="Format">
-	<t>**WARNING: To simplify the definition for the moment, only ASCII characters are used.
-		This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**
-	</t>
-	<t>Also the header definition will be subject to change after determining acceptable characters.
-		For the resource identifier, we will probably refer to the IRI definition in the future.
-	</t>
-	<?rfc include="fig-message-abnf.xml"?>
-</section>
-<section anchor="msg-serialization" title="Serialization">
-	<t>Messages are serialized into a blob of bytes.
-		Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
-		The second case occurs when an attached file is up- or downloaded.
-		The beginning and end, e.
-		g.
-		the length of a message must be determined from lenght of the WebSocket message.
-	</t>
+<?xml version="1.0" encoding="UTF-8"?>
+<section anchor="messages" title="Messages">
+  <t>Messages are the basic unit of communication in the FOSP network.
+  There are three different types of messages which serve different purposes.
+  After being serialized, each message is transported over a WebSocket connection inside of one WebSocket text message or binary message.
+  </t>
+  <section anchor="msg-type" title="Types">
+    <t>Each message has a specific type, which determines the kind of purpose this message serves.
+    The type is implicitly given in the way that the content of the message determines it’s type.
+    For now there are only three types of messages needed to support all functionality.
+    The types are requests, responses and notifications.
+    Should there be the need for additional types of messages, a new one can be added in later versions of the protocol.
+    </t>
+    <t>All messages can have headers and a body, similar to HTTP messages and are distinguished by their main attributes.
+    Requests and notifications usually act on, or are emitted from an object or an attachemnt.
+    The identifier of the object or attachemnt is then part of the request.
+    If a request does not act upon an object, the identifier is replaced with an asterisk.
+    Furthermore, each request and response carries an sequence number that makes it possible to to assign one response to one request.
+    </t>
+  </section>
+  <section anchor="msg-type-request" title="Request">
+    <t>Requests are sent from clients to servers to authenticate or manipulate objects.
+    A request consists of ...
+    <list>
+      <t>a request type</t>
+      <t>optionally an identifier of a resource that it manipulates</t>
+      <t>a sequence number that is used to match the request with its response</t>
+    </list>
+    The content of the body depends on the type of request.
+    For example, the body of a SELECT or DELETE request is empty and the body of a CREATE request contains the new object.
+    In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
+    </t>
+    <t>The request types are described in the following section.</t>
+    <section anchor="msg-type-request-connect" title="Connect">
+      <t>The CONNECT request is the first request that is sent from a client or server that initiates a new connection.
+      It does not act upon an object and thus the resource identifier is set to an asterisk.
+      The body of this request is used to negotiate the protocol version and maybe in the future other protocol parameters and services that the server might provide.
+      It contains an simple JSON object that, for the moment, has only one field named "version" and the value of this field is the string "0.1".
+      </t>
+      <t>The response status code will indicate whether the connection was successfully opened or not.</t>
+      <t>All following request types can only be sent after a successful CONNECT request.</t>
+    </section>
+    <section anchor="msg-type-request-register" title="Register">
+      <t>The REGISTER request can be sent to create a new user on the server.
+      The resource identifier for this request is also always the asterisk as it does not act upon a request.
+      The body contains a JSON object with a "name" and "password" field.
+      </t>
+      <t>If the user account can be created the server will do that and afterwards sent a response with a status code indicating success.
+      </t>
+    </section>
+    <section anchor="msg-type-request-authenticate" title="Authenticate">
+      <t>The AUTHENTICATE request is usually the second request after the CONNECT request.
+      Like the REGISTER request, the resource identifier is an asterisk and the body contains an object with a "name" and a "password" field.
+      </t>
+      <t>The server verifies that the password is correct for the given user and sents a success response or a failed response otherwise.
+      All future request will then be made in the name of this authenticated user.
+      </t>
+    </section>
+    <section anchor="msg-type-request-select" title="Select">
+      <t>The SELECT request is used to retrieve an object.
+      The resource identifier in the request denotes the object that should be returned.
+      The body of the request is empty.
+      </t>
+      <t>The server will first check the rights of the current user on this object.
+      Then it might either sent a response with an status that indicates an error or it might sent a success response that contains the requested object in its body.
+      Even when the request was successfull, not the whole object might be returned because the user might have the right to read some fields but not others.
+      </t>
+    </section>
+    <section anchor="msg-type-request-create" title="Create">
+      <t>The CREATE request is used to store new objects on the server.
+      </t>
+    </section>
+    <!--
+	The request type is one of the following ...
+	<list style="hanging">
+	<t hangText="CONNECT">used to initiate a connection</t>
+	<t hangText="REGISTER">used to create a new FOSP user</t>
+	<t hangText="AUTHENTICATE">used to authenticate</t>
+	<t hangText="SELECT">retrieves an object</t>
+	<t hangText="CREATE">adds a new object</t>
+	<t hangText="UPDATE">changes an existing object</t>
+	<t hangText="DELETE">removes an object and all its children</t>
+	<t hangText="LIST">returns a list of children of an object</t>
+	<t hangText="READ">download the attached file of an object</t>
+	<t hangText="WRITE">upload a file as an attachment to an object</t>
+	</list>
+    -->
+  </section>
+  <section anchor="msg-type-response" title="Response">
+    <t>Responses are sent from servers to clients when a request has been processed.
+    A response has ...
+    <list>
+      <t>a type, either “SUCCEEDED” or “FAILED”.</t>
+      <t>a status code, an integer greater zero.</t>
+      <t>a sequence number which must match the sequence number of the request
+      it responds to.
+      </t>
+    </list>
+    The body of a response depends on the request that is answered.
+    For a CREATE or DELETE request it would be empty, for a SELECT request it would be the object that was requested.
+    In case of a READ request it would contain the file.
+    </t>
+  </section>
+  <section anchor="msg-type-notification" title="Notification">
+    <t>Notifications are sent from servers to clients when objects change and the client
+    has subscribed to those changes. A notification consists of ...
+    <list>
+      <t>an event which is one of “CREATED”, “UPDATED” or “DELETED”.</t>
+      <t>a resource identifier.</t>
+    </list>
+    The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
+    If the event equals DELETED then the body of the notification must be empty.
+    Otherwise it should contain the new version of the object.
+    </t>
+  </section>
+  <section anchor="msg-format" title="Format">
+    <t>**WARNING: To simplify the definition for the moment, only ASCII characters are used.
+    This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**
+    </t>
+    <t>Also the header definition will be subject to change after determining acceptable characters.
+    For the resource identifier, we will probably refer to the IRI definition in the future.
+    </t>
+    <?rfc include="fig-message-abnf.xml"?>
+  </section>
+  <section anchor="msg-serialization" title="Serialization">
+    <t>Messages are serialized into a blob of bytes.
+    Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
+    The second case occurs when an attached file is up- or downloaded.
+    The beginning and end, e.
+    g.
+    the length of a message must be determined from lenght of the WebSocket message.
+    </t>
+  </section>
 </section>

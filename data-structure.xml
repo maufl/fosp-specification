@@ -1,93 +1,95 @@
-<!-- vim: set spelllang=en_us spell sw=3 st=3 ts=3 noexpandtab: -->
-<section anchor="objects" title="Objects">
-	<t>We refer to the basic unit of data, that can be manipulated in the FOSP network, as an object.
-		An object consists of key-value pairs.
-		The constraints for keys and values are the ones described by the JSON specification.
-		Each object has by default specific key value pairs that have a special meaning, for example, the key “owner” contains the identifier of the user who created the object.
-		When transferring objects in messages, the object is serialized according to the JSON specification.
-		In the rest of the document we will refer to a key-value pair of an object either as an attribute or a field of an object.
-	</t>
-</section>
-<section anchor="obj-trees" title="Trees">
-	<t>In FOSP, all objects are part of a tree of objects.
-		Therefore, all objects have a parent object, except for the root object of a tree.
-		Consequently, all objects can have child objects.
-		For each user there exists one tree of objects and the root node of this tree is named like the identifier of the user.
-		The tree of the user is stored on the servers that are responsible for the domain of the provider where the user is registered.
-	</t>
-</section>
-<section anchor="data-structure-attachments" title="Attachments">
-	<t>As files, like pictures and documents, are also shared via social networks, FOSP supports saving binary files.
-		For each object, one file can be saved as an attachment.
-		This way, files can be addressed with the same schema and the objects they are attached to can provide the meta-data.
-		If an object has a belonging file, it is extended by a new attribute named “attachment”.
-		In this attribute, the "size", file "name", and MIME "type" of the file is saved.
-		The attached file is read and written using special requests.
-	</t>
-</section>
-<section anchor="data-structure-fields" title="Object attributes">
-	<t>Most attributes of an object have a well defined meaning.
-		The servers have to ensure that the content of these attributes adheres to the specification and that users do not make changes that are not allowed.
-		<xref target="fig-object-example" />&nbsp;shows an example of an objects with all the fields described here.
-		Currently we define the following attributes and their values:
-		<list>
-			<t>The “owner” field is set by the server on creation of the object and contains the identifier of the user who created the object as a string.
-				It determines the ownership of this object and is used when enforcing access rights.
-			</t>
-			<t>The “btime” (birth time) field is set by the server to the date of creation of the object.
-				It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
-				Users must not be able to change its content.
-			</t>
-			<t>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
-				It is saved just like “btime”.
-				In the future it might be used to allow client side caching similar to ETags in HTTP.
-			</t>
-			<t>The “data” field is where the user should save the payload and may contain any valid value.
-				The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
-				These two fields are the only fields where the user can save arbitrary data.
-			</t>
-		</list>
-	</t>
-	<t>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
-	</t>
-	<t anchor="data-structure-fields-acl">The “acl” field saves information about access rights in form of an object.
-		It is read by the server to enforce access control.
-		<list>
-			<t>The acl object can have the following fields: “owner”, “users”, “groups”, “other” </t>
-			<t>The value of the “owner” and “other” field is a set of rights</t>
-			<t>A set of rights is an array of strings where each string identifies a certain right.
-				For example, the string ”read-acl” stands for the right to read the “acl” field.
-			</t>
-			<t>The value of the “users” and “groups” field is an object.
-				In these objects, each key identifies a user or a group and the related value is a set of rights.
-			</t>
-		</list>
-	</t>
-	<t>The “subscriptions” field saves information about subscriptions.
-		It is read by the server to determine which users have to be notified on changes to an object.
-		<list>
-			<t>It contains an object and each key is the identifier of a user.</t>
-			<t>The value is an object with the fields: “events” and “depth”</t>
-			<t>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity </t>
-		</list>
-	</t>
-	<t>The “attachment” field is only present if this object has an attachment.
-		It contains an object with three fields.
-		<list>
-			<t>The “name” field contains a string with the file name.
-			</t>
-			<t>The “size” field contains the number of bytes of the attached file.</t>
-			<t>The “type” field contains a string with the mime-type of the attached file.
-			</t>
-		</list>
-	</t>
-	<?rfc include="fig-object.xml"?>
-</section>
-<section anchor="std-objs" title="Provisioned Objects">
-	<t>Some objects in the tree of a user will be used by the server to obtain configurations.
-		For example alice@wonderland.
-		lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.
-		lit.
-		These objects can will be created by the server when the user first registers with it.
-	</t>
+<?xml version="1.0" encoding="UTF-8"?>
+<section anchor="data-structure" title="Data structure">
+  <section anchor="objects" title="Objects">
+    <t>We refer to the basic unit of data, that can be manipulated in the FOSP network, as an object.
+    An object consists of key-value pairs.
+    The constraints for keys and values are the ones described by the JSON specification.
+    Each object has by default specific key value pairs that have a special meaning, for example, the key “owner” contains the identifier of the user who created the object.
+    When transferring objects in messages, the object is serialized according to the JSON specification.
+    In the rest of the document we will refer to a key-value pair of an object either as an attribute or a field of an object.
+    </t>
+  </section>
+  <section anchor="obj-trees" title="Trees">
+    <t>In FOSP, all objects are part of a tree of objects.
+    Therefore, all objects have a parent object, except for the root object of a tree.
+    Consequently, all objects can have child objects.
+    For each user there exists one tree of objects and the root node of this tree is named like the identifier of the user.
+    The tree of the user is stored on the servers that are responsible for the domain of the provider where the user is registered.
+    </t>
+  </section>
+  <section anchor="data-structure-attachments" title="Attachments">
+    <t>As files, like pictures and documents, are also shared via social networks, FOSP supports saving binary files.
+    For each object, one file can be saved as an attachment.
+    This way, files can be addressed with the same schema and the objects they are attached to can provide the meta-data.
+    If an object has a belonging file, it is extended by a new attribute named “attachment”.
+    In this attribute, the "size", file "name", and MIME "type" of the file is saved.
+    The attached file is read and written using special requests.
+    </t>
+  </section>
+  <section anchor="data-structure-fields" title="Object attributes">
+    <t>Most attributes of an object have a well defined meaning.
+    The servers have to ensure that the content of these attributes adheres to the specification and that users do not make changes that are not allowed.
+    <xref target="fig-object-example" />&nbsp;shows an example of an objects with all the fields described here.
+    Currently we define the following attributes and their values:
+    <list>
+      <t>The “owner” field is set by the server on creation of the object and contains the identifier of the user who created the object as a string.
+      It determines the ownership of this object and is used when enforcing access rights.
+      </t>
+      <t>The “btime” (birth time) field is set by the server to the date of creation of the object.
+      It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
+      Users must not be able to change its content.
+      </t>
+      <t>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
+      It is saved just like “btime”.
+      In the future it might be used to allow client side caching similar to ETags in HTTP.
+      </t>
+      <t>The “data” field is where the user should save the payload and may contain any valid value.
+      The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
+      These two fields are the only fields where the user can save arbitrary data.
+      </t>
+    </list>
+    </t>
+    <t>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
+    </t>
+    <t anchor="data-structure-fields-acl">The “acl” field saves information about access rights in form of an object.
+    It is read by the server to enforce access control.
+    <list>
+      <t>The acl object can have the following fields: “owner”, “users”, “groups”, “other” </t>
+      <t>The value of the “owner” and “other” field is a set of rights</t>
+      <t>A set of rights is an array of strings where each string identifies a certain right.
+      For example, the string ”read-acl” stands for the right to read the “acl” field.
+      </t>
+      <t>The value of the “users” and “groups” field is an object.
+      In these objects, each key identifies a user or a group and the related value is a set of rights.
+      </t>
+    </list>
+    </t>
+    <t>The “subscriptions” field saves information about subscriptions.
+    It is read by the server to determine which users have to be notified on changes to an object.
+    <list>
+      <t>It contains an object and each key is the identifier of a user.</t>
+      <t>The value is an object with the fields: “events” and “depth”</t>
+      <t>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity </t>
+    </list>
+    </t>
+    <t>The “attachment” field is only present if this object has an attachment.
+    It contains an object with three fields.
+    <list>
+      <t>The “name” field contains a string with the file name.
+      </t>
+      <t>The “size” field contains the number of bytes of the attached file.</t>
+      <t>The “type” field contains a string with the mime-type of the attached file.
+      </t>
+    </list>
+    </t>
+    <?rfc include="fig-object.xml"?>
+  </section>
+  <section anchor="std-objs" title="Provisioned Objects">
+    <t>Some objects in the tree of a user will be used by the server to obtain configurations.
+    For example alice@wonderland.
+    lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.
+    lit.
+    These objects can will be created by the server when the user first registers with it.
+    </t>
+  </section>
 </section>

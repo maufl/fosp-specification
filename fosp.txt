@@ -2,8 +2,8 @@
 
 
 Network Working Group                                          F. Maurer
-Internet-Draft                                        September 22, 2014
-Expires: March 26, 2015
+Internet-Draft                                            September 2014
+Expires: March 5, 2015
 
 
                  The Federated Object Sharing Protocol
@@ -15,7 +15,7 @@ Abstract
    FOSP is a protocol that allows sharing arbitrary data, setting access
    rights on the shared data and receiving notifications on changes.
    Furthermore, all features of FOSP can be used in a federated network,
-   e.g. between multiple independed providers.  It was designed to be
+   e.g. between multiple independned providers.  It was designed to be
    the most simple solution that combines all these features.
 
 Status of this Memo
@@ -34,7 +34,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 26, 2015.
+   This Internet-Draft will expire on March 5, 2015.
 
 
 
@@ -52,7 +52,7 @@ Status of this Memo
 
 
 
-Maurer                   Expires March 26, 2015                 [Page 1]
+Maurer                    Expires March 5, 2015                 [Page 1]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -66,23 +66,28 @@ Table of Contents
      1.4.  Terminology  . . . . . . . . . . . . . . . . . . . . . . .  3
    2.  Overview . . . . . . . . . . . . . . . . . . . . . . . . . . .  5
      2.1.  User and providers . . . . . . . . . . . . . . . . . . . .  5
-     2.2.  Network topology . . . . . . . . . . . . . . . . . . . . .  5
+     2.2.  Trees, Objects and Attachments . . . . . . . . . . . . . .  5
      2.3.  Messages . . . . . . . . . . . . . . . . . . . . . . . . .  5
-     2.4.  Trees, Objects and Attachments . . . . . . . . . . . . . .  6
-   3.  Network Topology . . . . . . . . . . . . . . . . . . . . . . .  7
-   4.  Messages . . . . . . . . . . . . . . . . . . . . . . . . . . .  8
-     4.1.  Types  . . . . . . . . . . . . . . . . . . . . . . . . . .  8
-       4.1.1.  Request  . . . . . . . . . . . . . . . . . . . . . . .  8
-       4.1.2.  Response . . . . . . . . . . . . . . . . . . . . . . .  9
-       4.1.3.  Notification . . . . . . . . . . . . . . . . . . . . .  9
-     4.2.  Format . . . . . . . . . . . . . . . . . . . . . . . . . . 10
-     4.3.  Serialization  . . . . . . . . . . . . . . . . . . . . . . 12
-   5.  Data structure . . . . . . . . . . . . . . . . . . . . . . . . 13
-     5.1.  Objects  . . . . . . . . . . . . . . . . . . . . . . . . . 13
-     5.2.  Trees  . . . . . . . . . . . . . . . . . . . . . . . . . . 13
-     5.3.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 13
-     5.4.  Standard Fields  . . . . . . . . . . . . . . . . . . . . . 13
-     5.5.  Standart Objects . . . . . . . . . . . . . . . . . . . . . 16
+     2.4.  Network topology . . . . . . . . . . . . . . . . . . . . .  6
+   3.  Data structure . . . . . . . . . . . . . . . . . . . . . . . .  7
+     3.1.  Objects  . . . . . . . . . . . . . . . . . . . . . . . . .  7
+     3.2.  Trees  . . . . . . . . . . . . . . . . . . . . . . . . . .  7
+     3.3.  Attachments  . . . . . . . . . . . . . . . . . . . . . . .  7
+     3.4.  Object attributes  . . . . . . . . . . . . . . . . . . . .  7
+     3.5.  Provisioned Objects  . . . . . . . . . . . . . . . . . . . 10
+   4.  Messages . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+     4.1.  Types  . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+     4.2.  Request  . . . . . . . . . . . . . . . . . . . . . . . . . 11
+       4.2.1.  Connect  . . . . . . . . . . . . . . . . . . . . . . . 12
+       4.2.2.  Register . . . . . . . . . . . . . . . . . . . . . . . 12
+       4.2.3.  Authenticate . . . . . . . . . . . . . . . . . . . . . 12
+       4.2.4.  Select . . . . . . . . . . . . . . . . . . . . . . . . 12
+       4.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.5.  Format . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.6.  Serialization  . . . . . . . . . . . . . . . . . . . . . . 15
+   5.  Network Topology . . . . . . . . . . . . . . . . . . . . . . . 16
    6.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
      6.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 17
      6.2.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 17
@@ -103,12 +108,7 @@ Table of Contents
 
 
 
-
-
-
-
-
-Maurer                   Expires March 26, 2015                 [Page 2]
+Maurer                    Expires March 5, 2015                 [Page 2]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -119,15 +119,15 @@ Internet-Draft                    FOSP                    September 2014
 
    The Federated Object Storage Protocol (FOSP) is an application-level
    protocol for exchanging structured and unstructured data generated by
-   users of different providers.  It is designed to fullfill the needs
-   of online social networks by combining necessary features into one
+   users of different providers.  It is designed to fulfill the needs of
+   online social networks by combining necessary features into one
    simple protocol.
 
    FOSP aims to provide three core features:
 
-   1.  Store data online and support standart operations on it.
+   1.  Store data online and support standard operations on it.
 
-   2.  Enforce access control on the data, for useres from different
+   2.  Enforce access control on the data, for users from different
        hosts, without central authentication.
 
    3.  Notify users when data is added, removed or has changed.
@@ -164,17 +164,18 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                 [Page 3]
+Maurer                    Expires March 5, 2015                 [Page 3]
 
 Internet-Draft                    FOSP                    September 2014
 
 
    provider  An entity that provides storage space on the Internet for
-      the data of users.  It is identified by a DNS domain name.
+      the data of users.  It is identified by a fully qualified domain
+      name.
 
    server  A FOSP server stores the data of users of a certain provider.
-      Multiple servers can be deployed to deliver the data of a provider
-      to implement fault tolerance and load balancing.
+      For fault tolerance and load balancing purposes, a provider might
+      deploy multiple servers.
 
    client  A FOSP client is a program a user uses to communicate with a
       FOSP server.  It facilitates accessing the data of the user that
@@ -193,6 +194,11 @@ Internet-Draft                    FOSP                    September 2014
    notification  A notification is a message that is sent by servers
       when changes happen to an object.
 
+   object  An object is the basic unit of data in FOSP.  It consists of
+      structured data expressed in JSON.
+
+   attachment  An attachment is a binary or text file that is associated
+      with an object.
 
 
 
@@ -214,13 +220,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-
-
-
-
-
-
-Maurer                   Expires March 26, 2015                 [Page 4]
+Maurer                    Expires March 5, 2015                 [Page 4]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -233,152 +233,265 @@ Internet-Draft                    FOSP                    September 2014
    content on the server of providers and can share it by setting the
    appropriate access rights for other users.  Each user is registered
    with one provider.  The user has an unique name at the provider that
-   togther with the domain name of the provider forms his or her
+   together with the domain name of the provider forms his or her
    identifier, similar to an Email address.  However users can still
    share their content with friends that are registered with different
    providers.
 
-   The FOSP protocol is mostly a request/response protocol.  A user
-   connects to the server of his or her provider, using a client and
-   then both can exchange messages.  Request messages are sent from the
-   client to the server to manipulate or retrieve data.  Servers respond
-   by sending a response message.
+   Providers are companies or individuals that provide storage for
+   users.  A provider is identified by a fully qualified domain name.
+   Similar to Email and XMPP, everybody can be a provider by simply
+   hosting his or her own FOSP server.  The servers of different
+   providers communicate to allow users of different providers to share
+   data.
 
-2.2.  Network topology
+2.2.  Trees, Objects and Attachments
 
-   The network topology is similar to the SMTP or XMPP network.  A
-   provider operates one or more server that handle the domain of the
-   provider.  A user can use a client to connect to a server of a
-   provide where he or she is registered and request data.  The server
-   can connect to a server of a different provider to forward request it
-   can not process itself.
+   The basic data units that can be stored on the server have a well
+   defined structure and we call them objects.  We chose this name
+   because they are objects in the sense of the JSON specification.
+   Other familiar terms for a JSON object might be dictionary, hashmap
+   of associative array.  They consist of key-value pairs where each key
+   is a string and each value is one of the values allowed by JSON.
+   Most of the key-value pairs have a special meaning, for example there
+   is a key-value pair that stores the access conrol list.
 
-2.3.  Messages
-
-   Server and clients communicate by sending messages over a persisten
-   connection.  There are for now three different kind of messages that
-   serve different purposes.
-
-   Requests are sent from the client to the server to retrieve, alter or
-   delete data.  The server either processes the request or if it
-   cannot, forwards it to a server of a different provider that can
-   process the request.
-
-   After processing a request, the server sents a response.  If the
-   request has been forwarded, the response will take the same path back
-   to the client, through the server that forwarded the request.
-
-   Whenever an object or attachment has been modified, notifications can
-   be sent to users who have subscribed for these events.  These
-   notifications might also be forwarded by the server.
-
-
-
-
-
-Maurer                   Expires March 26, 2015                 [Page 5]
-
-Internet-Draft                    FOSP                    September 2014
-
-
-2.4.  Trees, Objects and Attachments
-
-   The information units that can be stored on the server have a well
-   defined structure and we call them objects.  An object is basically
-   an dictionary or hashmap with a selection of predefined keys.  Most
-   of the key-value pairs have a special meaning, for example there is a
-   key value pair that stores the access conrol list.  They adhere to
-   the JSON specification.
-
-   All objects are ordered into trees.  For each user, one such tree
-   exists and the root object of the tree is named like the user.  Each
-   object can thus be uniquely identified by its path, e.g.
+   All objects are part of a tree.  For each user, one such tree exists
+   and the root object of the tree is named like the user.  Each object
+   can thus be uniquely identified by its path, e.g.
    alice@wonderlant.lit/social/me.
 
    To store data that can not be expressed in JSON, each object can have
-   an attachment.  The attachement hast the same name and path as the
-   object.  It is modified using special requests.
+   an attachment.  The attachement is addressed in the same way as the
+   object but is modified using special requests.
+
+2.3.  Messages
+
+   The communication between FOSP clients and servers is segmented into
+   messages.  There a three different kind of messages: requests,
+   responses and notifications.
+
+   To create, alter or delete objects and attachments, a client sends a
+   request to the server.  When the request is processed, the server
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Maurer                   Expires March 26, 2015                 [Page 6]
+Maurer                    Expires March 5, 2015                 [Page 5]
 
 Internet-Draft                    FOSP                    September 2014
 
 
-3.  Network Topology
+   sends a response.  If the request concerns an object that the server
+   does not store, it may be forwarded to a server that does store it.
 
-   In the FOSP network, agents are either clients or servers.  Each
-   server belongs to one provider that is identified by a domain name.
-   For load balancing purposes, more than one server per domain might be
-   used.  To keep the examples simple, we nevertheless assume that there
-   is one server per provider and use the term provider and server
-   interchangeable.  A user connects, using a client, to the server of
-   their provider.  We refer to this server as the home server of the
-   user.
+   As users and clients might be interested in changes to objects and
+   attachments, they can subscribe to events on objects.  When a server
+   makes changes to objects or attachments, it can send notifications to
+   clients that inform about events that happened.
 
-   To manipulate or access data, the user sends requests.  A request can
-   act upon a resource.  If the resource is not managed by the server
-   the user is connected to, the server will relay the request to the
-   responsible server.  Hence, FOSP servers may open connections to
-   other FOSP servers.
+2.4.  Network topology
 
+   FOSP follows the client-server paradigm.  The network topology is
+   similar to the SMTP or XMPP network.  A provider operates one or more
+   server that handle the domain of the provider.  A user can use a
+   client to connect to a server of a provide where he or she is
+   registered and request data.  The server can connect to a server of a
+   different provider to forward request it can not process itself.
 
 
-   +--------------+    +--------------+
-   |alice@        |    |queen@        |
-   |wonderland.lit|    |wonderland.lit|
-   +------------+-+    +-+------------+
-                |        |
-                |        |
-                |        |
-             +--v--------v--+
-             |wonderland.lit|
-             |              |
-             +---+------^---+
-                 |      |
-                 |      |
-             +---v------+---+
-             |realworld.lit |
-             |              |
-             +--^-----------+
-                |
-                |
-    +-----------+--+
-    | sister@      |
-    | realworld.lit|
-    +--------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 5, 2015                 [Page 6]
+
+Internet-Draft                    FOSP                    September 2014
+
+
+3.  Data structure
+
+3.1.  Objects
+
+   We refer to the basic unit of data, that can be manipulated in the
+   FOSP network, as an object.  An object consists of key-value pairs.
+   The constraints for keys and values are the ones described by the
+   JSON specification.  Each object has by default specific key value
+   pairs that have a special meaning, for example, the key "owner"
+   contains the identifier of the user who created the object.  When
+   transferring objects in messages, the object is serialized according
+   to the JSON specification.  In the rest of the document we will refer
+   to a key-value pair of an object either as an attribute or a field of
+   an object.
+
+3.2.  Trees
+
+   In FOSP, all objects are part of a tree of objects.  Therefore, all
+   objects have a parent object, except for the root object of a tree.
+   Consequently, all objects can have child objects.  For each user
+   there exists one tree of objects and the root node of this tree is
+   named like the identifier of the user.  The tree of the user is
+   stored on the servers that are responsible for the domain of the
+   provider where the user is registered.
+
+3.3.  Attachments
+
+   As files, like pictures and documents, are also shared via social
+   networks, FOSP supports saving binary files.  For each object, one
+   file can be saved as an attachment.  This way, files can be addressed
+   with the same schema and the objects they are attached to can provide
+   the meta-data.  If an object has a belonging file, it is extended by
+   a new attribute named "attachment".  In this attribute, the "size",
+   file "name", and MIME "type" of the file is saved.  The attached file
+   is read and written using special requests.
+
+3.4.  Object attributes
+
+   Most attributes of an object have a well defined meaning.  The
+   servers have to ensure that the content of these attributes adheres
+   to the specification and that users do not make changes that are not
+   allowed.  Figure 1 shows an example of an objects with all the fields
+   described here.  Currently we define the following attributes and
+   their values:
+
+      The "owner" field is set by the server on creation of the object
+      and contains the identifier of the user who created the object as
+      a string.  It determines the ownership of this object and is used
+
+
+
+Maurer                    Expires March 5, 2015                 [Page 7]
+
+Internet-Draft                    FOSP                    September 2014
+
+
+      when enforcing access rights.
+
+      The "btime" (birth time) field is set by the server to the date of
+      creation of the object.  It is saved as a string, formatted
+      according to the ISO 8601 standard and must always be in the UTC
+      time zone.  Users must not be able to change its content.
+
+      Similar the "mtime" (modify time) is set to the current date each
+      time the object is altered and is not to be set by the users
+      directly.  It is saved just like "btime".  In the future it might
+      be used to allow client side caching similar to ETags in HTTP.
+
+      The "data" field is where the user should save the payload and may
+      contain any valid value.  The "type" field should contain a string
+      that describes the content type of the "data" field, similar to
+      MIME types.  These two fields are the only fields where the user
+      can save arbitrary data.
+
+   Furthermore, there are the three fields "acl", "subscriptions" and
+   "attachment" that contain more complex objects.
+
+   The "acl" field saves information about access rights in form of an
+   object.  It is read by the server to enforce access control.
+
+      The acl object can have the following fields: "owner", "users",
+      "groups", "other"
+
+      The value of the "owner" and "other" field is a set of rights
+
+      A set of rights is an array of strings where each string
+      identifies a certain right.  For example, the string "read-acl"
+      stands for the right to read the "acl" field.
+
+      The value of the "users" and "groups" field is an object.  In
+      these objects, each key identifies a user or a group and the
+      related value is a set of rights.
+
+   The "subscriptions" field saves information about subscriptions.  It
+   is read by the server to determine which users have to be notified on
+   changes to an object.
+
+      It contains an object and each key is the identifier of a user.
+
+      The value is an object with the fields: "events" and "depth"
+
+      The value of "events" is an array of strings which identify an
+      event, the value of "depth" is an integer between -1 and infinity
+
+
+
+
+Maurer                    Expires March 5, 2015                 [Page 8]
+
+Internet-Draft                    FOSP                    September 2014
+
+
+   The "attachment" field is only present if this object has an
+   attachment.  It contains an object with three fields.
+
+      The "name" field contains a string with the file name.
+
+      The "size" field contains the number of bytes of the attached
+      file.
+
+      The "type" field contains a string with the mime-type of the
+      attached file.
+
+
+
+   {
+     btime: "2007-03-01T13:00:00Z",
+     mtime: "2008-05-11T15:30:00Z",
+     owner: "alice@wonderland.lit",
+     acl: {
+       owner: ["read-data", "write-data", "read-acl", "write-acl",
+         "read-subscriptions", "write-subscriptions",
+         "read-children", "write-children", "delete-children"],
+       users: {
+         alice@wonderland.lit: [
+           "read-data",
+           "not-write-data",
+           "read-acl",
+           "write-acl",
+           "read-subscriptions",
+           "not-write-subscriptions"
+         ]
+       }
+     },
+     subscriptions: {
+       users: {
+         alice@wonderland.lit: {
+           events: [ "created", "updated" ],
+           depth: 1
+         }
+       }
+     },
+     type: "text/plain",
+     data: "Just plain text"
+   }
 
 
                                  Figure 1
@@ -387,8 +500,63 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
+Maurer                    Expires March 5, 2015                 [Page 9]
+
+Internet-Draft                    FOSP                    September 2014
 
-Maurer                   Expires March 26, 2015                 [Page 7]
+
+3.5.  Provisioned Objects
+
+   Some objects in the tree of a user will be used by the server to
+   obtain configurations.  For example alice@wonderland. lit/config/
+   groups will contain the mapping from users to groups, that is valid
+   for the tree alice@wonderland. lit.  These objects can will be
+   created by the server when the user first registers with it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 5, 2015                [Page 10]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -420,7 +588,7 @@ Internet-Draft                    FOSP                    September 2014
    and response carries an sequence number that makes it possible to to
    assign one response to one request.
 
-4.1.1.  Request
+4.2.  Request
 
    Requests are sent from clients to servers to authenticate or
    manipulate objects.  A request consists of ...
@@ -429,39 +597,8 @@ Internet-Draft                    FOSP                    September 2014
 
       optionally an identifier of a resource that it manipulates
 
-      a sequence number
-
-   The request type is one of the following ...
-
-   CONNECT  used to initiate a connection
-
-   REGISTER  used to create a new FOSP user
-
-   AUTHENTICATE  used to authenticate
-
-
-
-
-
-
-Maurer                   Expires March 26, 2015                 [Page 8]
-
-Internet-Draft                    FOSP                    September 2014
-
-
-   SELECT  retrieves an object
-
-   CREATE  adds a new object
-
-   UPDATE  changes an existing object
-
-   DELETE  removes an object and all its children
-
-   LIST  returns a list of children of an object
-
-   READ  download the attached file of an object
-
-   WRITE  upload a file as an attachment to an object
+      a sequence number that is used to match the request with its
+      response
 
    The content of the body depends on the type of request.  For example,
    the body of a SELECT or DELETE request is empty and the body of a
@@ -469,7 +606,82 @@ Internet-Draft                    FOSP                    September 2014
    JSON object, except for the WRITE request that has the byte
    representation of the file as the body.
 
-4.1.2.  Response
+   The request types are described in the following section.
+
+
+
+
+
+Maurer                    Expires March 5, 2015                [Page 11]
+
+Internet-Draft                    FOSP                    September 2014
+
+
+4.2.1.  Connect
+
+   The CONNECT request is the first request that is sent from a client
+   or server that initiates a new connection.  It does not act upon an
+   object and thus the resource identifier is set to an asterisk.  The
+   body of this request is used to negotiate the protocol version and
+   maybe in the future other protocol parameters and services that the
+   server might provide.  It contains an simple JSON object that, for
+   the moment, has only one field named "version" and the value of this
+   field is the string "0.1".
+
+   The response status code will indicate whether the connection was
+   successfully opened or not.
+
+   All following request types can only be sent after a successful
+   CONNECT request.
+
+4.2.2.  Register
+
+   The REGISTER request can be sent to create a new user on the server.
+   The resource identifier for this request is also always the asterisk
+   as it does not act upon a request.  The body contains a JSON object
+   with a "name" and "password" field.
+
+   If the user account can be created the server will do that and
+   afterwards sent a response with a status code indicating success.
+
+4.2.3.  Authenticate
+
+   The AUTHENTICATE request is usually the second request after the
+   CONNECT request.  Like the REGISTER request, the resource identifier
+   is an asterisk and the body contains an object with a "name" and a
+   "password" field.
+
+   The server verifies that the password is correct for the given user
+   and sents a success response or a failed response otherwise.  All
+   future request will then be made in the name of this authenticated
+   user.
+
+4.2.4.  Select
+
+   The SELECT request is used to retrieve an object.  The resource
+   identifier in the request denotes the object that should be returned.
+   The body of the request is empty.
+
+   The server will first check the rights of the current user on this
+   object.  Then it might either sent a response with an status that
+   indicates an error or it might sent a success response that contains
+
+
+
+Maurer                    Expires March 5, 2015                [Page 12]
+
+Internet-Draft                    FOSP                    September 2014
+
+
+   the requested object in its body.  Even when the request was
+   successfull, not the whole object might be returned because the user
+   might have the right to read some fields but not others.
+
+4.2.5.  Create
+
+   The CREATE request is used to store new objects on the server.
+
+4.3.  Response
 
    Responses are sent from servers to clients when a request has been
    processed.  A response has ...
@@ -486,7 +698,7 @@ Internet-Draft                    FOSP                    September 2014
    would be the object that was requested.  In case of a READ request it
    would contain the file.
 
-4.1.3.  Notification
+4.4.  Notification
 
    Notifications are sent from servers to clients when objects change
    and the client has subscribed to those changes.  A notification
@@ -497,19 +709,11 @@ Internet-Draft                    FOSP                    September 2014
       a resource identifier.
 
    The notifications are sent when a request triggers an event, for
-
-
-
-Maurer                   Expires March 26, 2015                 [Page 9]
-
-Internet-Draft                    FOSP                    September 2014
-
-
    example CREATE triggers a CREATED event.  If the event equals DELETED
    then the body of the notification must be empty.  Otherwise it should
    contain the new version of the object.
 
-4.2.  Format
+4.5.  Format
 
    **WARNING: To simplify the definition for the moment, only ASCII
    characters are used.  This WILL change as the protocol itself
@@ -517,48 +721,16 @@ Internet-Draft                    FOSP                    September 2014
    user and resource names MUST be supported**
 
    Also the header definition will be subject to change after
-   determining acceptable characters.  For the resource identifier, we
-   will probably refer to the IRI definition in the future.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Maurer                   Expires March 26, 2015                [Page 10]
+Maurer                    Expires March 5, 2015                [Page 13]
 
 Internet-Draft                    FOSP                    September 2014
+
+
+   determining acceptable characters.  For the resource identifier, we
+   will probably refer to the IRI definition in the future.
 
 
    message       = request / response / notification
@@ -608,16 +780,12 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-
-
-
-
-Maurer                   Expires March 26, 2015                [Page 11]
+Maurer                    Expires March 5, 2015                [Page 14]
 
 Internet-Draft                    FOSP                    September 2014
 
 
-4.3.  Serialization
+4.6.  Serialization
 
    Messages are serialized into a blob of bytes.  Most of the message is
    text in UTF-8 encoding, only the body is either a valid JSON object,
@@ -668,166 +836,53 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                [Page 12]
+Maurer                    Expires March 5, 2015                [Page 15]
 
 Internet-Draft                    FOSP                    September 2014
 
 
-5.  Data structure
+5.  Network Topology
 
-5.1.  Objects
+   In the FOSP network, agents are either clients or servers.  Each
+   server belongs to one provider that is identified by a domain name.
+   For load balancing purposes, more than one server per domain might be
+   used.  To keep the examples simple, we nevertheless assume that there
+   is one server per provider and use the term provider and server
+   interchangeable.  A user connects, using a client, to the server of
+   their provider.  We refer to this server as the home server of the
+   user.
 
-   We refer to the basic unit of data, that can be manipulated in the
-   FOSP network, as an object.  An object consists of key-value pairs.
-   The constraints for keys and values are the ones described by the
-   JSON specification.  Each object has by default specific key value
-   pairs that have a special meaning, for example, the key "owner"
-   contains the identifier of the user who created the object.  When
-   transfering objects in messages, the object is serialized according
-   to the JSON specification.
-
-5.2.  Trees
-
-   In FOSP, all objects are part of a tree of objects.  Therefore, all
-   objects have a parent object, except for the root object of a tree.
-   Consequently, all objects can have child objects.  For each user
-   there exists one tree of objects and the root node of this tree is
-   named like the identifier of the user.  The tree of the user is
-   stored on the servers that are responsible for the domain where the
-   user is registered.
-
-5.3.  Attachments
-
-   As files, like pictures and documents, are also shared via social
-   networks, FOSP supports saving binary files.  For each object, one
-   file can be saved as an attachment.  This way, files can be addressed
-   with the same schema and the objects they are attached to can provide
-   the meta-data.  If an object has a belonging file, it is extended by
-   a new attributes named "attachment".  In this attribute, the size,
-   file name, and mime-type of the file is saved.  The attached file is
-   read and written using special requests.
-
-5.4.  Standard Fields
-
-   Most attributes of an object have a well defined meaning.  The
-   servers have to ensure that the content of these attributes adheres
-   to the specification and that users do not make changes that are not
-   allowed.  Figure 3 shows an example of an objects with all the fields
-   described here.  Currently we define the following attributes and
-   their values:
-
-      The "owner" field is set by the server on creation of the object
-      and contains the identifier of the user who created the object as
-      a string.  It determines the ownership of this object and is used
-      when enforcing access rights.
+   To manipulate or access data, the user sends requests.  A request can
+   act upon a resource.  If the resource is not managed by the server
+   the user is connected to, the server will relay the request to the
+   responsible server.  Hence, FOSP servers may open connections to
+   other FOSP servers.
 
 
 
-
-Maurer                   Expires March 26, 2015                [Page 13]
-
-Internet-Draft                    FOSP                    September 2014
-
-
-      The "btime" (birth time) field is set by the server to the date of
-      creation of the object.  It is saved as a string, formatted
-      according to the ISO 8601 standard and must always be in the UTC
-      time zone.  Users should not be able to change its content.  It
-      was added because it's an information that is usually of interest
-      to users.
-
-      Similar the "mtime" (modify time) is set to the current date each
-      time the object is altered and is not to be set by the users
-      directly.  It is saved just like "btime".  In the future it will
-      be used to allow client side caching similar to ETags in HTTP.
-
-      We recommend that users should not be allowed to add or alter
-      arbitrary fields except for the "data" and "type" field.  The
-      "data" field is where the user should save the payload and may
-      contain any valid value.  The "type" field should contain a string
-      that describes the content type of the "data" field, similar to
-      MIME types.
-
-   Furthermore, there are the three fields "acl", "subscriptions" and
-   "attachment" that contain more complex objects.
-
-   The "acl" field saves information about access rights.  It is read by
-   the server to enforce access control.
-
-      The acl object can have the following fields: "owner", "users",
-      "groups", "other"
-
-      The value of the "owner" and "other" field is a set of rights
-
-      A set of rights is an array of strings where each string
-      identifies a certain right.  For example, the string "read-acl"
-      stands for the right to read the "acl" field.
-
-      The value of the "users" and "groups" field is an object.  In
-      these objects, each key identifies a user or a group and the
-      related value is a set of rights.
-
-   The "subscriptions" field saves information about subscriptions.  It
-   is read by the server to determine which users have to be notified on
-   changes to an object.
-
-      It contains an object and each key is the identifier of a user.
-
-      The value is an object with the fields: "events" and "depth"
-
-      The value of "events" is an array of strings which identify an
-      event, the value of "depth" is an integer between -1 and infinity
-
-
-
-Maurer                   Expires March 26, 2015                [Page 14]
-
-Internet-Draft                    FOSP                    September 2014
-
-
-   The "attachment" field is only present if this object has an
-   attachment.  It contains an object with three fields.
-
-      The "name" field contains a string with the file name.
-
-      The "size" field contains the number of bytes of the attached
-      file.
-
-      The "mime-type" field contains a string with the mime-type of the
-      attached file.
-
-
-
-   {
-     btime: "2007-03-01T13:00:00Z",
-     mtime: "2008-05-11T15:30:00Z",
-     owner: "alice@wonderland.lit",
-     acl: {
-       owner: ["read-data", "write-data", "read-acl", "write-acl",
-         "read-subscriptions", "write-subscriptions",
-         "read-children", "write-children", "delete-children"],
-       users: {
-         alice@wonderland.lit: [
-           "read-data",
-           "not-write-data",
-           "read-acl",
-           "write-acl",
-           "read-subscriptions",
-           "not-write-subscriptions"
-         ]
-       }
-     },
-     subscriptions: {
-       users: {
-         alice@wonderland.lit: {
-           events: [ "created", "updated" ],
-           depth: 1
-         }
-       }
-     },
-     type: "text/plain",
-     data: "Just plain text"
-   }
+   +--------------+    +--------------+
+   |alice@        |    |queen@        |
+   |wonderland.lit|    |wonderland.lit|
+   +------------+-+    +-+------------+
+                |        |
+                |        |
+                |        |
+             +--v--------v--+
+             |wonderland.lit|
+             |              |
+             +---+------^---+
+                 |      |
+                 |      |
+             +---v------+---+
+             |realworld.lit |
+             |              |
+             +--^-----------+
+                |
+                |
+    +-----------+--+
+    | sister@      |
+    | realworld.lit|
+    +--------------+
 
 
                                  Figure 3
@@ -836,63 +891,8 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                [Page 15]
-
-Internet-Draft                    FOSP                    September 2014
 
-
-5.5.  Standart Objects
-
-   Some objects in the tree of a user will be used by the server to
-   obtain configurations.  For example alice@wonderland. lit/config/
-   groups will contain the mapping from users to groups, that is valid
-   for the tree alice@wonderland. lit.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Maurer                   Expires March 26, 2015                [Page 16]
+Maurer                    Expires March 5, 2015                [Page 16]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -908,7 +908,7 @@ Internet-Draft                    FOSP                    September 2014
 
 6.1.  Access control
 
-   As stated in Section 5.4, each object can save access control
+   As stated in Section 3.4, each object can save access control
    information.  A valid entry in the access control list consists of
    the identifier of a user or a group of users and a list of rights.
    Manipulation of different parts of the object can require different
@@ -948,7 +948,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                [Page 17]
+Maurer                    Expires March 5, 2015                [Page 17]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -972,7 +972,7 @@ Internet-Draft                    FOSP                    September 2014
 
 6.3.  Attachments
 
-   As explained in Section 5.3, each object can have a file as
+   As explained in Section 3.3, each object can have a file as
    attachment.  However, attachments will likely not be stored together
    with objects, but in a storage that is more suitable for files.
    Depending on how the server implements operations on attachments, it
@@ -1004,7 +1004,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                [Page 18]
+Maurer                    Expires March 5, 2015                [Page 18]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -1060,7 +1060,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                [Page 19]
+Maurer                    Expires March 5, 2015                [Page 19]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -1116,7 +1116,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                [Page 20]
+Maurer                    Expires March 5, 2015                [Page 20]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -1172,7 +1172,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                   Expires March 26, 2015                [Page 21]
+Maurer                    Expires March 5, 2015                [Page 21]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -1228,5 +1228,5 @@ Author's Address
 
 
 
-Maurer                   Expires March 26, 2015                [Page 22]
+Maurer                    Expires March 5, 2015                [Page 22]
 
