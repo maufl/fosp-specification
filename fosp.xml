@@ -28,6 +28,7 @@
     <?rfc include="data-structure.xml"?>
     <?rfc include="network-topology.xml"?>
     <?rfc include="messages.xml"?>
+    <?rfc include="bindings.xml"?>
     <?rfc include="policies.xml"?>
     <?rfc include="connection-initiation.xml"?>
   </middle>

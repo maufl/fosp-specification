@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section anchor="bindings" title="Bindings">
+ <t>Bindings define how a FOSP message is transported via an existing protocol.
+ Currently a binding for the WebSocket protocol is defined and a binding for HTTP is being worked on.
+ </t>
+ <section anchor="bindings-ws" title="WebSocket binding">
+  <section anchor="msg-format" title="Format">
+    <t>**WARNING: To simplify the definition for the moment, only ASCII characters are used.
+    This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**
+    </t>
+    <t>Also the header definition will be subject to change after determining acceptable characters.
+    For the resource identifier, we will probably refer to the IRI definition in the future.
+    </t>
+    <?rfc include="fig-message-abnf.xml"?>
+  </section>
+  <section anchor="msg-serialization" title="Serialization">
+    <t>Messages are serialized into a blob of bytes.
+    Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
+    The second case occurs when an attached file is up- or downloaded.
+    The beginning and end, e.
+    g.
+    the length of a message must be determined from lenght of the WebSocket message.
+    </t>
+  </section>
+ </section>
+</section>
