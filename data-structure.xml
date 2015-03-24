@@ -9,6 +9,76 @@
     In the rest of the document we will refer to a key-value pair of an object either as an attribute or a field of an object.
     </t>
   </section>
+  <section anchor="data-structure-fields" title="Object attributes">
+    <t>Most attributes of an object have a well defined meaning.
+    The servers have to ensure that the content of these attributes adheres to the specification and that users do not make changes that are not allowed.
+    <xref target="fig-object-example" />&nbsp;shows an example of an objects with all the fields described here.
+    Currently we define the following attributes and their values:
+    <list>
+      <t>The “owner” field is set by the server on creation of the object and contains the identifier of the user who created the object as a string.
+      It determines the ownership of this object and is used when enforcing access rights.
+      The user MUST NOT be able to set the field to a different value.
+      </t>
+      <t>The “btime” (birth time) field is set by the server to the date of creation of the object.
+      It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
+      Users must not be able to change its content.
+      The user MUST NOT be able to set the field to a different value.
+      </t>
+      <t>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
+      It is saved just like “btime”.
+      In the future it might be used to allow client side caching similar to ETags in HTTP.
+      The user MUST NOT be able to set the field to a different value.
+      </t>
+      <t>The “data” field is where the user should save the payload and may contain any valid value.
+      The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
+      These two fields are the only fields where the user can save arbitrary data.
+      The server MUST allow the user to store any data in this fields.
+      </t>
+    </list>
+    </t>
+    <t>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
+    </t>
+    <t anchor="data-structure-fields-acl">The “acl” field saves information about access rights in form of an object.
+    It is read by the server to enforce access control.
+    <list>
+      <t>The acl object can have the following fields: “owner”, “users”, “groups”, “other” </t>
+      <t>The value of the “owner” and “other” field is a set of rights</t>
+      <t>A set of rights is an object where each key identifies a certain scope the right applies to, and the value is a string array of permissions.
+      For example, the key ”acl” means that the permissions apply to the acl field of the object.
+      Currently allowed values for the key are “acl”, “data”, “subscriptions“, “children“.
+      The permissions can be “read”, “write“ and “delete”.
+      They can also be prefixed with “not-“ to revoke a right, which is necessary because rights are inherited.
+      This will be further explained in&nbsp;<xref target="access-control" />.
+      </t>
+      <t>The value of the “users” and “groups” field is an object.
+      In these objects, each key identifies a user or a group and the related value is a set of rights.
+      </t>
+    </list>
+    </t>
+    <t>The “subscriptions” field saves information about subscriptions.
+    It is read by the server to determine which users have to be notified on changes to an object.
+    <list>
+      <t>It contains an object and each key is the identifier of a user.</t>
+      <t>The value is an object with the fields: “events” and “depth”</t>
+      <t>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity </t>
+    </list>
+    How this field is evaluated by the server is explained in&nbsp;<xref target="subscriptions" />.
+    </t>
+    <t>The “attachment” field is only present if this object has an attachment.
+    It contains an object with three fields.
+    <list>
+      <t>The “name” field contains a string with the file name.
+      </t>
+      <t>The “size” field contains the number of bytes of the attached file.
+      The value of this field MUST be set by the server whenever a WRITE request changes the size of the file.
+      The value of this field MUST NOT be set by a user.
+      </t>
+      <t>The “type” field contains a string with the mime-type of the attached file.
+      </t>
+    </list>
+    </t>
+    <?rfc include="fig-object.xml"?>
+  </section>
   <section anchor="obj-trees" title="Trees">
     <t>In FOSP, all objects are part of a tree of objects.
     Therefore, all objects have a parent object, except for the root object of a tree.
@@ -26,70 +96,10 @@
     The attached file is read and written using special requests.
     </t>
   </section>
-  <section anchor="data-structure-fields" title="Object attributes">
-    <t>Most attributes of an object have a well defined meaning.
-    The servers have to ensure that the content of these attributes adheres to the specification and that users do not make changes that are not allowed.
-    <xref target="fig-object-example" />&nbsp;shows an example of an objects with all the fields described here.
-    Currently we define the following attributes and their values:
-    <list>
-      <t>The “owner” field is set by the server on creation of the object and contains the identifier of the user who created the object as a string.
-      It determines the ownership of this object and is used when enforcing access rights.
-      </t>
-      <t>The “btime” (birth time) field is set by the server to the date of creation of the object.
-      It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
-      Users must not be able to change its content.
-      </t>
-      <t>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
-      It is saved just like “btime”.
-      In the future it might be used to allow client side caching similar to ETags in HTTP.
-      </t>
-      <t>The “data” field is where the user should save the payload and may contain any valid value.
-      The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
-      These two fields are the only fields where the user can save arbitrary data.
-      </t>
-    </list>
-    </t>
-    <t>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
-    </t>
-    <t anchor="data-structure-fields-acl">The “acl” field saves information about access rights in form of an object.
-    It is read by the server to enforce access control.
-    <list>
-      <t>The acl object can have the following fields: “owner”, “users”, “groups”, “other” </t>
-      <t>The value of the “owner” and “other” field is a set of rights</t>
-      <t>A set of rights is an array of strings where each string identifies a certain right.
-      For example, the string ”read-acl” stands for the right to read the “acl” field.
-      </t>
-      <t>The value of the “users” and “groups” field is an object.
-      In these objects, each key identifies a user or a group and the related value is a set of rights.
-      </t>
-    </list>
-    </t>
-    <t>The “subscriptions” field saves information about subscriptions.
-    It is read by the server to determine which users have to be notified on changes to an object.
-    <list>
-      <t>It contains an object and each key is the identifier of a user.</t>
-      <t>The value is an object with the fields: “events” and “depth”</t>
-      <t>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity </t>
-    </list>
-    </t>
-    <t>The “attachment” field is only present if this object has an attachment.
-    It contains an object with three fields.
-    <list>
-      <t>The “name” field contains a string with the file name.
-      </t>
-      <t>The “size” field contains the number of bytes of the attached file.</t>
-      <t>The “type” field contains a string with the mime-type of the attached file.
-      </t>
-    </list>
-    </t>
-    <?rfc include="fig-object.xml"?>
-  </section>
   <section anchor="std-objs" title="Provisioned Objects">
     <t>Some objects in the tree of a user will be used by the server to obtain configurations.
-    For example alice@wonderland.
-    lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.
-    lit.
-    These objects can will be created by the server when the user first registers with it.
+    For example alice@wonderland.lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.lit.
+    These objects will be created by the server when the user first registers with it.
     </t>
   </section>
 </section>

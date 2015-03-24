@@ -11,8 +11,8 @@ Here we collect all topics that have to be discussed and then order them.
 * Overview
   * Users and Providers
   * Trees, Objects and Attachments
-  * Messages
   * Network topology
+  * Messages
   * Bindings
 * Data structure
   * Objects
@@ -20,6 +20,10 @@ Here we collect all topics that have to be discussed and then order them.
   * Trees
   * Attachments
   * Provisioned Objects
+* Network topology
+  * Client
+  * Server
+  * Connection
 * Messages
   * Requests
     * Info ??
@@ -47,12 +51,9 @@ Here we collect all topics that have to be discussed and then order them.
     * Session management
     * Format
     * Serialization
-* Network topology
-  * Server
-  * Client
-  * Connection
 * Policies
   * Access control
+  * Groups
   * Subscriptions
   * Attachments
   * Authentication
@@ -67,3 +68,5 @@ Here we collect all topics that have to be discussed and then order them.
 * Seperate Create/Update or not?
 * Name connection negotiation: Discover/Connect/Info
 * Extend JSON?
+* Finalize possible ACL rights and the notation, e.g. read/write vs. method names
+* Layout for group configuration must be defined

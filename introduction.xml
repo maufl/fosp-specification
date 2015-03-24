@@ -25,7 +25,8 @@
   </section>
   <section anchor="requirements" title="Requirements">
     <t>FOSP builds on existing protocols and data formats.
-    The transport protocol for FOSP messages currently is the WebSocket protocol, tough other options may be added in the future.
+    The transport protocol for FOSP messages currently is the WebSocket protocol and a HTTP binding is in the works.
+    Other options may be added in the future.
     Objects are serialized into the JavaScript Object Notation (JSON).
     Besides these technical dependencies, FOSP is inspired by WebDAV and XMPP and has similarities to LDAP.
     </t>
@@ -37,6 +38,7 @@
       It is identified by a fully qualified domain name.
       </t>
       <t hangText="server">A FOSP server stores the data of users of a certain provider.
+      The term server applies to the the software that processes request as well as to the machine that runs the software.
       For fault tolerance and load balancing purposes, a provider might deploy multiple servers.
       </t>
       <t hangText="client">A FOSP client is a program a user uses to communicate with a FOSP server.
@@ -57,6 +59,10 @@
       It consists of structured data expressed in JSON.
       </t>
       <t hangText="attachment">An attachment is a binary or text file that is associated with an object.
+      Each object can only have one attachment.
+      </t>
+      <t hangText="tree">The objects of a users form a tree structure.
+      Each object has exactly one parent object, except for the root object.
       </t>
     </list>
     </t>
