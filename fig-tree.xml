@@ -1,0 +1,24 @@
+<figure anchor="fig-tree-example">
+	<preamble />
+	<artwork>
+<![CDATA[
+   +--------------------+     
+   |alice@wonderland.lit|     
+   +---+------------+---+     
+       |            |         
+       |            |         
+   +---+--+      +--+---+     
+   |config|      |social|     
+   +------+      +----+-+     
+                      |       
+                      |       
+                     ++-+     
+        +----------> |me|     
+        |            +--+     
+        +                     
+alice@wonderland.lit/social/me
+
+]]>
+	</artwork>
+	<postamble />
+</figure>

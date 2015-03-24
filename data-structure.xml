@@ -84,6 +84,7 @@
     Consequently, all objects can have child objects.
     For each user there exists one tree of objects and the root node of this tree is named like the identifier of the user.
     The tree of the user is stored on the servers that are responsible for the domain of the provider where the user is registered.
+    <?rfc include="fig-tree.xml" ?>
     </t>
   </section>
   <section anchor="data-structure-attachments" title="Attachments">
