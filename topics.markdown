@@ -25,6 +25,7 @@ Here we collect all topics that have to be discussed and then order them.
   * Server
   * Connection
 * Messages
+  * Types
   * Requests
     * Info ??
     * Bind
@@ -42,6 +43,7 @@ Here we collect all topics that have to be discussed and then order them.
     * Created
     * Updated
     * Deleted
+  * Status Codes
 * Bindings
   * Websockets
     * Connection Initiation
@@ -62,7 +64,6 @@ Here we collect all topics that have to be discussed and then order them.
   * Registration
   * Message forwarding
 * Discovery
-* Error Codes
 
 # Open questions
 * Auhtentication methods and registration possibilities.

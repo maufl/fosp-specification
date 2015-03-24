@@ -21,7 +21,7 @@
     </list>
     </t>
   </section>
-  <section anchor="subscriptions" title="Subscriptions">
+  <section anchor="pol-subscriptions" title="Subscriptions">
     <t>Similar to the access control information, subscriptions can be set on objects so that a user will be notified when changes occur.
     A subscription consists of an identifier of a user, a list of events to subscribe to and a “depth”.
     The depth is used to subscribe to events from all child objects to a certain depth.

@@ -17,7 +17,7 @@
     If a request does not act upon an object, the identifier is replaced with an asterisk.
     </t>
   </section>
-  <section anchor="msg-type-request" title="Request">
+  <section anchor="msg-request" title="Request">
     <t>Requests are sent from clients to servers to authenticate or manipulate objects.
     A request consists of ...
     <list>
@@ -35,11 +35,11 @@
     When the request is successfully processed, a success response MUST be sent.
     Depending on the request, it may contain information in its body, like the object that was requested, or an attachment that was read.
     </t>
-    <t>The request types are described in the following section.</t>
-    <section anchor="msg-type-request-info" title="Info">
+    <t>The request types are described in the following sections.</t>
+    <section anchor="msg-request-info" title="Info">
       <t>TODO</t>
     </section>
-    <section anchor="msg-type-request-bind" title="Bind">
+    <section anchor="msg-request-bind" title="Bind">
       <t>The BIND request is used to authenticate the client.
       The body MUST contain an object with the "method" attribute that specifies the used authentication method.
       The possible methods of authentication are not final yet, however every server SHOULD support a simple authentication by name and password.
@@ -52,7 +52,7 @@
       It can for example either be a tied to network connection, or be a cookie supplied in each request.
       </t>
     </section>
-    <section anchor="msg-type-request-get" title="Get">
+    <section anchor="msg-request-get" title="Get">
       <t>The GET request is used to retrieve an object.
       The resource identifier in the request denotes the object that should be returned.
       The server MUST ignore any content in the body of the request.
@@ -61,14 +61,14 @@
       Even on success, not the whole object might be returned as the user might have the right to read some attributes but not others.
       </t>
     </section>
-    <section anchor="msg-type-request-list" title="List">
+    <section anchor="msg-request-list" title="List">
       <t>The LIST request is used to discover all child objects of a certain object.
       The resource identifier specifies the object of which the children should be returned.
       </t>
       <t>If successfull, the response contains an array of names of the child objects.
       </t>
     </section>
-    <section anchor="msg-type-request-create" title="Create">
+    <section anchor="msg-request-create" title="Create">
       <t>The CREATE request is used to store new objects on the server.
       The resource identifier is the desired location for the new object.
       The body containes the object to store.
@@ -76,7 +76,7 @@
       <t>On success, an empty success response is returned and the object is stored at the given location.
       </t>
     </section>
-    <section anchor="mgs-type-request-patch" title="Patch">
+    <section anchor="mgs-request-patch" title="Patch">
       <t>The PATCH request is used to update an already existing object on the server.
       The resource identifier specifies the object that should be updated.
       The body containes an object with the differences that should be applied to the object.
@@ -90,21 +90,21 @@
       <t>On success, an empty success response is returned.
       </t>
     </section>
-    <section anchor="msg-type-request-delete" title="Delete">
+    <section anchor="msg-request-delete" title="Delete">
       <t>The DELETE request is used to remove an object from a tree.
       The resource identifier specifies the object that should be removed.
       </t>
       <t>If successfull, a succeeded message is returned and the object is permanently removed.
       </t>
     </section>
-    <section anchor="msg-type-request-read" title="Read">
+    <section anchor="msg-request-read" title="Read">
       <t>The READ request is used to read the attachment.
       The resource identifier specifies the object of which the attachment should be read.
       </t>
       <t>The success response body contains the raw bytes of the attachment.
       </t>
     </section>
-    <section anchor="msg-type-request-write" title="Write">
+    <section anchor="msg-request-write" title="Write">
       <t>The WRITE request is used to write to the attachment.
       The resource identifier specifies the object of which the attachment should be written.
       The body contains the raw bytes of the attachment.
@@ -113,19 +113,19 @@
       </t>
     </section>
   </section>
-  <section anchor="msg-type-response" title="Response">
+  <section anchor="msg-response" title="Response">
     <t>Responses are sent from servers to clients when a request has been processed.
     A response has ...
     <list>
       <t>a type, either “SUCCEEDED” or “FAILED”.</t>
       <t>a status code, an integer greater zero.</t>
-      <t>a sequence number which must match the sequence number of the request
-      it responds to.
-      </t>
     </list>
-    The body of a response depends on the request that is answered.
-    For a CREATE or DELETE request it would be empty, for a SELECT request it would be the object that was requested.
-    In case of a READ request it would contain the file.
+    </t>
+    <t>The body of a response depends on the request that is answered.
+    For a CREATE or DELETE request it would be empty, for a GET request it would be the object that was requested.
+    In case of a READ request it would contain the raw bytes of the attachment.
+    </t>
+    <t>The status code is explained in&nbsp;<xref target="msg-status-codes" />.
     </t>
   </section>
   <section anchor="msg-type-notification" title="Notification">
@@ -135,9 +135,16 @@
       <t>an event which is one of “CREATED”, “UPDATED” or “DELETED”.</t>
       <t>a resource identifier.</t>
     </list>
-    The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
+    </t>
+    <t>The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
     If the event equals DELETED then the body of the notification must be empty.
     Otherwise it should contain the new version of the object.
+    </t>
+    <t>When and to who notifications are sent is explained in&nbsp;<xref target="pol-subscriptions" />.
+    </t>
+  </section>
+  <section anchor="msg-status-codes" title="Status codes">
+    <t>TODO
     </t>
   </section>
   <section anchor="msg-format" title="Format">

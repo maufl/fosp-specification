@@ -62,7 +62,7 @@
       <t>The value is an object with the fields: “events” and “depth”</t>
       <t>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity </t>
     </list>
-    How this field is evaluated by the server is explained in&nbsp;<xref target="subscriptions" />.
+    How this field is evaluated by the server is explained in&nbsp;<xref target="pol-subscriptions" />.
     </t>
     <t>The “attachment” field is only present if this object has an attachment.
     It contains an object with three fields.
