@@ -1,26 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="bindings" title="Bindings">
- <t>Bindings define how a FOSP message is transported via an existing protocol.
- Currently a binding for the WebSocket protocol is defined and a binding for HTTP is being worked on.
- </t>
- <section anchor="bindings-ws" title="WebSocket binding">
-  <section anchor="msg-format" title="Format">
-    <t>**WARNING: To simplify the definition for the moment, only ASCII characters are used.
-    This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**
+  <t>Bindings define how a FOSP message is transported via an existing protocol.
+  Currently a binding for the WebSocket protocol is defined and a binding for HTTP is being worked on.
+  </t>
+  <section anchor="bindings-ws" title="WebSocket binding">
+    <t>The WebSocket binding provides a way of sending FOSP messages of WebSocket messages.
+    It was chosen because it is  the only bidirectional protocol currently supported in browsers.
     </t>
-    <t>Also the header definition will be subject to change after determining acceptable characters.
-    For the resource identifier, we will probably refer to the IRI definition in the future.
-    </t>
-    <?rfc include="fig-message-abnf.xml"?>
+    <section anchor="bindings-ws-connection-initiation" title="Connection Initiation">
+      <t>To send messages to a server over WebSockets, a connection has to be established first.
+      How the server address, port and URL path are determined for a given domain is discussed in&nbsp;<xref target="discovery" />.
+      In the WebSocket handshake, the Sec-WebSocket-Protocol MUST be set to "fosp".
+      </t>
+    </section>
+    <section anchor="msg-format" title="Format">
+      <t>The FOSP messages is formatted similar to a HTTP request/response.
+      </t>
+      <t><em>WARNING: To simplify the definition for the moment, only ASCII characters are used.
+      This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported</em>
+      Also the header definition will be subject to change after determining acceptable characters.
+      For the resource identifier, we will probably refer to the IRI definition in the future.
+      </t>
+      <?rfc include="fig-message-abnf.xml"?>
+    </section>
+    <section anchor="msg-serialization" title="Serialization">
+      <t>Messages are serialized into a blob of bytes and sent inside a single WebSocket message.
+      Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or raw bytes.
+      The second case occurs when an attachment is up- or downloaded.
+      The beginning and end, e.g. the length of a message must be determined from lenght of the WebSocket message.
+      </t>
+      <t>When a message contains binary data that is not UTF-8 encoded text, e.g. a WRITE request, a binary WebSocket message MUST be used.
+      Otherwise, when the whole message is valid UTF-8 encoded text, a text WebSocket message CAN be used.
+      </t>
+    </section>
   </section>
-  <section anchor="msg-serialization" title="Serialization">
-    <t>Messages are serialized into a blob of bytes.
-    Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
-    The second case occurs when an attached file is up- or downloaded.
-    The beginning and end, e.
-    g.
-    the length of a message must be determined from lenght of the WebSocket message.
+  <section anchor="bindings-http" title="HTTP binding">
+    <t>The HTTP binding is developed because it might be simpler for clients to process large up- or downloads via HTTP.
+    However, it does not support all of FOSPs functionality because notifications can not be sent over HTTP (at least over HTTP/1.1).
     </t>
-  </section>
- </section>
+    <section anchor="bingings-http-mapping" title="Mapping">
+      <t>Each FOSP request is transported as an HTTP request.
+      The request identifier is used as the HTTP method.
+      The HTTP request-URI MUST be the absolute URI of the FOSP object.
+      The HTTP headers are the FOSP headers.
+      The HTTP body is the FOSP body.
+      </t>
+    </section>
+    <section anchor="bindings-http-session-management" title="Session management">
+      <t>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a BIND request.
+      With this cookie, the client is able to make authenticated requests.
+      </t>
+    </section>
 </section>
