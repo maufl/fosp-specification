@@ -2,7 +2,7 @@
 <section anchor="messages" title="Messages">
   <t>Messages are the basic unit of communication in the FOSP network.
   There are three different types of messages which serve different purposes.
-  After being serialized, each message is transported over a WebSocket connection inside of one WebSocket text message or binary message.
+  How a message is serialized depends on the protocol that is used to transport the message.
   </t>
   <section anchor="msg-type" title="Types">
     <t>Each message has a specific type, which determines the kind of purpose this message serves.
@@ -15,7 +15,6 @@
     Requests and notifications usually act on, or are emitted from an object or an attachemnt.
     The identifier of the object or attachemnt is then part of the request.
     If a request does not act upon an object, the identifier is replaced with an asterisk.
-    Furthermore, each request and response carries an sequence number that makes it possible to to assign one response to one request.
     </t>
   </section>
   <section anchor="msg-type-request" title="Request">
@@ -24,67 +23,92 @@
     <list>
       <t>a request type</t>
       <t>optionally an identifier of a resource that it manipulates</t>
-      <t>a sequence number that is used to match the request with its response</t>
     </list>
     The content of the body depends on the type of request.
-    For example, the body of a SELECT or DELETE request is empty and the body of a CREATE request contains the new object.
+    For example, the body of a GET or DELETE request is empty and the body of a CREATE request contains the new object.
     In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
     </t>
     <t>The request types are described in the following section.</t>
-    <section anchor="msg-type-request-connect" title="Connect">
-      <t>The CONNECT request is the first request that is sent from a client or server that initiates a new connection.
-      It does not act upon an object and thus the resource identifier is set to an asterisk.
-      The body of this request is used to negotiate the protocol version and maybe in the future other protocol parameters and services that the server might provide.
-      It contains an simple JSON object that, for the moment, has only one field named "version" and the value of this field is the string "0.1".
-      </t>
-      <t>The response status code will indicate whether the connection was successfully opened or not.</t>
-      <t>All following request types can only be sent after a successful CONNECT request.</t>
+    <section anchor="msg-type-request-info" title="Info">
+      <t>TODO</t>
     </section>
-    <section anchor="msg-type-request-register" title="Register">
-      <t>The REGISTER request can be sent to create a new user on the server.
-      The resource identifier for this request is also always the asterisk as it does not act upon a request.
-      The body contains a JSON object with a "name" and "password" field.
+    <section anchor="msg-type-request-bind" title="Bind">
+      <t>The BIND request is used to authenticate the client.
+      The body MUST contain an object with the "method" attribute that specifies the used authentication method.
+      The possible methods of authentication are not final yet, however every server SHOULD support a simple authentication by name and password.
+      In this case the object also contains a "user" and "password" attribute containing the full user name and the password.
       </t>
-      <t>If the user account can be created the server will do that and afterwards sent a response with a status code indicating success.
-      </t>
-    </section>
-    <section anchor="msg-type-request-authenticate" title="Authenticate">
-      <t>The AUTHENTICATE request is usually the second request after the CONNECT request.
-      Like the REGISTER request, the resource identifier is an asterisk and the body contains an object with a "name" and a "password" field.
-      </t>
-      <t>The server verifies that the password is correct for the given user and sents a success response or a failed response otherwise.
+      <t>
+      The server verifies that the authentication is successfull and sents a success response or a failed response otherwise.
       All future request will then be made in the name of this authenticated user.
+      How the state is kept depends on the transport protocol used.
+      It can for example either be a tied to network connection, or be a cookie supplied in each request.
       </t>
     </section>
-    <section anchor="msg-type-request-select" title="Select">
-      <t>The SELECT request is used to retrieve an object.
+    <section anchor="msg-type-request-get" title="Get">
+      <t>The GET request is used to retrieve an object.
       The resource identifier in the request denotes the object that should be returned.
-      The body of the request is empty.
+      The server MUST ignore any content in the body of the request.
       </t>
       <t>The server will first check the rights of the current user on this object.
       Then it might either sent a response with an status that indicates an error or it might sent a success response that contains the requested object in its body.
       Even when the request was successfull, not the whole object might be returned because the user might have the right to read some fields but not others.
       </t>
     </section>
-    <section anchor="msg-type-request-create" title="Create">
-      <t>The CREATE request is used to store new objects on the server.
+    <section anchor="msg-type-request-list" title="List">
+      <t>The LIST request is used to discover all child objects of a certain object.
+      The resource identifier specifies the object of which the children should be returned.
+      </t>
+      <t>If successfull, the response will contain an array of names of the child objects.
       </t>
     </section>
-    <!--
-	The request type is one of the following ...
-	<list style="hanging">
-	<t hangText="CONNECT">used to initiate a connection</t>
-	<t hangText="REGISTER">used to create a new FOSP user</t>
-	<t hangText="AUTHENTICATE">used to authenticate</t>
-	<t hangText="SELECT">retrieves an object</t>
-	<t hangText="CREATE">adds a new object</t>
-	<t hangText="UPDATE">changes an existing object</t>
-	<t hangText="DELETE">removes an object and all its children</t>
-	<t hangText="LIST">returns a list of children of an object</t>
-	<t hangText="READ">download the attached file of an object</t>
-	<t hangText="WRITE">upload a file as an attachment to an object</t>
-	</list>
-    -->
+    <section anchor="msg-type-request-create" title="Create">
+      <t>The CREATE request is used to store new objects on the server.
+      The resource identifier is the desired location for the new object.
+      The body containes the object to store.
+      </t>
+      <t>The server will try to store the object at the given location but MUST first check whether the user has sufficent rights and an object with the given identifier does not yet exist.
+      When the server can store the object, it will return a success response and an failed response otherwise.
+      </t>
+    </section>
+    <section anchor="mgs-type-request-patch" title="Patch">
+      <t>The PATCH request is used to update an already existing object on the server.
+      The resource identifier specifies the object that should be updated.
+      The body containes an object with the differences that should be applied to the object.
+      </t>
+      <t>After checking permissions and the existence of the object, the server will apply the differences to the object.
+      If successfull, a succeeded message is returned or an failed message otherwise.
+      </t>
+      <t>The differences are merged into the object as follows.
+      If the original object does not have an attribute the differences object has, the attribute is copied to the object.
+      If the original object already has an attribute the differences object has and the new value is <em>null</em>, the attribute is deleted from the object.
+      If the original object already has an attribute the differences object has and the value is not null, the attribute is replaced with the new attribute except when the value of the old and the new attribute are both an object.
+      In this case the merging is done on the attribute recursivly as it is on the whole object.
+      </t>
+    </section>
+    <section anchor="msg-type-request-delete" title="Delete">
+      <t>The DELETE request is used to remove an object from a tree.
+      The resource identifier specifies the object that should be removed.
+      </t>
+      <t>After checking existence of the object and permissions, the server will remove the object.
+      If successfull, a succeeded message is returned and a failed message otherwise.
+      </t>
+    </section>
+    <section anchor="msg-type-request-read" title="Read">
+      <t>The READ request is used to read the attachment.
+      The resource identifier specifies the object of which the attachment should be read.
+      </t>
+      <t>The success response will contain the raw bytes of the attachment.
+      </t>
+    </section>
+    <section anchor="msg-type-request-write" title="Write">
+      <t>The WRITE request is used to write to the attachment.
+      The resource identifier specifies the object of which the attachment should be written.
+      The body contains the raw bytes of the attachment.
+      </t>
+      <t>The success response is empty.
+      </t>
+    </section>
   </section>
   <section anchor="msg-type-response" title="Response">
     <t>Responses are sent from servers to clients when a request has been processed.

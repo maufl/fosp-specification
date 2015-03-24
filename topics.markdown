@@ -16,7 +16,7 @@ Here we collect all topics that have to be discussed and then order them.
   * Bindings
 * Data structure
   * Objects
-    * Allowed Fields
+  * Object attributes
   * Trees
   * Attachments
   * Provisioned Objects
@@ -27,11 +27,11 @@ Here we collect all topics that have to be discussed and then order them.
 * Messages
   * Requests
     * Info ??
-    * Authenticate/Bind
+    * Bind
     * Get
     * List
     * Create
-    * Update
+    * Patch
     * Delete
     * Read
     * Write
@@ -65,5 +65,6 @@ Here we collect all topics that have to be discussed and then order them.
 * Error Codes
 
 # Open questions
+* Auhtentication methods and registration possibilities.
 * Name connection negotiation: Discover/Connect/Info
 * Layout for group configuration must be defined
