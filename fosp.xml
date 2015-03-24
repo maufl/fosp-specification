@@ -30,7 +30,7 @@
     <?rfc include="messages.xml"?>
     <?rfc include="bindings.xml"?>
     <?rfc include="policies.xml"?>
-    <?rfc include="connection-initiation.xml"?>
+    <?rfc include="discovery.xml"?>
   </middle>
   <back>
     <references>
