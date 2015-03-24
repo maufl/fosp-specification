@@ -24,9 +24,16 @@
       <t>a request type</t>
       <t>optionally an identifier of a resource that it manipulates</t>
     </list>
-    The content of the body depends on the type of request.
+    </t>
+    <t>The content of the body depends on the type of request.
     For example, the body of a GET or DELETE request is empty and the body of a CREATE request contains the new object.
     In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
+    </t>
+    <t>The server MUST always responde to a request with a response message.
+    Depending on the request, the server must check access rights and whether a certain object exits, bevor the request can be processed.
+    If the user does not have sufficent rights or an required object does not exist (e.g. a parent object when creating a child), a failure response MUST be sent.
+    When the request is successfully processed, a success response MUST be sent.
+    Depending on the request, it may contain information in its body, like the object that was requested, or an attachment that was read.
     </t>
     <t>The request types are described in the following section.</t>
     <section anchor="msg-type-request-info" title="Info">
@@ -40,7 +47,7 @@
       </t>
       <t>
       The server verifies that the authentication is successfull and sents a success response or a failed response otherwise.
-      All future request will then be made in the name of this authenticated user.
+      All future request are made in the name of this authenticated user.
       How the state is kept depends on the transport protocol used.
       It can for example either be a tied to network connection, or be a cookie supplied in each request.
       </t>
@@ -50,16 +57,15 @@
       The resource identifier in the request denotes the object that should be returned.
       The server MUST ignore any content in the body of the request.
       </t>
-      <t>The server will first check the rights of the current user on this object.
-      Then it might either sent a response with an status that indicates an error or it might sent a success response that contains the requested object in its body.
-      Even when the request was successfull, not the whole object might be returned because the user might have the right to read some fields but not others.
+      <t>If the request was successfull, the object is returned in the body of the response..
+      Even on success, not the whole object might be returned as the user might have the right to read some attributes but not others.
       </t>
     </section>
     <section anchor="msg-type-request-list" title="List">
       <t>The LIST request is used to discover all child objects of a certain object.
       The resource identifier specifies the object of which the children should be returned.
       </t>
-      <t>If successfull, the response will contain an array of names of the child objects.
+      <t>If successfull, the response contains an array of names of the child objects.
       </t>
     </section>
     <section anchor="msg-type-request-create" title="Create">
@@ -67,8 +73,7 @@
       The resource identifier is the desired location for the new object.
       The body containes the object to store.
       </t>
-      <t>The server will try to store the object at the given location but MUST first check whether the user has sufficent rights and an object with the given identifier does not yet exist.
-      When the server can store the object, it will return a success response and an failed response otherwise.
+      <t>On success, an empty success response is returned and the object is stored at the given location.
       </t>
     </section>
     <section anchor="mgs-type-request-patch" title="Patch">
@@ -76,29 +81,27 @@
       The resource identifier specifies the object that should be updated.
       The body containes an object with the differences that should be applied to the object.
       </t>
-      <t>After checking permissions and the existence of the object, the server will apply the differences to the object.
-      If successfull, a succeeded message is returned or an failed message otherwise.
-      </t>
       <t>The differences are merged into the object as follows.
       If the original object does not have an attribute the differences object has, the attribute is copied to the object.
       If the original object already has an attribute the differences object has and the new value is <em>null</em>, the attribute is deleted from the object.
       If the original object already has an attribute the differences object has and the value is not null, the attribute is replaced with the new attribute except when the value of the old and the new attribute are both an object.
       In this case the merging is done on the attribute recursivly as it is on the whole object.
       </t>
+      <t>On success, an empty success response is returned.
+      </t>
     </section>
     <section anchor="msg-type-request-delete" title="Delete">
       <t>The DELETE request is used to remove an object from a tree.
       The resource identifier specifies the object that should be removed.
       </t>
-      <t>After checking existence of the object and permissions, the server will remove the object.
-      If successfull, a succeeded message is returned and a failed message otherwise.
+      <t>If successfull, a succeeded message is returned and the object is permanently removed.
       </t>
     </section>
     <section anchor="msg-type-request-read" title="Read">
       <t>The READ request is used to read the attachment.
       The resource identifier specifies the object of which the attachment should be read.
       </t>
-      <t>The success response will contain the raw bytes of the attachment.
+      <t>The success response body contains the raw bytes of the attachment.
       </t>
     </section>
     <section anchor="msg-type-request-write" title="Write">
