@@ -212,41 +212,51 @@ Trees<br />
 Attachments<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#std-objs">3.5.</a>&nbsp;
 Provisioned Objects<br />
-<a href="#messages">4.</a>&nbsp;
-Messages<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type">4.1.</a>&nbsp;
-Types<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request">4.2.</a>&nbsp;
-Request<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-connect">4.2.1.</a>&nbsp;
-Connect<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-register">4.2.2.</a>&nbsp;
-Register<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-authenticate">4.2.3.</a>&nbsp;
-Authenticate<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-select">4.2.4.</a>&nbsp;
-Select<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-request-create">4.2.5.</a>&nbsp;
-Create<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-response">4.3.</a>&nbsp;
-Response<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-notification">4.4.</a>&nbsp;
-Notification<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-format">4.5.</a>&nbsp;
-Format<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-serialization">4.6.</a>&nbsp;
-Serialization<br />
-<a href="#network-topology">5.</a>&nbsp;
+<a href="#network-topology">4.</a>&nbsp;
 Network Topology<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#network-topology-client">5.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#network-topology-client">4.1.</a>&nbsp;
 Client<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#network-topology-server">5.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#network-topology-server">4.2.</a>&nbsp;
 Server<br />
+<a href="#messages">5.</a>&nbsp;
+Messages<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type">5.1.</a>&nbsp;
+Types<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request">5.2.</a>&nbsp;
+Request<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-info">5.2.1.</a>&nbsp;
+Info<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-bind">5.2.2.</a>&nbsp;
+Bind<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-get">5.2.3.</a>&nbsp;
+Get<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-list">5.2.4.</a>&nbsp;
+List<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-create">5.2.5.</a>&nbsp;
+Create<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#mgs-request-patch">5.2.6.</a>&nbsp;
+Patch<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-delete">5.2.7.</a>&nbsp;
+Delete<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-read">5.2.8.</a>&nbsp;
+Read<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-write">5.2.9.</a>&nbsp;
+Write<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-response">5.3.</a>&nbsp;
+Response<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-type-notification">5.4.</a>&nbsp;
+Notification<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes">5.5.</a>&nbsp;
+Status codes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-format">5.6.</a>&nbsp;
+Format<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-serialization">5.7.</a>&nbsp;
+Serialization<br />
 <a href="#policies">6.</a>&nbsp;
 Policies<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">6.1.</a>&nbsp;
 Access control<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#subscriptions">6.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-subscriptions">6.2.</a>&nbsp;
 Subscriptions<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-attachments">6.3.</a>&nbsp;
 Attachments<br />
@@ -599,7 +609,7 @@ Object attributes</h3>
 <p>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity 
 </p>
 </blockquote><p>
-    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#subscriptions'>Section&nbsp;6.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;6.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
     
 </p>
 <p>The “attachment” field is only present if this object has an attachment.
@@ -678,24 +688,94 @@ Attachments</h3>
 <a name="rfc.section.3.5"></a><h3>3.5.&nbsp;
 Provisioned Objects</h3>
 
-<p>Some objects in the tree of a user will be used by the server to obtain configurations.
-    For example alice@wonderland.lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.lit.
+<p>Some objects in the tree of a user will be used by the server to obtain configuration options.
+    For example alice@wonderland.lit/config/groups will contain the mappings from users to groups that are valid for the tree alice@wonderland.lit.
     These objects will be created by the server when the user first registers with it.
     
 </p>
-<a name="messages"></a><br /><hr />
+<a name="network-topology"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;
+Network Topology</h3>
+
+<p>In the FOSP network, agents are either clients or servers.
+  
+</p>
+<a name="network-topology-client"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+Client</h3>
+
+<p>A user connects, using a client, to the server of their provider.
+    We refer to this server as the home server of the user.
+    To manipulate or access data, the user uses the client to send requests.
+    
+</p>
+<p>A client can be any programm that understands the FOSP protocol.
+    
+</p>
+<a name="network-topology-server"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+Server</h3>
+
+<p>A server is a software running on a machine on the internet, that processes requests of clients.
+    Each server belongs to one provider that is identified by a domain name.
+    For load balancing purposes, more than one server per domain/provider might be used.
+    To keep the examples simple, we nevertheless assume that there is one server per provider.
+    
+</p>
+<p>A request can act upon a resource.
+    If the resource is not managed by the server the user is connected to, the server will relay the request to the responsible server.
+    Hence, FOSP servers may open connections to other FOSP servers.
+    
+</p><br /><hr class="insert" />
+<a name="fig-network-topology"></a>
+
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+
++--------------+    +--------------+
+|alice@        |    |queen@        |
+|wonderland.lit|    |wonderland.lit|
++------------+-+    +-+------------+
+             |        |
+             |        |
+             |        |
+          +--v--------v--+
+          |wonderland.lit|
+          |              |
+          +---+------^---+
+              |      |
+              |      |
+          +---v------+---+
+          |realworld.lit |
+          |              |
+          +--^-----------+
+             |
+             |
+ +-----------+--+
+ | sister@      |
+ | realworld.lit|
+ +--------------+
+
+</pre></div>
+<p>
+</p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;3&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
+<a name="messages"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
 Messages</h3>
 
 <p>Messages are the basic unit of communication in the FOSP network.
   There are three different types of messages which serve different purposes.
-  After being serialized, each message is transported over a WebSocket connection inside of one WebSocket text message or binary message.
+  How a message is serialized depends on the protocol that is used to transport the message.
   
 </p>
 <a name="msg-type"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
 Types</h3>
 
 <p>Each message has a specific type, which determines the kind of purpose this message serves.
@@ -709,12 +789,11 @@ Types</h3>
     Requests and notifications usually act on, or are emitted from an object or an attachemnt.
     The identifier of the object or attachemnt is then part of the request.
     If a request does not act upon an object, the identifier is replaced with an asterisk.
-    Furthermore, each request and response carries an sequence number that makes it possible to to assign one response to one request.
     
 </p>
-<a name="msg-type-request"></a><br /><hr />
+<a name="msg-request"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+<a name="rfc.section.5.2"></a><h3>5.2.&nbsp;
 Request</h3>
 
 <p>Requests are sent from clients to servers to authenticate or manipulate objects.
@@ -725,83 +804,147 @@ Request</h3>
 </p>
 <p>optionally an identifier of a resource that it manipulates
 </p>
-<p>a sequence number that is used to match the request with its response
-</p>
 </blockquote><p>
-    The content of the body depends on the type of request.
-    For example, the body of a SELECT or DELETE request is empty and the body of a CREATE request contains the new object.
+    
+</p>
+<p>The content of the body depends on the type of request.
+    For example, the body of a GET or DELETE request is empty and the body of a CREATE request contains the new object.
     In general the body is a JSON object, except for the WRITE request that has the byte representation of the file as the body.
     
 </p>
-<p>The request types are described in the following section.
+<p>The server MUST always responde to a request with a response message.
+    Depending on the request, the server must check access rights and whether a certain object exits, bevor the request can be processed.
+    If the user does not have sufficent rights or an required object does not exist (e.g. a parent object when creating a child), a failure response MUST be sent.
+    When the request is successfully processed, a success response MUST be sent.
+    Depending on the request, it may contain information in its body, like the object that was requested, or an attachment that was read.
+    
 </p>
-<a name="msg-type-request-connect"></a><br /><hr />
+<p>The request types are described in the following sections.
+</p>
+<a name="msg-request-info"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2.1"></a><h3>4.2.1.&nbsp;
-Connect</h3>
+<a name="rfc.section.5.2.1"></a><h3>5.2.1.&nbsp;
+Info</h3>
 
-<p>The CONNECT request is the first request that is sent from a client or server that initiates a new connection.
-      It does not act upon an object and thus the resource identifier is set to an asterisk.
-      The body of this request is used to negotiate the protocol version and maybe in the future other protocol parameters and services that the server might provide.
-      It contains an simple JSON object that, for the moment, has only one field named "version" and the value of this field is the string "0.1".
-      
+<p>TODO
 </p>
-<p>The response status code will indicate whether the connection was successfully opened or not.
-</p>
-<p>All following request types can only be sent after a successful CONNECT request.
-</p>
-<a name="msg-type-request-register"></a><br /><hr />
+<a name="msg-request-bind"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2.2"></a><h3>4.2.2.&nbsp;
-Register</h3>
+<a name="rfc.section.5.2.2"></a><h3>5.2.2.&nbsp;
+Bind</h3>
 
-<p>The REGISTER request can be sent to create a new user on the server.
-      The resource identifier for this request is also always the asterisk as it does not act upon a request.
-      The body contains a JSON object with a "name" and "password" field.
+<p>The BIND request is used to authenticate the client.
+      The body MUST contain an object with the "method" attribute that specifies the used authentication method.
+      The possible methods of authentication are not final yet, however every server SHOULD support a simple authentication by name and password.
+      In this case the object also contains a "user" and "password" attribute containing the full user name and the password.
       
 </p>
-<p>If the user account can be created the server will do that and afterwards sent a response with a status code indicating success.
+<p>
+      The server verifies that the authentication is successfull and sents a success response or a failed response otherwise.
+      All future request are made in the name of this authenticated user.
+      How the state is kept depends on the transport protocol used.
+      It can for example either be a tied to network connection, or be a cookie supplied in each request.
       
 </p>
-<a name="msg-type-request-authenticate"></a><br /><hr />
+<a name="msg-request-get"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2.3"></a><h3>4.2.3.&nbsp;
-Authenticate</h3>
+<a name="rfc.section.5.2.3"></a><h3>5.2.3.&nbsp;
+Get</h3>
 
-<p>The AUTHENTICATE request is usually the second request after the CONNECT request.
-      Like the REGISTER request, the resource identifier is an asterisk and the body contains an object with a "name" and a "password" field.
-      
-</p>
-<p>The server verifies that the password is correct for the given user and sents a success response or a failed response otherwise.
-      All future request will then be made in the name of this authenticated user.
-      
-</p>
-<a name="msg-type-request-select"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2.4"></a><h3>4.2.4.&nbsp;
-Select</h3>
-
-<p>The SELECT request is used to retrieve an object.
+<p>The GET request is used to retrieve an object.
       The resource identifier in the request denotes the object that should be returned.
-      The body of the request is empty.
+      The server MUST ignore any content in the body of the request.
       
 </p>
-<p>The server will first check the rights of the current user on this object.
-      Then it might either sent a response with an status that indicates an error or it might sent a success response that contains the requested object in its body.
-      Even when the request was successfull, not the whole object might be returned because the user might have the right to read some fields but not others.
+<p>If the request was successfull, the object is returned in the body of the response..
+      Even on success, not the whole object might be returned as the user might have the right to read some attributes but not others.
       
 </p>
-<a name="msg-type-request-create"></a><br /><hr />
+<a name="msg-request-list"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2.5"></a><h3>4.2.5.&nbsp;
+<a name="rfc.section.5.2.4"></a><h3>5.2.4.&nbsp;
+List</h3>
+
+<p>The LIST request is used to discover all child objects of a certain object.
+      The resource identifier specifies the object of which the children should be returned.
+      
+</p>
+<p>If successfull, the response contains an array of names of the child objects.
+      
+</p>
+<a name="msg-request-create"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.2.5"></a><h3>5.2.5.&nbsp;
 Create</h3>
 
 <p>The CREATE request is used to store new objects on the server.
+      The resource identifier is the desired location for the new object.
+      The body containes the object to store.
       
 </p>
-<a name="msg-type-response"></a><br /><hr />
+<p>On success, an empty success response is returned and the object is stored at the given location.
+      
+</p>
+<a name="mgs-request-patch"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
+<a name="rfc.section.5.2.6"></a><h3>5.2.6.&nbsp;
+Patch</h3>
+
+<p>The PATCH request is used to update an already existing object on the server.
+      The resource identifier specifies the object that should be updated.
+      The body containes an object with the differences that should be applied to the object.
+      
+</p>
+<p>The differences are merged into the object as follows.
+      If the original object does not have an attribute the differences object has, the attribute is copied to the object.
+      If the original object already has an attribute the differences object has and the new value is , the attribute is deleted from the object.
+      If the original object already has an attribute the differences object has and the value is not null, the attribute is replaced with the new attribute except when the value of the old and the new attribute are both an object.
+      In this case the merging is done on the attribute recursivly as it is on the whole object.
+      
+</p>
+<p>On success, an empty success response is returned.
+      
+</p>
+<a name="msg-request-delete"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.2.7"></a><h3>5.2.7.&nbsp;
+Delete</h3>
+
+<p>The DELETE request is used to remove an object from a tree.
+      The resource identifier specifies the object that should be removed.
+      
+</p>
+<p>If successfull, a succeeded message is returned and the object is permanently removed.
+      
+</p>
+<a name="msg-request-read"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.2.8"></a><h3>5.2.8.&nbsp;
+Read</h3>
+
+<p>The READ request is used to read the attachment.
+      The resource identifier specifies the object of which the attachment should be read.
+      
+</p>
+<p>The success response body contains the raw bytes of the attachment.
+      
+</p>
+<a name="msg-request-write"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.2.9"></a><h3>5.2.9.&nbsp;
+Write</h3>
+
+<p>The WRITE request is used to write to the attachment.
+      The resource identifier specifies the object of which the attachment should be written.
+      The body contains the raw bytes of the attachment.
+      
+</p>
+<p>The success response is empty.
+      
+</p>
+<a name="msg-response"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.3"></a><h3>5.3.&nbsp;
 Response</h3>
 
 <p>Responses are sent from servers to clients when a request has been processed.
@@ -812,19 +955,20 @@ Response</h3>
 </p>
 <p>a status code, an integer greater zero.
 </p>
-<p>a sequence number which must match the sequence number of the request
-      it responds to.
-      
-</p>
 </blockquote><p>
-    The body of a response depends on the request that is answered.
-    For a CREATE or DELETE request it would be empty, for a SELECT request it would be the object that was requested.
-    In case of a READ request it would contain the file.
+    
+</p>
+<p>The body of a response depends on the request that is answered.
+    For a CREATE or DELETE request it would be empty, for a GET request it would be the object that was requested.
+    In case of a READ request it would contain the raw bytes of the attachment.
+    
+</p>
+<p>The status code is explained in&nbsp;<a class='info' href='#msg-status-codes'>Section&nbsp;5.5<span> (</span><span class='info'>Status codes</span><span>)</span></a>.
     
 </p>
 <a name="msg-type-notification"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.4"></a><h3>4.4.&nbsp;
+<a name="rfc.section.5.4"></a><h3>5.4.&nbsp;
 Notification</h3>
 
 <p>Notifications are sent from servers to clients when objects change and the client
@@ -836,14 +980,27 @@ Notification</h3>
 <p>a resource identifier.
 </p>
 </blockquote><p>
-    The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
+    
+</p>
+<p>The notifications are sent when a request triggers an event, for example CREATE triggers a CREATED event.
     If the event equals DELETED then the body of the notification must be empty.
     Otherwise it should contain the new version of the object.
     
 </p>
+<p>When and to who notifications are sent is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;6.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+    
+</p>
+<a name="msg-status-codes"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.5"></a><h3>5.5.&nbsp;
+Status codes</h3>
+
+<p>TODO
+    
+</p>
 <a name="msg-format"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.5"></a><h3>4.5.&nbsp;
+<a name="rfc.section.5.6"></a><h3>5.6.&nbsp;
 Format</h3>
 
 <p>**WARNING: To simplify the definition for the moment, only ASCII characters are used.
@@ -902,11 +1059,11 @@ Format</h3>
 <dfn>ALPHANUM</dfn>      = <cite class='key'>ALPHA</cite> / <cite class='key'>DIGIT</cite>
 </pre></div>
 <p>
-</p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;3&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+</p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;4&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
 <a name="msg-serialization"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.6"></a><h3>4.6.&nbsp;
+<a name="rfc.section.5.7"></a><h3>5.7.&nbsp;
 Serialization</h3>
 
 <p>Messages are serialized into a blob of bytes.
@@ -917,76 +1074,6 @@ Serialization</h3>
     the length of a message must be determined from lenght of the WebSocket message.
     
 </p>
-<a name="network-topology"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5"></a><h3>5.&nbsp;
-Network Topology</h3>
-
-<p>In the FOSP network, agents are either clients or servers.
-  
-</p>
-<a name="network-topology-client"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
-Client</h3>
-
-<p>A user connects, using a client, to the server of their provider.
-    We refer to this server as the home server of the user.
-    To manipulate or access data, the user uses the client to send requests.
-    
-</p>
-<p>A client can be any programm that understands the FOSP protocol.
-    
-</p>
-<a name="network-topology-server"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.2"></a><h3>5.2.&nbsp;
-Server</h3>
-
-<p>A server is a software running on a machine on the internet, that processes requests of clients.
-    Each server belongs to one provider that is identified by a domain name.
-    For load balancing purposes, more than one server per domain/provider might be used.
-    To keep the examples simple, we nevertheless assume that there is one server per provider.
-    
-</p>
-<p>A request can act upon a resource.
-    If the resource is not managed by the server the user is connected to, the server will relay the request to the responsible server.
-    Hence, FOSP servers may open connections to other FOSP servers.
-    
-</p><br /><hr class="insert" />
-<a name="fig-network-topology"></a>
-
-<p>
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-
-+--------------+    +--------------+
-|alice@        |    |queen@        |
-|wonderland.lit|    |wonderland.lit|
-+------------+-+    +-+------------+
-             |        |
-             |        |
-             |        |
-          +--v--------v--+
-          |wonderland.lit|
-          |              |
-          +---+------^---+
-              |      |
-              |      |
-          +---v------+---+
-          |realworld.lit |
-          |              |
-          +--^-----------+
-             |
-             |
- +-----------+--+
- | sister@      |
- | realworld.lit|
- +--------------+
-
-</pre></div>
-<p>
-</p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;4&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
-
 <a name="policies"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
@@ -1024,7 +1111,7 @@ Access control</h3>
 </ol><p>
     
 </p>
-<a name="subscriptions"></a><br /><hr />
+<a name="pol-subscriptions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.2"></a><h3>6.2.&nbsp;
 Subscriptions</h3>
