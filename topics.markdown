@@ -65,8 +65,5 @@ Here we collect all topics that have to be discussed and then order them.
 * Error Codes
 
 # Open questions
-* Seperate Create/Update or not?
 * Name connection negotiation: Discover/Connect/Info
-* Extend JSON?
-* Finalize possible ACL rights and the notation, e.g. read/write vs. method names
 * Layout for group configuration must be defined

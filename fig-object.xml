@@ -3,34 +3,34 @@
 	<artwork>
 <![CDATA[
 {
-  btime: "2007-03-01T13:00:00Z",
-  mtime: "2008-05-11T15:30:00Z",
-  owner: "alice@wonderland.lit",
-  acl: {
-    owner: ["read-data", "write-data", "read-acl", "write-acl",
-      "read-subscriptions", "write-subscriptions",
-      "read-children", "write-children", "delete-children"],
-    users: {
-      alice@wonderland.lit: [
-        "read-data",
-        "not-write-data",
-        "read-acl",
-        "write-acl",
-        "read-subscriptions",
-        "not-write-subscriptions"
-      ]
-    }
-  },
-  subscriptions: {
-    users: {
-      alice@wonderland.lit: {
-        events: [ "created", "updated" ],
-        depth: 1
+  "btime": "2007-03-01T13:00:00Z",
+  "mtime": "2008-05-11T15:30:00Z",
+  "owner": "alice@wonderland.lit",
+  "acl": {
+    "owner": {
+      "data": [ "read", "write" ],
+      "acl": [ "read", "write" ],
+      "subscriptions": [ "read", "write" ],
+      "children": [ "read", "write", "delete" ]
+      },
+    "users": {
+      "alice@wonderland.lit": {
+        "data": [ "read", "not-write" ],
+	"acl": [ "read", "not-write" ],
+	"subscriptions": [ "read", "not-write" ]
       }
     }
   },
-  type: "text/plain",
-  data: "Just plain text"
+  "subscriptions": {
+    "users": {
+      "alice@wonderland.lit": {
+        "events": [ "created", "updated" ],
+        "depth": 1
+      }
+    }
+  },
+  "type": "text/plain",
+  "data": "Just plain text"
 }
 ]]>
 	</artwork>

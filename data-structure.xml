@@ -8,6 +8,7 @@
     When transferring objects in messages, the object is serialized according to the JSON specification.
     In the rest of the document we will refer to a key-value pair of an object either as an attribute or a field of an object.
     </t>
+    <?rfc include="fig-object.xml"?>
   </section>
   <section anchor="data-structure-fields" title="Object attributes">
     <t>Most attributes of an object have a well defined meaning.
@@ -21,7 +22,6 @@
       </t>
       <t>The “btime” (birth time) field is set by the server to the date of creation of the object.
       It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
-      Users must not be able to change its content.
       The user MUST NOT be able to set the field to a different value.
       </t>
       <t>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
@@ -55,7 +55,7 @@
       </t>
     </list>
     </t>
-    <t>The “subscriptions” field saves information about subscriptions.
+    <t>The “subscriptions” field stores information about subscriptions.
     It is read by the server to determine which users have to be notified on changes to an object.
     <list>
       <t>It contains an object and each key is the identifier of a user.</t>
@@ -77,7 +77,6 @@
       </t>
     </list>
     </t>
-    <?rfc include="fig-object.xml"?>
   </section>
   <section anchor="obj-trees" title="Trees">
     <t>In FOSP, all objects are part of a tree of objects.
@@ -97,8 +96,8 @@
     </t>
   </section>
   <section anchor="std-objs" title="Provisioned Objects">
-    <t>Some objects in the tree of a user will be used by the server to obtain configurations.
-    For example alice@wonderland.lit/config/groups will contain the mapping from users to groups, that is valid for the tree alice@wonderland.lit.
+    <t>Some objects in the tree of a user will be used by the server to obtain configuration options.
+    For example alice@wonderland.lit/config/groups will contain the mappings from users to groups that are valid for the tree alice@wonderland.lit.
     These objects will be created by the server when the user first registers with it.
     </t>
   </section>
