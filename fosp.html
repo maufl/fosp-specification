@@ -248,25 +248,37 @@ Response<br />
 Notification<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes">5.5.</a>&nbsp;
 Status codes<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-format">5.6.</a>&nbsp;
-Format<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-serialization">5.7.</a>&nbsp;
-Serialization<br />
-<a href="#policies">6.</a>&nbsp;
-Policies<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">6.1.</a>&nbsp;
-Access control<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-subscriptions">6.2.</a>&nbsp;
-Subscriptions<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-attachments">6.3.</a>&nbsp;
-Attachments<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-reg">6.4.</a>&nbsp;
-Authentication and Registration<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forw">6.5.</a>&nbsp;
-Message forwarding<br />
-<a href="#con-init">7.</a>&nbsp;
+<a href="#bindings">6.</a>&nbsp;
+Bindings<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-ws">6.1.</a>&nbsp;
+WebSocket binding<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-ws-connection-initiation">6.1.1.</a>&nbsp;
 Connection Initiation<br />
-<a href="#rfc.references1">8.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-format">6.1.2.</a>&nbsp;
+Format<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-serialization">6.1.3.</a>&nbsp;
+Serialization<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-http">6.2.</a>&nbsp;
+HTTP binding<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bingings-http-mapping">6.2.1.</a>&nbsp;
+Mapping<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-http-session-management">6.2.2.</a>&nbsp;
+Session management<br />
+<a href="#policies">7.</a>&nbsp;
+Policies<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">7.1.</a>&nbsp;
+Access control<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-subscriptions">7.2.</a>&nbsp;
+Subscriptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-attachments">7.3.</a>&nbsp;
+Attachments<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-reg">7.4.</a>&nbsp;
+Authentication and Registration<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forw">7.5.</a>&nbsp;
+Message forwarding<br />
+<a href="#discovery">8.</a>&nbsp;
+Discovery<br />
+<a href="#rfc.references1">9.</a>&nbsp;
 References<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Author's Address<br />
@@ -588,7 +600,7 @@ Object attributes</h3>
       Currently allowed values for the key are “acl”, “data”, “subscriptions“, “children“.
       The permissions can be “read”, “write“ and “delete”.
       They can also be prefixed with “not-“ to revoke a right, which is necessary because rights are inherited.
-      This will be further explained in&nbsp;<a class='info' href='#access-control'>Section&nbsp;6.1<span> (</span><span class='info'>Access control</span><span>)</span></a>.
+      This will be further explained in&nbsp;<a class='info' href='#access-control'>Section&nbsp;7.1<span> (</span><span class='info'>Access control</span><span>)</span></a>.
       
 </p>
 <p>The value of the “users” and “groups” field is an object.
@@ -609,7 +621,7 @@ Object attributes</h3>
 <p>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity 
 </p>
 </blockquote><p>
-    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;6.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
     
 </p>
 <p>The “attachment” field is only present if this object has an attachment.
@@ -987,7 +999,7 @@ Notification</h3>
     Otherwise it should contain the new version of the object.
     
 </p>
-<p>When and to who notifications are sent is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;6.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+<p>When and to who notifications are sent is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
     
 </p>
 <a name="msg-status-codes"></a><br /><hr />
@@ -998,18 +1010,46 @@ Status codes</h3>
 <p>TODO
     
 </p>
-<a name="msg-format"></a><br /><hr />
+<a name="bindings"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.6"></a><h3>5.6.&nbsp;
-Format</h3>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+Bindings</h3>
 
-<p>**WARNING: To simplify the definition for the moment, only ASCII characters are used.
-    This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported**
+<p>Bindings define how a FOSP message is transported via an existing protocol.
+  Currently a binding for the WebSocket protocol is defined and a binding for HTTP is being worked on.
+  
+</p>
+<a name="bindings-ws"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6.1"></a><h3>6.1.&nbsp;
+WebSocket binding</h3>
+
+<p>The WebSocket binding provides a way of sending FOSP messages of WebSocket messages.
+    It was chosen because it is  the only bidirectional protocol currently supported in browsers.
     
 </p>
-<p>Also the header definition will be subject to change after determining acceptable characters.
-    For the resource identifier, we will probably refer to the IRI definition in the future.
-    
+<a name="bindings-ws-connection-initiation"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6.1.1"></a><h3>6.1.1.&nbsp;
+Connection Initiation</h3>
+
+<p>To send messages to a server over WebSockets, a connection has to be established first.
+      How the server address, port and URL path are determined for a given domain is discussed in&nbsp;<a class='info' href='#discovery'>Section&nbsp;8<span> (</span><span class='info'>Discovery</span><span>)</span></a>.
+      In the WebSocket handshake, the Sec-WebSocket-Protocol MUST be set to "fosp".
+      
+</p>
+<a name="msg-format"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6.1.2"></a><h3>6.1.2.&nbsp;
+Format</h3>
+
+<p>The FOSP messages is formatted similar to a HTTP request/response.
+      
+</p>
+<p>
+      Also the header definition will be subject to change after determining acceptable characters.
+      For the resource identifier, we will probably refer to the IRI definition in the future.
+      
 </p><br /><hr class="insert" />
 <a name="fosp-abnf"></a>
 
@@ -1063,20 +1103,52 @@ Format</h3>
 
 <a name="msg-serialization"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.7"></a><h3>5.7.&nbsp;
+<a name="rfc.section.6.1.3"></a><h3>6.1.3.&nbsp;
 Serialization</h3>
 
-<p>Messages are serialized into a blob of bytes.
-    Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or not interpreted at all.
-    The second case occurs when an attached file is up- or downloaded.
-    The beginning and end, e.
-    g.
-    the length of a message must be determined from lenght of the WebSocket message.
+<p>Messages are serialized into a blob of bytes and sent inside a single WebSocket message.
+      Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or raw bytes.
+      The second case occurs when an attachment is up- or downloaded.
+      The beginning and end, e.g. the length of a message must be determined from lenght of the WebSocket message.
+      
+</p>
+<p>When a message contains binary data that is not UTF-8 encoded text, e.g. a WRITE request, a binary WebSocket message MUST be used.
+      Otherwise, when the whole message is valid UTF-8 encoded text, a text WebSocket message CAN be used.
+      
+</p>
+<a name="bindings-http"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6.2"></a><h3>6.2.&nbsp;
+HTTP binding</h3>
+
+<p>The HTTP binding is developed because it might be simpler for clients to process large up- or downloads via HTTP.
+    However, it does not support all of FOSPs functionality because notifications can not be sent over HTTP (at least over HTTP/1.1).
     
+</p>
+<a name="bingings-http-mapping"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6.2.1"></a><h3>6.2.1.&nbsp;
+Mapping</h3>
+
+<p>Each FOSP request is transported as an HTTP request.
+      The request identifier is used as the HTTP method.
+      The HTTP request-URI MUST be the absolute URI of the FOSP object.
+      The HTTP headers are the FOSP headers.
+      The HTTP body is the FOSP body.
+      
+</p>
+<a name="bindings-http-session-management"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6.2.2"></a><h3>6.2.2.&nbsp;
+Session management</h3>
+
+<p>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a BIND request.
+      With this cookie, the client is able to make authenticated requests.
+      
 </p>
 <a name="policies"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6"></a><h3>6.&nbsp;
+<a name="rfc.section.7"></a><h3>7.&nbsp;
 Policies</h3>
 
 <p>Besides implementing the technical specification of the protocol, the server has to enforce a set of policies.
@@ -1086,7 +1158,7 @@ Policies</h3>
 </p>
 <a name="access-control"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.1"></a><h3>6.1.&nbsp;
+<a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
 Access control</h3>
 
 <p>As stated in <a class='info' href='#data-structure-fields'>Section&nbsp;3.2<span> (</span><span class='info'>Object attributes</span><span>)</span></a>, each object can save access control information.
@@ -1113,7 +1185,7 @@ Access control</h3>
 </p>
 <a name="pol-subscriptions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.2"></a><h3>6.2.&nbsp;
+<a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
 Subscriptions</h3>
 
 <p>Similar to the access control information, subscriptions can be set on objects so that a user will be notified when changes occur.
@@ -1141,7 +1213,7 @@ Subscriptions</h3>
 </p>
 <a name="pol-attachments"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.3"></a><h3>6.3.&nbsp;
+<a name="rfc.section.7.3"></a><h3>7.3.&nbsp;
 Attachments</h3>
 
 <p>As explained in <a class='info' href='#data-structure-attachments'>Section&nbsp;3.4<span> (</span><span class='info'>Attachments</span><span>)</span></a>, each object can have a file as attachment.
@@ -1153,7 +1225,7 @@ Attachments</h3>
 </p>
 <a name="pol-auth-reg"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.4"></a><h3>6.4.&nbsp;
+<a name="rfc.section.7.4"></a><h3>7.4.&nbsp;
 Authentication and Registration</h3>
 
 <p>When a client connects to a server, it has to provide credentials to the server, so that the user of the client can be authenticated.
@@ -1170,7 +1242,7 @@ Authentication and Registration</h3>
 </p>
 <a name="pol-msg-forw"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.5"></a><h3>6.5.&nbsp;
+<a name="rfc.section.7.5"></a><h3>7.5.&nbsp;
 Message forwarding</h3>
 
 <p>A server does not need to accept forwarded requests from other servers, if it shouldn’t be part of the federated network.
@@ -1183,37 +1255,14 @@ Message forwarding</h3>
     lit”, server B must close the connection.
     
 </p>
-<a name="con-init"></a><br /><hr />
+<a name="discovery"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7"></a><h3>7.&nbsp;
-Connection Initiation</h3>
+<a name="rfc.section.8"></a><h3>8.&nbsp;
+Discovery</h3>
 
-<p>First, the agent that wants to open a new connection has to find out which server
-  to connect to and on which port. The server responsible for a certain domain is the
-  server with the IP address that is assigned to the DNS A record of the domain name 
-  and the port is 1337 for insecure connections and 1338 for secure connections (e.g. ws:// or wss://).
-  In the future, a better approach of discovering the
-  server will be necessary and probably done by using DNS SRV records.
-  
-</p>
-<p>After opening a connection to a server, the initiator first sends a CONNECT
-  request that has to be answered with a SUCCEEDED response if the connection
-  is accepted. The body of the request contains information about the supported
-  version of the protocol and could in the future be used to negotiate more pa-
-  rameters of the connection. The response, if successful, contains the version the
-  server supports and could also be used to advertise additional services provided
-  by the server.
-  
-</p>
-<p>If the connection is opened by a client to a server, a new user can then be
-  registered with the REGISTER request. Finally, the initiator has to authenticate
-  to the server he connects to. The specific mechanism of authentication depends
-  on whether a client connects to a server or a server connects to another server.
-  
-</p>
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>8.&nbsp;References</h3>
+<h3>9.&nbsp;References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="refs.rfc2119">[refs.rfc2119]</a></td>
 <td class="author-text">Bradner, S., &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; RFC&nbsp;2119, BCP&nbsp;14, March&nbsp;1997.</td></tr>

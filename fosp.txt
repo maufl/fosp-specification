@@ -59,56 +59,112 @@ Internet-Draft                    FOSP                    September 2014
 
 Table of Contents
 
-   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
-     1.1.  Purpose  . . . . . . . . . . . . . . . . . . . . . . . . .  3
-     1.2.  Conventions  . . . . . . . . . . . . . . . . . . . . . . .  3
-     1.3.  Requirements . . . . . . . . . . . . . . . . . . . . . . .  3
-     1.4.  Terminology  . . . . . . . . . . . . . . . . . . . . . . .  3
-   2.  Overview . . . . . . . . . . . . . . . . . . . . . . . . . . .  5
-     2.1.  User and providers . . . . . . . . . . . . . . . . . . . .  5
-     2.2.  Trees, Objects and Attachments . . . . . . . . . . . . . .  5
-     2.3.  Network topology . . . . . . . . . . . . . . . . . . . . .  5
-     2.4.  Messages . . . . . . . . . . . . . . . . . . . . . . . . .  6
-     2.5.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . .  6
-   3.  Data structure . . . . . . . . . . . . . . . . . . . . . . . .  7
-     3.1.  Objects  . . . . . . . . . . . . . . . . . . . . . . . . .  7
-     3.2.  Object attributes  . . . . . . . . . . . . . . . . . . . .  8
-     3.3.  Trees  . . . . . . . . . . . . . . . . . . . . . . . . . . 10
-     3.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 11
-     3.5.  Provisioned Objects  . . . . . . . . . . . . . . . . . . . 11
-   4.  Network Topology . . . . . . . . . . . . . . . . . . . . . . . 12
-     4.1.  Client . . . . . . . . . . . . . . . . . . . . . . . . . . 12
-     4.2.  Server . . . . . . . . . . . . . . . . . . . . . . . . . . 12
-   5.  Messages . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
-     5.1.  Types  . . . . . . . . . . . . . . . . . . . . . . . . . . 14
-     5.2.  Request  . . . . . . . . . . . . . . . . . . . . . . . . . 14
-       5.2.1.  Info . . . . . . . . . . . . . . . . . . . . . . . . . 15
-       5.2.2.  Bind . . . . . . . . . . . . . . . . . . . . . . . . . 15
-       5.2.3.  Get  . . . . . . . . . . . . . . . . . . . . . . . . . 15
-       5.2.4.  List . . . . . . . . . . . . . . . . . . . . . . . . . 15
-       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 15
-       5.2.6.  Patch  . . . . . . . . . . . . . . . . . . . . . . . . 16
-       5.2.7.  Delete . . . . . . . . . . . . . . . . . . . . . . . . 16
-       5.2.8.  Read . . . . . . . . . . . . . . . . . . . . . . . . . 16
-       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 16
-     5.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 17
-     5.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 17
-     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 17
-     5.6.  Format . . . . . . . . . . . . . . . . . . . . . . . . . . 17
-     5.7.  Serialization  . . . . . . . . . . . . . . . . . . . . . . 19
-   6.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
-     6.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 20
-     6.2.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 20
-     6.3.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 21
-     6.4.  Authentication and Registration  . . . . . . . . . . . . . 21
-     6.5.  Message forwarding . . . . . . . . . . . . . . . . . . . . 22
-   7.  Connection Initiation  . . . . . . . . . . . . . . . . . . . . 23
-   8.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 24
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 25
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     1.1.  Purpose  . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     1.2.  Conventions  . . . . . . . . . . . . . . . . . . . . . . .  4
+     1.3.  Requirements . . . . . . . . . . . . . . . . . . . . . . .  4
+     1.4.  Terminology  . . . . . . . . . . . . . . . . . . . . . . .  4
+   2.  Overview . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
+     2.1.  User and providers . . . . . . . . . . . . . . . . . . . .  6
+     2.2.  Trees, Objects and Attachments . . . . . . . . . . . . . .  6
+     2.3.  Network topology . . . . . . . . . . . . . . . . . . . . .  6
+     2.4.  Messages . . . . . . . . . . . . . . . . . . . . . . . . .  7
+     2.5.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . .  7
+   3.  Data structure . . . . . . . . . . . . . . . . . . . . . . . .  8
+     3.1.  Objects  . . . . . . . . . . . . . . . . . . . . . . . . .  8
+     3.2.  Object attributes  . . . . . . . . . . . . . . . . . . . .  9
+     3.3.  Trees  . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+     3.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 12
+     3.5.  Provisioned Objects  . . . . . . . . . . . . . . . . . . . 12
+   4.  Network Topology . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.1.  Client . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.2.  Server . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+   5.  Messages . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+     5.1.  Types  . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+     5.2.  Request  . . . . . . . . . . . . . . . . . . . . . . . . . 15
+       5.2.1.  Info . . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.2.  Bind . . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.3.  Get  . . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.4.  List . . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.6.  Patch  . . . . . . . . . . . . . . . . . . . . . . . . 17
+       5.2.7.  Delete . . . . . . . . . . . . . . . . . . . . . . . . 17
+       5.2.8.  Read . . . . . . . . . . . . . . . . . . . . . . . . . 17
+       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 17
+     5.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 18
+     5.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 18
+     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 18
+   6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+     6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 19
+       6.1.1.  Connection Initiation  . . . . . . . . . . . . . . . . 19
+       6.1.2.  Format . . . . . . . . . . . . . . . . . . . . . . . . 19
+       6.1.3.  Serialization  . . . . . . . . . . . . . . . . . . . . 21
+     6.2.  HTTP binding . . . . . . . . . . . . . . . . . . . . . . . 21
+       6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 21
+       6.2.2.  Session management . . . . . . . . . . . . . . . . . . 21
+   7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+     7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 22
+     7.2.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 22
 
 
 
 Maurer                    Expires March 5, 2015                 [Page 2]
+
+Internet-Draft                    FOSP                    September 2014
+
+
+     7.3.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 23
+     7.4.  Authentication and Registration  . . . . . . . . . . . . . 23
+     7.5.  Message forwarding . . . . . . . . . . . . . . . . . . . . 24
+   8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 27
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 5, 2015                 [Page 3]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -164,7 +220,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 3]
+Maurer                    Expires March 5, 2015                 [Page 4]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -220,7 +276,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 4]
+Maurer                    Expires March 5, 2015                 [Page 5]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -276,7 +332,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 5]
+Maurer                    Expires March 5, 2015                 [Page 6]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -332,7 +388,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 6]
+Maurer                    Expires March 5, 2015                 [Page 7]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -388,7 +444,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 7]
+Maurer                    Expires March 5, 2015                 [Page 8]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -444,7 +500,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 8]
+Maurer                    Expires March 5, 2015                 [Page 9]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -487,7 +543,7 @@ Internet-Draft                    FOSP                    September 2014
       "children".  The permissions can be "read", "write" and "delete".
       They can also be prefixed with "not-" to revoke a right, which is
       necessary because rights are inherited.  This will be further
-      explained in Section 6.1.
+      explained in Section 7.1.
 
       The value of the "users" and "groups" field is an object.  In
       these objects, each key identifies a user or a group and the
@@ -500,7 +556,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 9]
+Maurer                    Expires March 5, 2015                [Page 10]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -513,7 +569,7 @@ Internet-Draft                    FOSP                    September 2014
       event, the value of "depth" is an integer between -1 and infinity
 
    How this field is evaluated by the server is explained
-   in Section 6.2.
+   in Section 7.2.
 
    The "attachment" field is only present if this object has an
    attachment.  It contains an object with three fields.
@@ -556,7 +612,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 10]
+Maurer                    Expires March 5, 2015                [Page 11]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -612,7 +668,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 11]
+Maurer                    Expires March 5, 2015                [Page 12]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -668,7 +724,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 12]
+Maurer                    Expires March 5, 2015                [Page 13]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -724,7 +780,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 13]
+Maurer                    Expires March 5, 2015                [Page 14]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -780,7 +836,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 14]
+Maurer                    Expires March 5, 2015                [Page 15]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -836,7 +892,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 15]
+Maurer                    Expires March 5, 2015                [Page 16]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -892,7 +948,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 16]
+Maurer                    Expires March 5, 2015                [Page 17]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -928,18 +984,54 @@ Internet-Draft                    FOSP                    September 2014
    then the body of the notification must be empty.  Otherwise it should
    contain the new version of the object.
 
-   When and to who notifications are sent is explained in Section 6.2.
+   When and to who notifications are sent is explained in Section 7.2.
 
 5.5.  Status codes
 
    TODO
 
-5.6.  Format
 
-   **WARNING: To simplify the definition for the moment, only ASCII
-   characters are used.  This WILL change as the protocol itself
-   mandates the use of Unicode and the UTF-8 encoding and international
-   user and resource names MUST be supported**
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 5, 2015                [Page 18]
+
+Internet-Draft                    FOSP                    September 2014
+
+
+6.  Bindings
+
+   Bindings define how a FOSP message is transported via an existing
+   protocol.  Currently a binding for the WebSocket protocol is defined
+   and a binding for HTTP is being worked on.
+
+6.1.  WebSocket binding
+
+   The WebSocket binding provides a way of sending FOSP messages of
+   WebSocket messages.  It was chosen because it is the only
+   bidirectional protocol currently supported in browsers.
+
+6.1.1.  Connection Initiation
+
+   To send messages to a server over WebSockets, a connection has to be
+   established first.  How the server address, port and URL path are
+   determined for a given domain is discussed in Section 8.  In the
+   WebSocket handshake, the Sec-WebSocket-Protocol MUST be set to
+   "fosp".
+
+6.1.2.  Format
+
+   The FOSP messages is formatted similar to a HTTP request/response.
 
    Also the header definition will be subject to change after
    determining acceptable characters.  For the resource identifier, we
@@ -948,7 +1040,27 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 17]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 5, 2015                [Page 19]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -1004,47 +1116,45 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 18]
+Maurer                    Expires March 5, 2015                [Page 20]
 
 Internet-Draft                    FOSP                    September 2014
 
 
-5.7.  Serialization
+6.1.3.  Serialization
 
-   Messages are serialized into a blob of bytes.  Most of the message is
-   text in UTF-8 encoding, only the body is either a valid JSON object,
-   UTF-8 encoded, or not interpreted at all.  The second case occurs
-   when an attached file is up- or downloaded.  The beginning and end,
-   e. g. the length of a message must be determined from lenght of the
-   WebSocket message.
+   Messages are serialized into a blob of bytes and sent inside a single
+   WebSocket message.  Most of the message is text in UTF-8 encoding,
+   only the body is either a valid JSON object, UTF-8 encoded, or raw
+   bytes.  The second case occurs when an attachment is up- or
+   downloaded.  The beginning and end, e.g. the length of a message must
+   be determined from lenght of the WebSocket message.
 
+   When a message contains binary data that is not UTF-8 encoded text,
+   e.g. a WRITE request, a binary WebSocket message MUST be used.
+   Otherwise, when the whole message is valid UTF-8 encoded text, a text
+   WebSocket message CAN be used.
 
+6.2.  HTTP binding
 
+   The HTTP binding is developed because it might be simpler for clients
+   to process large up- or downloads via HTTP.  However, it does not
+   support all of FOSPs functionality because notifications can not be
+   sent over HTTP (at least over HTTP/1.1).
 
+6.2.1.  Mapping
 
+   Each FOSP request is transported as an HTTP request.  The request
+   identifier is used as the HTTP method.  The HTTP request-URI MUST be
+   the absolute URI of the FOSP object.  The HTTP headers are the FOSP
+   headers.  The HTTP body is the FOSP body.
 
+6.2.2.  Session management
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   To support authenticated requests, a FOSP server that supports the
+   HTTP binding MUST return a cookie in a success response to a BIND
+   request.  With this cookie, the client is able to make authenticated
+   requests.
 
 
 
@@ -1060,12 +1170,14 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 19]
+
+
+Maurer                    Expires March 5, 2015                [Page 21]
 
 Internet-Draft                    FOSP                    September 2014
 
 
-6.  Policies
+7.  Policies
 
    Besides implementing the technical specification of the protocol, the
    server has to enforce a set of policies.  These policies describe how
@@ -1074,7 +1186,7 @@ Internet-Draft                    FOSP                    September 2014
    certain attributes of objects and constraints on whether or not a
    message should be forwarded.
 
-6.1.  Access control
+7.1.  Access control
 
    As stated in Section 3.2, each object can save access control
    information.  A valid entry in the access control list consists of
@@ -1101,7 +1213,7 @@ Internet-Draft                    FOSP                    September 2014
 
    5.  If the current object is already the root object, deny access
 
-6.2.  Subscriptions
+7.2.  Subscriptions
 
    Similar to the access control information, subscriptions can be set
    on objects so that a user will be notified when changes occur.  A
@@ -1116,7 +1228,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 20]
+Maurer                    Expires March 5, 2015                [Page 22]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -1138,7 +1250,7 @@ Internet-Draft                    FOSP                    September 2014
    Therefore, the server has to calculate the view of the object per
    user to prevent leaking of data a user might not be allowed to see.
 
-6.3.  Attachments
+7.3.  Attachments
 
    As explained in Section 3.4, each object can have a file as
    attachment.  However, attachments will likely not be stored together
@@ -1151,7 +1263,7 @@ Internet-Draft                    FOSP                    September 2014
    be deleted and an attachment should only be readable if there is an
    attachment field in the object.
 
-6.4.  Authentication and Registration
+7.4.  Authentication and Registration
 
    When a client connects to a server, it has to provide credentials to
    the server, so that the user of the client can be authenticated.
@@ -1172,14 +1284,14 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 21]
+Maurer                    Expires March 5, 2015                [Page 23]
 
 Internet-Draft                    FOSP                    September 2014
 
 
    from there.
 
-6.5.  Message forwarding
+7.5.  Message forwarding
 
    A server does not need to accept forwarded requests from other
    servers, if it shouldn't be part of the federated network.  This
@@ -1228,35 +1340,12 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 22]
+Maurer                    Expires March 5, 2015                [Page 24]
 
 Internet-Draft                    FOSP                    September 2014
 
 
-7.  Connection Initiation
-
-   First, the agent that wants to open a new connection has to find out
-   which server to connect to and on which port.  The server responsible
-   for a certain domain is the server with the IP address that is
-   assigned to the DNS A record of the domain name and the port is 1337
-   for insecure connections and 1338 for secure connections (e.g. ws://
-   or wss://).  In the future, a better approach of discovering the
-   server will be necessary and probably done by using DNS SRV records.
-
-   After opening a connection to a server, the initiator first sends a
-   CONNECT request that has to be answered with a SUCCEEDED response if
-   the connection is accepted.  The body of the request contains
-   information about the supported version of the protocol and could in
-   the future be used to negotiate more pa- rameters of the connection.
-   The response, if successful, contains the version the server supports
-   and could also be used to advertise additional services provided by
-   the server.
-
-   If the connection is opened by a client to a server, a new user can
-   then be registered with the REGISTER request.  Finally, the initiator
-   has to authenticate to the server he connects to.  The specific
-   mechanism of authentication depends on whether a client connects to a
-   server or a server connects to another server.
+8.  Discovery
 
 
 
@@ -1284,12 +1373,35 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 23]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 5, 2015                [Page 25]
 
 Internet-Draft                    FOSP                    September 2014
 
 
-8.  References
+9.  References
 
    [refs.rfc2119]
               Bradner, S., "Key words for use in RFCs to Indicate
@@ -1340,7 +1452,7 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 24]
+Maurer                    Expires March 5, 2015                [Page 26]
 
 Internet-Draft                    FOSP                    September 2014
 
@@ -1396,5 +1508,5 @@ Author's Address
 
 
 
-Maurer                    Expires March 5, 2015                [Page 25]
+Maurer                    Expires March 5, 2015                [Page 27]
 
