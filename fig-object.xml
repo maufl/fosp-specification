@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <figure anchor="fig-object-example">
-	<preamble />
-	<artwork>
+  <preamble />
+  <artwork>
 <![CDATA[
 {
   "btime": "2007-03-01T13:00:00Z",
@@ -16,8 +17,8 @@
     "users": {
       "alice@wonderland.lit": {
         "data": [ "read", "not-write" ],
-	"acl": [ "read", "not-write" ],
-	"subscriptions": [ "read", "not-write" ]
+        "acl": [ "read", "not-write" ],
+        "subscriptions": [ "read", "not-write" ]
       }
     }
   },
@@ -38,6 +39,6 @@
   "data": "Just plain text"
 }
 ]]>
-	</artwork>
-	<postamble />
+  </artwork>
+  <postamble />
 </figure>

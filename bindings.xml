@@ -18,8 +18,8 @@
     <section anchor="bindings-ws-format" title="Format">
       <t>The FOSP messages is formatted similar to a HTTP request/response.
       </t>
-      <t><b>WARNING: To simplify the definition for the moment, only ASCII characters are used.
-      This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported</b>
+      <t>WARNING: To simplify the definition for the moment, only ASCII characters are used.
+      This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported.
       Also the header definition will be subject to change after determining acceptable characters.
       For the resource identifier, we will probably refer to the IRI definition in the future.
       </t>

@@ -84,8 +84,8 @@
       </t>
       <t>The differences are merged into the object as follows.
       If the original object does not have an attribute the differences object has, the attribute is copied to the object.
-      If the original object already has an attribute the differences object has and the new value is <b>null</b>, the attribute is deleted from the object.
-      If the original object already has an attribute the differences object has and the value is not null, the attribute is replaced with the new attribute except when the value of the old and the new attribute are both an object.
+      If the original object already has an attribute the differences object has and the new value is "null", the attribute is deleted from the object.
+      If the original object already has an attribute the differences object has and the value is not "null", the attribute is replaced with the new attribute except when the value of the old and the new attribute are both an object.
       In this case the merging is done on the attribute recursivly as it is on the whole object.
       </t>
       <t>On success, an empty success response is returned.

@@ -34,17 +34,7 @@
   </middle>
   <back>
     <references>
-      <reference anchor="refs.rfc2119">
-	<front>
-	  <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-	  <author initials="S." surname="Bradner" fullname="Scott Bradner">
-	    <organization>Havard University</organization>
-	  </author>
-	  <date month="March" year="1997" />
-	</front>
-	<seriesInfo name="RFC" value="2119" />
-	<seriesInfo name="BCP" value="14" />
-      </reference>
+      <?rfc include="reference.RFC.2119.xml" ?>
       <?rfc include="reference.RFC.5785.xml" ?>
     </references>
   </back>
