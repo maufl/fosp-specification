@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="policies" title="Policies">
   <t>Besides implementing the technical specification of the protocol, the server has to enforce a set of policies.
-  These policies describe how the server interprets the objects to enforces access control and send notifications for subscriptions.
+  These policies describe how the server interprets the objects to enforc access control and send notifications for subscriptions.
   They also define constraints on certain attributes of objects and constraints on whether or not a message should be forwarded.
   </t>
   <section anchor="access-control" title="Access control">
     <t>As stated in <xref target="data-structure-fields" />, each object can save access control information.
     A valid entry in the access control list consists of the identifier of a user or a group of users and a list of rights.
-    Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “acl-write” right.
+    Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “write” right in the "acl" key.
     Because the objects are part of a tree, we can use inheritance to set access rights for a whole subtree by setting the appropriate access control information on the root of the subtree.
     This way the rights on an object are the sum of the rights on this object and all it’s ancestors.
-    To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-acl-write”.
+    To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-write”.
     The server must enforce access control for an object in the following way.
     <list style="numbers">
       <t>Check if the right in question is set on the current object</t>
@@ -22,7 +22,12 @@
     </t>
   </section>
   <section anchor="pol-groups" title="Groups">
-    <t>TODO
+    <t>To be able to set rights for a group of people, the user must first be able to define groups and store them at a well known place on the server.
+    Each group is only valid for the tree that it is defined in.
+    The server MUST look for group definitions in objects at the location "&lt;user@domain&gt;/config/groups".
+    Each object underneath this object can contain a group definition and the group name is the name of the object.
+    To be a valid group definition, the object MUST contain an object in its "data" attribute and this inner object MUST contain a "users" attribute with an array value.
+    The array then contains the full names of all users in this group.
     </t>
   </section>
   <section anchor="pol-subscriptions" title="Subscriptions">
@@ -36,9 +41,7 @@
       <t>For each subscription: If the event that occurred is in the list of subscribed events and the distance of the current object to the object where the event occurred is smaller or equal to the “depth” of the subscription or the “depth” is equal to “-1”, add the user of this subscription to the list of users that should be notified.
       The distance between two objects is 0 if they are the same object, 1 if one is the parent of the other and so on.
       </t>
-      <t>Go to the parent of the current object and repeat from step 1.
-      unless the
-      current object is the root object
+      <t>Go to the parent of the current object and repeat from step 1. unless the current object is the root object.
       </t>
     </list>
     An important aspect to consider when sending notifications that include the new version of the object, is that every user who will be notified might be allowed to only see different parts of the object.
