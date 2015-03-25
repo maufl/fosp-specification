@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="overview" title="Overview">
+  <t>This section provides a short overview.
+  It is intended to familiarize with the concepts of FOSP.
+  It does not contain additional information that is not covered in the rest of the document and can be skipped.
+  </t>
   <section anchor="overview-user-and-provider" title="User and providers">
     <t>In the FOSP world, data is created by users.
     Users store their content on the servers of providers and can share it by setting the appropriate access rights for other users.

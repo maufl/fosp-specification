@@ -194,7 +194,7 @@
 	If the server MUST only return this status if the client is already authenticated.
 	</t>
 	<t hangText="404 Not Found">The object the client requested could not be found.</t>
-	<t hangText="405 Method Not Allow">The request method is not allowed on this object.
+	<t hangText="405 Method Not Allowed">The request method is not allowed on this object.
 	This status can be returned if a client tries to READ and attachment of an object without attachment.
 	</t>
 	<t hangText="409 Conflict">The request could not be completed due to a conflict with an resource.
@@ -202,6 +202,7 @@
 	</t>
 	<t hangText="412 Precondition Failed">If the request did contain a condition and condition is not satisfied, then the server MUST return this status.
 	Conditional request are not supported yet, but might be in the future.
+	This status can also be returned if a new object should be created but the parent object does not exist.
 	</t>
 	<t hangText="413 Request Entity Too Large">The server might choose to accept only messages smaller than a certain size.
 	In this case, if a client tries to send a larger message, the server CAN respond with this status and drop the request.
@@ -232,7 +233,7 @@
   <section anchor="msg-fowarding" title="Forwarding">
     <t>If a request applies to a resource that is not stored by the home server of the user, the server can forward it to a server that does store it.
     In this case, the server MUST insert an additional "From" header that contains the full username of the user that sent the request.
-    Similar, when a server sents a response to a forwarded request, an additional "To" header is added.
+    Similar, when a server sends a response to a forwarded request, an additional "To" header is added.
     This also applies if a notification is to be sent to a user of a different provider.
     </t>
   </section>

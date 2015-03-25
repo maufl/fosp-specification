@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="data-structure" title="Data structure">
+  <t>FOSP allows users to store structured data in objects and everything else in attachments, which each belong to an object.
+  The objects are all part of a tree and each user owns one such tree.
+  </t>
   <section anchor="objects" title="Objects">
     <t>We refer to the basic unit of data, that can be manipulated in the FOSP network, as an object.
     An object consists of key-value pairs.

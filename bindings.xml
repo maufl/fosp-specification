@@ -48,7 +48,7 @@
     </section>
     <section anchor="bindings-http-session-management" title="Session management">
       <t>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a BIND request.
-      With this cookie, the client is able to make authenticated requests.
+      With this cookie, the client MUST be able to make authenticated requests.
       </t>
     </section>
   </section>

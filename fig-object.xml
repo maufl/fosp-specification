@@ -29,6 +29,11 @@
       }
     }
   },
+  "attachment": {
+    "name": "hatter.jpg",
+    "type": "image/jpeg",
+    "size": 140385
+  },
   "type": "text/plain",
   "data": "Just plain text"
 }
