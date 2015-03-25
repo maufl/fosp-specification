@@ -94,6 +94,7 @@ Table of Contents
      5.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 18
      5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 18
+     5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 18
    6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
      6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 19
        6.1.1.  Connection Initiation  . . . . . . . . . . . . . . . . 19
@@ -104,7 +105,6 @@ Table of Contents
        6.2.2.  Session management . . . . . . . . . . . . . . . . . . 21
    7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
      7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 22
-     7.2.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 22
 
 
 
@@ -113,19 +113,19 @@ Maurer                    Expires March 5, 2015                 [Page 2]
 Internet-Draft                    FOSP                    September 2014
 
 
-     7.3.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 23
-     7.4.  Authentication and Registration  . . . . . . . . . . . . . 23
-     7.5.  Message forwarding . . . . . . . . . . . . . . . . . . . . 24
+     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+     7.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 22
+     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 23
+     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 23
+       7.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 23
+       7.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 24
+     7.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 24
+     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 24
    8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+     8.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+     8.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 25
    9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 26
    Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 27
-
-
-
-
-
-
-
 
 
 
@@ -569,7 +569,7 @@ Internet-Draft                    FOSP                    September 2014
       event, the value of "depth" is an integer between -1 and infinity
 
    How this field is evaluated by the server is explained
-   in Section 7.2.
+   in Section 7.3.
 
    The "attachment" field is only present if this object has an
    attachment.  It contains an object with three fields.
@@ -984,21 +984,21 @@ Internet-Draft                    FOSP                    September 2014
    then the body of the notification must be empty.  Otherwise it should
    contain the new version of the object.
 
-   When and to who notifications are sent is explained in Section 7.2.
+   When and to who notifications are sent is explained in Section 7.3.
 
 5.5.  Status codes
 
    TODO
 
+5.6.  Forwarding
 
-
-
-
-
-
-
-
-
+   If a request applies to a resource that is not stored by the home
+   server of the user, the server can forward it to a server that does
+   store it.  In this case, the server MUST insert an additional "From"
+   header that contains the full username of the user that sent the
+   request.  Similar, when a server sents a response to a forwarded
+   request, an additional "To" header is added.  This also applies if a
+   notification is to be sent to a user of a different provider.
 
 
 
@@ -1213,7 +1213,11 @@ Internet-Draft                    FOSP                    September 2014
 
    5.  If the current object is already the root object, deny access
 
-7.2.  Subscriptions
+7.2.  Groups
+
+   TODO
+
+7.3.  Subscriptions
 
    Similar to the access control information, subscriptions can be set
    on objects so that a user will be notified when changes occur.  A
@@ -1221,10 +1225,6 @@ Internet-Draft                    FOSP                    September 2014
    subscribe to and a "depth".  The depth is used to subscribe to events
    from all child objects to a certain depth.  When a change happens on
    an object, the server must use the following algorithm to determine
-   which users must be notified.
-
-   1.  Read the "subscriptions" from the current object.
-
 
 
 
@@ -1232,6 +1232,10 @@ Maurer                    Expires March 5, 2015                [Page 22]
 
 Internet-Draft                    FOSP                    September 2014
 
+
+   which users must be notified.
+
+   1.  Read the "subscriptions" from the current object.
 
    2.  For each subscription: If the event that occurred is in the list
        of subscribed events and the distance of the current object to
@@ -1250,7 +1254,7 @@ Internet-Draft                    FOSP                    September 2014
    Therefore, the server has to calculate the view of the object per
    user to prevent leaking of data a user might not be allowed to see.
 
-7.3.  Attachments
+7.4.  Attachments
 
    As explained in Section 3.4, each object can have a file as
    attachment.  However, attachments will likely not be stored together
@@ -1263,24 +1267,20 @@ Internet-Draft                    FOSP                    September 2014
    be deleted and an attachment should only be readable if there is an
    attachment field in the object.
 
-7.4.  Authentication and Registration
+7.5.  Authentication
 
-   When a client connects to a server, it has to provide credentials to
-   the server, so that the user of the client can be authenticated.
-   These are send in the body of the AUTHENTICATE request and can simply
-   be an object containing the name and the password of the user.  The
-   schema of authentication is not limited thought as the body can
-   contain arbitrary structured data.  Server to server authentication
-   is done using the DNS.  When a server receives a connection from
-   another server it verifies that the domain of the connecting server
-   resolves to the same IP address the connection comes from.
+   Most of the operations a user performs in FOSP probably require some
+   access rights.  To enforce these access rights, a user must be
+   authenticated and therefore be able to authenticate with the server.
+   As a server might forward requests on behalf of a user, the remote
+   server must also be able to verify that the server is authorized to
+   forward requests for the user.  Therefore, servers must also
+   authenticate each other.
 
-   The REGISTER request should be supported by all servers, but can be
-   disabled to prevent automatic creation of accounts by autonomous
-   programs.  It is also not required that the REGISTER command is the
-   only way to create an acount on a server.  For example, there could
-   be sign up forms on websites or a server of a company could be
-   connected to a directory service and fetch the login informations
+7.5.1.  Users
+
+   When a client connects to a server it can use the BIND request to
+   authenticate itself.  The most basic way to do this is just to
 
 
 
@@ -1289,47 +1289,47 @@ Maurer                    Expires March 5, 2015                [Page 23]
 Internet-Draft                    FOSP                    September 2014
 
 
-   from there.
+   provide a username and a password, which SHOULD be supported by any
+   server.  In the future, additional authenticaten methods will be
+   added.
 
-7.5.  Message forwarding
+7.5.2.  Servers
+
+   When a server opens a connection to another server, the
+   authentication can be done using DNS.  The connectiong server must
+   provide a domain name it wants to be authenticated for.  The
+   accepting server then does the server discovery process described in&
+   nbps;Section 8.1  and compares the resolved IP address to the address
+   of the connecting server.  If the IP addresses match, the
+   authentication is successfull.
+
+7.6.  Registration
+
+   The registration of a new user account is no longer part of the FOSP
+   protocol.  In general, out-of-band registration is prefered.  It can
+   either be done by the user via a web formular or the accounts can be
+   provisioned, for example in a coporate network from a directory
+   server.  In the future, a possibility of creating and account via an
+   CREATE request might be specified.
+
+7.7.  Message forwarding
+
+   In general, a server should accept forwarded messages from another
+   server.  However it MUST authenticate the remote server first, before
+   processing any other requests or sending any notifications.
 
    A server does not need to accept forwarded requests from other
    servers, if it shouldn't be part of the federated network.  This
    allows FOSP to be used in cooperate environments or other closed
    environments where federation with the outside world is not allowed.
 
-   In any case, a server must never accept a forwarded request if the
+   In any case, a server MUST never accept a forwarded request if the
    user of the request is not on the domain of the server that forwarded
-   the request.  For example, if server A, that is authoritative for
-   domain "example. net", authenticates to server B and then forwards a
-   request of user "alice@wonderland. lit", server B must close the
-   connection.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   the request.  For example, if server A, that is authenticated for
+   domain "example.net", authenticates to server B and then forwards a
+   request of user "alice@wonderland.lit", server B MUST close the
+   connection.  The user from which the request originates MUST be
+   specified in the "From" header of the request.
 
 
 
@@ -1347,9 +1347,9 @@ Internet-Draft                    FOSP                    September 2014
 
 8.  Discovery
 
+8.1.  DNS
 
-
-
+8.2.  Well known
 
 
 

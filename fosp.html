@@ -248,15 +248,17 @@ Response<br />
 Notification<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes">5.5.</a>&nbsp;
 Status codes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-fowarding">5.6.</a>&nbsp;
+Forwarding<br />
 <a href="#bindings">6.</a>&nbsp;
 Bindings<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-ws">6.1.</a>&nbsp;
 WebSocket binding<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-ws-connection-initiation">6.1.1.</a>&nbsp;
 Connection Initiation<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-format">6.1.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-ws-format">6.1.2.</a>&nbsp;
 Format<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-serialization">6.1.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-ws-serialization">6.1.3.</a>&nbsp;
 Serialization<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-http">6.2.</a>&nbsp;
 HTTP binding<br />
@@ -268,16 +270,28 @@ Session management<br />
 Policies<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">7.1.</a>&nbsp;
 Access control<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-subscriptions">7.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-groups">7.2.</a>&nbsp;
+Groups<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-subscriptions">7.3.</a>&nbsp;
 Subscriptions<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-attachments">7.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-attachments">7.4.</a>&nbsp;
 Attachments<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-reg">7.4.</a>&nbsp;
-Authentication and Registration<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forw">7.5.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth">7.5.</a>&nbsp;
+Authentication<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-user">7.5.1.</a>&nbsp;
+Users<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-server">7.5.2.</a>&nbsp;
+Servers<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-registrations">7.6.</a>&nbsp;
+Registration<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forwarding">7.7.</a>&nbsp;
 Message forwarding<br />
 <a href="#discovery">8.</a>&nbsp;
 Discovery<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#discovery-dns">8.1.</a>&nbsp;
+DNS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#discovery-well-known">8.2.</a>&nbsp;
+Well known<br />
 <a href="#rfc.references1">9.</a>&nbsp;
 References<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
@@ -621,7 +635,7 @@ Object attributes</h3>
 <p>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity 
 </p>
 </blockquote><p>
-    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.3<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
     
 </p>
 <p>The “attachment” field is only present if this object has an attachment.
@@ -999,7 +1013,7 @@ Notification</h3>
     Otherwise it should contain the new version of the object.
     
 </p>
-<p>When and to who notifications are sent is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.2<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+<p>When and to who notifications are sent is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.3<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
     
 </p>
 <a name="msg-status-codes"></a><br /><hr />
@@ -1008,6 +1022,17 @@ Notification</h3>
 Status codes</h3>
 
 <p>TODO
+    
+</p>
+<a name="msg-fowarding"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.6"></a><h3>5.6.&nbsp;
+Forwarding</h3>
+
+<p>If a request applies to a resource that is not stored by the home server of the user, the server can forward it to a server that does store it.
+    In this case, the server MUST insert an additional "From" header that contains the full username of the user that sent the request.
+    Similar, when a server sents a response to a forwarded request, an additional "To" header is added.
+    This also applies if a notification is to be sent to a user of a different provider.
     
 </p>
 <a name="bindings"></a><br /><hr />
@@ -1025,7 +1050,7 @@ Bindings</h3>
 WebSocket binding</h3>
 
 <p>The WebSocket binding provides a way of sending FOSP messages of WebSocket messages.
-    It was chosen because it is  the only bidirectional protocol currently supported in browsers.
+    It was chosen because it is the only bidirectional protocol currently supported in browsers.
     
 </p>
 <a name="bindings-ws-connection-initiation"></a><br /><hr />
@@ -1038,7 +1063,7 @@ Connection Initiation</h3>
       In the WebSocket handshake, the Sec-WebSocket-Protocol MUST be set to "fosp".
       
 </p>
-<a name="msg-format"></a><br /><hr />
+<a name="bindings-ws-format"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.1.2"></a><h3>6.1.2.&nbsp;
 Format</h3>
@@ -1101,7 +1126,7 @@ Format</h3>
 <p>
 </p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;4&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
-<a name="msg-serialization"></a><br /><hr />
+<a name="bindings-ws-serialization"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.1.3"></a><h3>6.1.3.&nbsp;
 Serialization</h3>
@@ -1183,9 +1208,17 @@ Access control</h3>
 </ol><p>
     
 </p>
-<a name="pol-subscriptions"></a><br /><hr />
+<a name="pol-groups"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
+Groups</h3>
+
+<p>TODO
+    
+</p>
+<a name="pol-subscriptions"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.3"></a><h3>7.3.&nbsp;
 Subscriptions</h3>
 
 <p>Similar to the access control information, subscriptions can be set on objects so that a user will be notified when changes occur.
@@ -1213,7 +1246,7 @@ Subscriptions</h3>
 </p>
 <a name="pol-attachments"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.3"></a><h3>7.3.&nbsp;
+<a name="rfc.section.7.4"></a><h3>7.4.&nbsp;
 Attachments</h3>
 
 <p>As explained in <a class='info' href='#data-structure-attachments'>Section&nbsp;3.4<span> (</span><span class='info'>Attachments</span><span>)</span></a>, each object can have a file as attachment.
@@ -1223,42 +1256,81 @@ Attachments</h3>
     Hence, if there is no attachment field in the object then the attachment should be deleted and an attachment should only be readable if there is an attachment field in the object.
     
 </p>
-<a name="pol-auth-reg"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.4"></a><h3>7.4.&nbsp;
-Authentication and Registration</h3>
-
-<p>When a client connects to a server, it has to provide credentials to the server, so that the user of the client can be authenticated.
-    These are send in the body of the AUTHENTICATE request and can simply be an object containing the name and the password of the user.
-    The schema of authentication is not limited thought as the body can contain arbitrary structured data.
-    Server to server authentication is done using the DNS.
-    When a server receives a connection from another server it verifies that the domain of the connecting server resolves to the same IP address the connection comes from.
-    
-</p>
-<p>The REGISTER request should be supported by all servers, but can be disabled to prevent automatic creation of accounts by autonomous programs.
-    It is also not required that the REGISTER command is the only way to create an acount on a server.
-    For example, there could be sign up forms on websites or a server of a company could be connected to a directory service and fetch the login informations from there.
-    
-</p>
-<a name="pol-msg-forw"></a><br /><hr />
+<a name="pol-auth"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.5"></a><h3>7.5.&nbsp;
+Authentication</h3>
+
+<p>Most of the operations a user performs in FOSP probably require some access rights.
+    To enforce these access rights, a user must be authenticated and therefore be able to authenticate with the server.
+    As a server might forward requests on behalf of a user, the remote server must also be able to verify that the server is authorized to forward requests for the user.
+    Therefore, servers must also authenticate each other.
+    
+</p>
+<a name="pol-auth-user"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.5.1"></a><h3>7.5.1.&nbsp;
+Users</h3>
+
+<p>When a client connects to a server it can use the BIND request to authenticate itself.
+      The most basic way to do this is just to provide a username and a password, which SHOULD be supported by any server.
+      In the future, additional authenticaten methods will be added.
+      
+</p>
+<a name="pol-auth-server"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.5.2"></a><h3>7.5.2.&nbsp;
+Servers</h3>
+
+<p>When a server opens a connection to another server, the authentication can be done using DNS.
+      The connectiong server must provide a domain name it wants to be authenticated for.
+      The accepting server then does the server discovery process described in&nbps;<a class='info' href='#discovery-dns'>Section&nbsp;8.1<span> (</span><span class='info'>DNS</span><span>)</span></a>&nbsp; and compares the resolved IP address to the address of the connecting server.
+      If the IP addresses match, the authentication is successfull.
+      
+</p>
+<a name="pol-registrations"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.6"></a><h3>7.6.&nbsp;
+Registration</h3>
+
+<p>The registration of a new user account is no longer part of the FOSP protocol.
+    In general, out-of-band registration is prefered.
+    It can either be done by the user via a web formular or the accounts can be provisioned, for example in a coporate network from a directory server.
+    In the future, a possibility of creating and account via an CREATE request might be specified.
+    
+</p>
+<a name="pol-msg-forwarding"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.7"></a><h3>7.7.&nbsp;
 Message forwarding</h3>
 
+<p>In general, a server should accept forwarded messages from another server.
+    However it MUST authenticate the remote server first, before processing any other requests or sending any notifications.
+    
+</p>
 <p>A server does not need to accept forwarded requests from other servers, if it shouldn’t be part of the federated network.
     This allows FOSP to be used in cooperate environments or other closed environments where federation with the outside world is not allowed.
     
 </p>
-<p>In any case, a server must never accept a forwarded request if the user of the request is not on the domain of the server that forwarded the request.
-    For example, if server A, that is authoritative for domain “example.
-    net”, authenticates to server B and then forwards a request of user “alice@wonderland.
-    lit”, server B must close the connection.
+<p>In any case, a server MUST never accept a forwarded request if the user of the request is not on the domain of the server that forwarded the request.
+    For example, if server A, that is authenticated for domain “example.net”, authenticates to server B and then forwards a request of user “alice@wonderland.lit”, server B MUST close the connection.
+    The user from which the request originates MUST be specified in the "From" header of the request.
     
 </p>
 <a name="discovery"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8"></a><h3>8.&nbsp;
 Discovery</h3>
+
+<a name="discovery-dns"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
+DNS</h3>
+
+<a name="discovery-well-known"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
+Well known</h3>
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
