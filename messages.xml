@@ -37,7 +37,8 @@
     </t>
     <t>The request types are described in the following sections.</t>
     <section anchor="msg-request-info" title="Info">
-      <t>TODO</t>
+      <t>There will likely be a request called INFO or OPTIONS to discover the capabilities of the server.
+      However, as of now, it is not yet clear what is needed and therefore the definition is postponed.</t>
     </section>
     <section anchor="msg-request-bind" title="Bind">
       <t>The BIND request is used to authenticate the client.
@@ -127,6 +128,9 @@
     </t>
     <t>The status code is explained in&nbsp;<xref target="msg-status-codes" />.
     </t>
+    <t>An FAILED response SHOULD contain an object describing the error that occured.
+    The object should contain a "message" attribute with a string value that explains the error.
+    </t>
   </section>
   <section anchor="msg-type-notification" title="Notification">
     <t>Notifications are sent from servers to clients when objects change and the client
@@ -144,8 +148,71 @@
     </t>
   </section>
   <section anchor="msg-status-codes" title="Status codes">
-    <t>TODO
+    <t>The status codes reuse and extend the status codes used in HTTP.
+    They are wildly known and also used in similar fashion in other protocols.
+    The status codes are also divided into the same classes, with the same meaning.
+    Not all status codes of HTTP are used, but all are reserved and MUST NOT be used for custom statuses.
     </t>
+    <section anchor="msg-status-codes-100" title="Informal 1xx">
+      <t>The 1xx status codes are not used at the moment.
+      A client MUST ignore any such responses and continue to wait for a final response.
+      </t>
+    </section>
+    <section anchor="msg-status-codes-200" title="Successful 2xx">
+      <t>The 2xx status codes indicate that the request was successful.
+      <list style="hanging">
+	<t hangText="200 OK">The request has succeeded.</t>
+	<t hangText="201 Created">The request has succeeded and a new object has been created.</t>
+	<t hangText="204 No Content">The request has succeeded but no content is returned.
+	This can be for example the case when a DELETE request has been sent.
+	</t>
+      </list>
+      </t>
+    </section>
+    <section anchor="msg-status-codes-300" title="Redirection 3xx">
+      <t>The 3xx status codes indicate that the requested object can be found elsewhere.
+      <list style="hanging">
+	<t hangText="301 Moved Permanently">The object was moved permanently and is now found at the location indicated in the "Location" header.
+	Moving objects is not yet supported but might be in the future.
+	Clients SHOULD be able to understand this status and in case of a GET, LIST or READ request MAY resent the request with the new location.
+	However, a client MUST never automatically resent the request if the request alters the object, e.g. is a CREATE, PATCH, DELETE or WRITE request.
+	</t>
+	<t hangText="304 Not Modified">If the request did contain a condition that checks for the modification date and the object did not change, the server SHOULD respond with this status code.
+	Conditional requests are not supported yet, but might be in the future.
+	</t>
+      </list>
+      </t>
+    </section>
+    <section anchor="msg-status-codes-400" title="Client error 4xx">
+      <t>The 4xx status codes indicate that the client made an error.
+      <list style="hanging">
+	<t hangText="400 Bad Request">The request could not be parsed by the server due to malformed syntax.</t>
+	<t hangText="401 Unauthorized">The client tried to send a request that needs authentication but is not yet authenticated.
+	The client must make a successful BIND request bevor retrying this request.
+	</t>
+	<t hangText="403 Forbidden">The client does not have the necessary permissions.
+	If the server MUST only return this status if the client is already authenticated.
+	</t>
+	<t hangText="404 Not Found">The object the client requested could not be found.</t>
+	<t hangText="405 Method Not Allow">The request method is not allowed on this object.
+	This status can be returned if a client tries to READ and attachment of an object without attachment.
+	</t>
+	<t hangText="409 Conflict">The request could not be completed due to a conflict with an resource.
+	This status MUST be returned by the server if the client tries to create an object that already exists.
+	</t>
+	<t hangText="412 Precondition Failed">If the request did contain a condition and condition is not satisfied, then the server MUST return this status.
+	Conditional request are not supported yet, but might be in the future.
+	</t>
+	<t hangText="413 Request Entity Too Large">The server might choose to accept only messages smaller than a certain size.
+	In this case, if a client tries to send a larger message, the server CAN respond with this status and drop the request.
+	</t>
+      </list>
+      </t>
+    </section>
+    <section anchor="msg-status-code-500" title="Server Error 5xx">
+      <t>TODO
+      </t>
+    </section>
   </section>
   <section anchor="msg-fowarding" title="Forwarding">
     <t>If a request applies to a resource that is not stored by the home server of the user, the server can forward it to a server that does store it.
