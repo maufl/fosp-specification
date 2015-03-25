@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="discovery" title="Discovery">
+  <section anchor="discovery-dns" title="DNS">
+  </section>
+  <section anchor="discovery-well-known" title="Well known">
+  </section>
 </section>
