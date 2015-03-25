@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="discovery" title="Discovery">
+  <t>To be able to connect to a server, the client has to first determine the correct address of the server.
+  The server is determined using the domain name of the user name.
+  There are two different ways of determining the server address, a DNS based one and by retrieving a JSON object from a "well-known" location.
+  The second approach is added as web application clients are unable to perform DNS lookups directly.
+  </t>
   <section anchor="discovery-dns" title="DNS">
+    <t>The discovery via DNS uses SRV records.
+    Unfortunately, the current format of SRV records is limited as it only includes one transport protocol.
+    DNS based discovery is therefore OPTIONAL until we are certain that the defined record format is acceptable.
+    </t>
+    <t>To discover a WebSocket based FOSP server for wonderland.lit, a DNS lookup for _fosp._wss._tcp.wonderland.lit with the record type SRV hast to be performed.
+    Similar, to discover a HTTP based FOSP server, _fosp._https._tcp.wonderland.lit has to be resolved.
+    </t>
   </section>
   <section anchor="discovery-well-known" title="Well known">
+    <t>When DNS lookups are not possible, the server address can also be discovered by retrieving a JSON object.
+    In accordance with <xref target="RFC5785" /> the object MUST be located at https://&lt;domain&gt;/.well-know/fosp.
+    A client SHOULD NOT accept this file over plain HTTP.
+    </t>
+    <t>This response, if successful, MUST contain an JSON object and SHOULD have the "Content-Type" header set to "application/json".
+    The object MUST either contain an "https-tcp" attribute with a string value of an valid HTTP URL or a "wss-tcp" attribute with a string value of a valid WebSocket URL or both.
+    </t>
   </section>
 </section>
