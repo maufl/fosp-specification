@@ -210,7 +210,22 @@
       </t>
     </section>
     <section anchor="msg-status-code-500" title="Server Error 5xx">
-      <t>TODO
+      <t>The 5xx status codes indicate an error in the server.
+      <list style="hanging">
+	<t hangText="500 Internal Server Error">The server could not process the request due to an internal error.
+	</t>
+	<t hangText="501 Not Implemented">The server does not support the requested functionality.
+	</t>
+	<t hangText="502 Bad Gateway">The server tried to forward the request, but was unsuccessful.
+	This might be because the authentication failed, the remote server rejected the connection or other reasons.
+	If the remote server can not be reached at all, 504 SHOULD be returned instead.
+	</t>
+	<t hangText="503 Service Unavailable">The server can currently not process any requests but will likly be able to in the near future.
+	</t>
+	<t hangText="504 Gateway Timeout">The server tried to forward the request but could not reach the upstream server at all.
+	This can be a permanent problem and indicate that the requested object does not exist on any remote server at all.
+	</t>
+      </list>
       </t>
     </section>
   </section>
