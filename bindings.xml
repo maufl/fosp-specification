@@ -6,6 +6,8 @@
   <section anchor="bindings-ws" title="WebSocket binding">
     <t>The WebSocket binding provides a way of sending FOSP messages of WebSocket messages.
     It was chosen because it is the only bidirectional protocol currently supported in browsers.
+    The client SHOULD NOT use an unsecure WebSocket connection.
+    A server SHOULD NOT accept an unsecure WebSocket connection other then for testing and debugging purposes.
     </t>
     <section anchor="bindings-ws-connection-initiation" title="Connection Initiation">
       <t>To send messages to a server over WebSockets, a connection has to be established first.
@@ -34,9 +36,11 @@
       </t>
     </section>
   </section>
-  <section anchor="bindings-http" title="HTTP binding">
-    <t>The HTTP binding is developed because it might be simpler for clients to process large up- or downloads via HTTP.
-    However, it does not support all of FOSPs functionality because notifications can not be sent over HTTP (at least over HTTP/1.1).
+  <section anchor="bindings-https" title="HTTPS binding">
+    <t>The HTTPS binding is developed because it might be simpler for clients to process large up- or downloads via HTTPS.
+    However, it does not support all of FOSPs functionality because notifications can not be sent over HTTPS (at least over HTTP/1.1).
+    A client SHOULD NOT issue FOSP requests over plain HTTP.
+    A server SHOULD NOT allow HTTP based requests other then for testing and debugging purposes.
     </t>
     <section anchor="bingings-http-mapping" title="Mapping">
       <t>Each FOSP request is transported as an HTTP request.
