@@ -270,8 +270,8 @@ Connection Initiation<br />
 Format<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-ws-serialization">6.1.3.</a>&nbsp;
 Serialization<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-http">6.2.</a>&nbsp;
-HTTP binding<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-https">6.2.</a>&nbsp;
+HTTPS binding<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bingings-http-mapping">6.2.1.</a>&nbsp;
 Mapping<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-http-session-management">6.2.2.</a>&nbsp;
@@ -1219,6 +1219,8 @@ WebSocket binding</h3>
 
 <p>The WebSocket binding provides a way of sending FOSP messages of WebSocket messages.
     It was chosen because it is the only bidirectional protocol currently supported in browsers.
+    The client SHOULD NOT use an unsecure WebSocket connection.
+    A server SHOULD NOT accept an unsecure WebSocket connection other then for testing and debugging purposes.
     
 </p>
 <a name="bindings-ws-connection-initiation"></a><br /><hr />
@@ -1309,13 +1311,15 @@ Serialization</h3>
       Otherwise, when the whole message is valid UTF-8 encoded text, a text WebSocket message CAN be used.
       
 </p>
-<a name="bindings-http"></a><br /><hr />
+<a name="bindings-https"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.2"></a><h3>6.2.&nbsp;
-HTTP binding</h3>
+HTTPS binding</h3>
 
-<p>The HTTP binding is developed because it might be simpler for clients to process large up- or downloads via HTTP.
-    However, it does not support all of FOSPs functionality because notifications can not be sent over HTTP (at least over HTTP/1.1).
+<p>The HTTPS binding is developed because it might be simpler for clients to process large up- or downloads via HTTPS.
+    However, it does not support all of FOSPs functionality because notifications can not be sent over HTTPS (at least over HTTP/1.1).
+    A client SHOULD NOT issue FOSP requests over plain HTTP.
+    A server SHOULD NOT allow HTTP based requests other then for testing and debugging purposes.
     
 </p>
 <a name="bingings-http-mapping"></a><br /><hr />
@@ -1493,22 +1497,48 @@ Message forwarding</h3>
 <a name="rfc.section.8"></a><h3>8.&nbsp;
 Discovery</h3>
 
+<p>To be able to connect to a server, the client has to first determine the correct address of the server.
+  The server is determined using the domain name of the user name.
+  There are two different ways of determining the server address, a DNS based one and by retrieving a JSON object from a "well-known" location.
+  The second approach is added as web application clients are unable to perform DNS lookups directly.
+  
+</p>
 <a name="discovery-dns"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
 DNS</h3>
 
+<p>The discovery via DNS uses SRV records.
+    Unfortunately, the current format of SRV records is limited as it only includes one transport protocol.
+    DNS based discovery is therefore OPTIONAL until we are certain that the defined record format is acceptable.
+    
+</p>
+<p>To discover a WebSocket based FOSP server for wonderland.lit, a DNS lookup for _fosp._wss._tcp.wonderland.lit with the record type SRV hast to be performed.
+    Similar, to discover a HTTP based FOSP server, _fosp._https._tcp.wonderland.lit has to be resolved.
+    
+</p>
 <a name="discovery-well-known"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
 Well known</h3>
 
+<p>When DNS lookups are not possible, the server address can also be discovered by retrieving a JSON object.
+    In accordance with <a class='info' href='#RFC5785'>[RFC5785]<span> (</span><span class='info'>Nottingham, M. and E. Hammer-Lahav, &ldquo;Defining Well-Known Uniform Resource Identifiers (URIs),&rdquo; April&nbsp;2010.</span><span>)</span></a> the object MUST be located at https://&lt;domain&gt;/.well-know/fosp.
+    A client SHOULD NOT accept this file over plain HTTP.
+    
+</p>
+<p>This response, if successful, MUST contain an JSON object and SHOULD have the "Content-Type" header set to "application/json".
+    The object MUST either contain an "https-tcp" attribute with a string value of an valid HTTP URL or a "wss-tcp" attribute with a string value of a valid WebSocket URL or both.
+    
+</p>
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>9.&nbsp;References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="refs.rfc2119">[refs.rfc2119]</a></td>
 <td class="author-text">Bradner, S., &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; RFC&nbsp;2119, BCP&nbsp;14, March&nbsp;1997.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5785">[RFC5785]</a></td>
+<td class="author-text">Nottingham, M. and E. Hammer-Lahav, &ldquo;<a href="http://tools.ietf.org/html/rfc5785">Defining Well-Known Uniform Resource Identifiers (URIs)</a>,&rdquo; RFC&nbsp;5785, April&nbsp;2010 (<a href="http://www.rfc-editor.org/rfc/rfc5785.txt">TXT</a>).</td></tr>
 </table>
 
 <a name="rfc.authors"></a><br /><hr />

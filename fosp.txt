@@ -113,7 +113,7 @@ Maurer                 Expires September 26, 2015               [Page 2]
 Internet-Draft                    FOSP                        March 2015
 
 
-     6.2.  HTTP binding . . . . . . . . . . . . . . . . . . . . . . . 24
+     6.2.  HTTPS binding  . . . . . . . . . . . . . . . . . . . . . . 24
        6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 24
        6.2.2.  Session management . . . . . . . . . . . . . . . . . . 24
    7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
@@ -1187,7 +1187,10 @@ Internet-Draft                    FOSP                        March 2015
 
    The WebSocket binding provides a way of sending FOSP messages of
    WebSocket messages.  It was chosen because it is the only
-   bidirectional protocol currently supported in browsers.
+   bidirectional protocol currently supported in browsers.  The client
+   SHOULD NOT use an unsecure WebSocket connection.  A server SHOULD NOT
+   accept an unsecure WebSocket connection other then for testing and
+   debugging purposes.
 
 6.1.1.  Connection Initiation
 
@@ -1204,9 +1207,6 @@ Internet-Draft                    FOSP                        March 2015
    Also the header definition will be subject to change after
    determining acceptable characters.  For the resource identifier, we
    will probably refer to the IRI definition in the future.
-
-
-
 
 
 
@@ -1303,12 +1303,14 @@ Internet-Draft                    FOSP                        March 2015
    Otherwise, when the whole message is valid UTF-8 encoded text, a text
    WebSocket message CAN be used.
 
-6.2.  HTTP binding
+6.2.  HTTPS binding
 
-   The HTTP binding is developed because it might be simpler for clients
-   to process large up- or downloads via HTTP.  However, it does not
-   support all of FOSPs functionality because notifications can not be
-   sent over HTTP (at least over HTTP/1.1).
+   The HTTPS binding is developed because it might be simpler for
+   clients to process large up- or downloads via HTTPS.  However, it
+   does not support all of FOSPs functionality because notifications can
+   not be sent over HTTPS (at least over HTTP/1.1).  A client SHOULD NOT
+   issue FOSP requests over plain HTTP.  A server SHOULD NOT allow HTTP
+   based requests other then for testing and debugging purposes.
 
 6.2.1.  Mapping
 
@@ -1323,8 +1325,6 @@ Internet-Draft                    FOSP                        March 2015
    HTTP binding MUST return a cookie in a success response to a BIND
    request.  With this cookie, the client MUST be able to make
    authenticated requests.
-
-
 
 
 
@@ -1571,38 +1571,38 @@ Internet-Draft                    FOSP                        March 2015
 
 8.  Discovery
 
+   To be able to connect to a server, the client has to first determine
+   the correct address of the server.  The server is determined using
+   the domain name of the user name.  There are two different ways of
+   determining the server address, a DNS based one and by retrieving a
+   JSON object from a "well-known" location.  The second approach is
+   added as web application clients are unable to perform DNS lookups
+   directly.
+
 8.1.  DNS
+
+   The discovery via DNS uses SRV records.  Unfortunately, the current
+   format of SRV records is limited as it only includes one transport
+   protocol.  DNS based discovery is therefore OPTIONAL until we are
+   certain that the defined record format is acceptable.
+
+   To discover a WebSocket based FOSP server for wonderland.lit, a DNS
+   lookup for _fosp._wss._tcp.wonderland.lit with the record type SRV
+   hast to be performed.  Similar, to discover a HTTP based FOSP server,
+   _fosp._https._tcp.wonderland.lit has to be resolved.
 
 8.2.  Well known
 
+   When DNS lookups are not possible, the server address can also be
+   discovered by retrieving a JSON object.  In accordance with [RFC5785]
+   the object MUST be located at https://<domain>/.well-know/fosp.  A
+   client SHOULD NOT accept this file over plain HTTP.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   This response, if successful, MUST contain an JSON object and SHOULD
+   have the "Content-Type" header set to "application/json".  The object
+   MUST either contain an "https-tcp" attribute with a string value of
+   an valid HTTP URL or a "wss-tcp" attribute with a string value of a
+   valid WebSocket URL or both.
 
 
 
@@ -1631,9 +1631,9 @@ Internet-Draft                    FOSP                        March 2015
               Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", RFC 2119, BCP 14, March 1997.
 
-
-
-
+   [RFC5785]  Nottingham, M. and E. Hammer-Lahav, "Defining Well-Known
+              Uniform Resource Identifiers (URIs)", RFC 5785,
+              April 2010.
 
 
 
