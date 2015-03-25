@@ -348,7 +348,7 @@ Conventions</h3>
 
 <p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
     "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-    document are to be interpreted as described in <a class='info' href='#refs.rfc2119'>RFC 2119<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> [refs.rfc2119].
+    document are to be interpreted as described in <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>.
     
 </p>
 <a name="requirements"></a><br /><hr />
@@ -560,8 +560,8 @@ Objects</h3>
     "users": {
       "alice@wonderland.lit": {
         "data": [ "read", "not-write" ],
-	"acl": [ "read", "not-write" ],
-	"subscriptions": [ "read", "not-write" ]
+        "acl": [ "read", "not-write" ],
+        "subscriptions": [ "read", "not-write" ]
       }
     }
   },
@@ -948,8 +948,8 @@ Patch</h3>
 </p>
 <p>The differences are merged into the object as follows.
       If the original object does not have an attribute the differences object has, the attribute is copied to the object.
-      If the original object already has an attribute the differences object has and the new value is , the attribute is deleted from the object.
-      If the original object already has an attribute the differences object has and the value is not null, the attribute is replaced with the new attribute except when the value of the old and the new attribute are both an object.
+      If the original object already has an attribute the differences object has and the new value is "null", the attribute is deleted from the object.
+      If the original object already has an attribute the differences object has and the value is not "null", the attribute is replaced with the new attribute except when the value of the old and the new attribute are both an object.
       In this case the merging is done on the attribute recursivly as it is on the whole object.
       
 </p>
@@ -1241,7 +1241,8 @@ Format</h3>
 <p>The FOSP messages is formatted similar to a HTTP request/response.
       
 </p>
-<p>
+<p>WARNING: To simplify the definition for the moment, only ASCII characters are used.
+      This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported.
       Also the header definition will be subject to change after determining acceptable characters.
       For the resource identifier, we will probably refer to the IRI definition in the future.
       
@@ -1535,8 +1536,8 @@ Well known</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>9.&nbsp;References</h3>
 <table width="99%" border="0">
-<tr><td class="author-text" valign="top"><a name="refs.rfc2119">[refs.rfc2119]</a></td>
-<td class="author-text">Bradner, S., &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; RFC&nbsp;2119, BCP&nbsp;14, March&nbsp;1997.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997 (<a href="http://www.rfc-editor.org/rfc/rfc2119.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2119.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2119.xml">XML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5785">[RFC5785]</a></td>
 <td class="author-text">Nottingham, M. and E. Hammer-Lahav, &ldquo;<a href="http://tools.ietf.org/html/rfc5785">Defining Well-Known Uniform Resource Identifiers (URIs)</a>,&rdquo; RFC&nbsp;5785, April&nbsp;2010 (<a href="http://www.rfc-editor.org/rfc/rfc5785.txt">TXT</a>).</td></tr>
 </table>

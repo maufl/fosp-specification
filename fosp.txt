@@ -198,8 +198,7 @@ Internet-Draft                    FOSP                        March 2015
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in RFC 2119
-   [refs.rfc2119].
+   document are to be interpreted as described in [RFC2119].
 
 1.3.  Requirements
 
@@ -214,6 +213,7 @@ Internet-Draft                    FOSP                        March 2015
 
    This document uses a number of terminologies to refer to concepts
    found in FOSP.
+
 
 
 
@@ -917,9 +917,9 @@ Internet-Draft                    FOSP                        March 2015
    original object does not have an attribute the differences object
    has, the attribute is copied to the object.  If the original object
    already has an attribute the differences object has and the new value
-   is , the attribute is deleted from the object.  If the original
+   is "null", the attribute is deleted from the object.  If the original
    object already has an attribute the differences object has and the
-   value is not null, the attribute is replaced with the new attribute
+   value is not "null", the attribute is replaced with the new attribute
    except when the value of the old and the new attribute are both an
    object.  In this case the merging is done on the attribute recursivly
    as it is on the whole object.
@@ -1204,13 +1204,13 @@ Internet-Draft                    FOSP                        March 2015
 
    The FOSP messages is formatted similar to a HTTP request/response.
 
-   Also the header definition will be subject to change after
-   determining acceptable characters.  For the resource identifier, we
-   will probably refer to the IRI definition in the future.
-
-
-
-
+   WARNING: To simplify the definition for the moment, only ASCII
+   characters are used.  This WILL change as the protocol itself
+   mandates the use of Unicode and the UTF-8 encoding and international
+   user and resource names MUST be supported.  Also the header
+   definition will be subject to change after determining acceptable
+   characters.  For the resource identifier, we will probably refer to
+   the IRI definition in the future.
 
 
 
@@ -1627,13 +1627,13 @@ Internet-Draft                    FOSP                        March 2015
 
 9.  References
 
-   [refs.rfc2119]
-              Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", RFC 2119, BCP 14, March 1997.
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
 
    [RFC5785]  Nottingham, M. and E. Hammer-Lahav, "Defining Well-Known
               Uniform Resource Identifiers (URIs)", RFC 5785,
               April 2010.
+
 
 
 
