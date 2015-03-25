@@ -6,8 +6,8 @@ message       = request / response / notification
 request       = request-type SP ( resource-id / "*" )
                 SP sequence-number CRLF headers [ CRLF body ]
 
-request-type  = "CONNECT" / "AUTHENTICATE" / "REGISTER" / "CREATE"
-                / "SELECT" / "UPDATE" / "DELETE" / "READ" / "WRITE"
+request-type  = "INFO" / "BIND" / "CREATE" / "GET" / "LIST"
+                / "PATCH" / "DELETE" / "READ" / "WRITE"
 
 response      = response-type SP response-status
                 SP sequence-number CRLF headers [ CRLF body ]
