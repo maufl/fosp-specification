@@ -429,6 +429,11 @@ Terminology</h3>
 <a name="rfc.section.2"></a><h3>2.&nbsp;
 Overview</h3>
 
+<p>This section provides a short overview.
+  It is intended to familiarize with the concepts of FOSP.
+  It does not contain additional information that is not covered in the rest of the document and can be skipped.
+  
+</p>
 <a name="overview-user-and-provider"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.2.1"></a><h3>2.1.&nbsp;
@@ -519,6 +524,10 @@ Bindings</h3>
 <a name="rfc.section.3"></a><h3>3.&nbsp;
 Data structure</h3>
 
+<p>FOSP allows users to store structured data in objects and everything else in attachments, which each belong to an object.
+  The objects are all part of a tree and each user owns one such tree.
+  
+</p>
 <a name="objects"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
@@ -563,6 +572,11 @@ Objects</h3>
         "depth": 1
       }
     }
+  },
+  "attachment": {
+    "name": "hatter.jpg",
+    "type": "image/jpeg",
+    "size": 140385
   },
   "type": "text/plain",
   "data": "Just plain text"
@@ -1120,7 +1134,7 @@ Client error 4xx</h3>
 <dt>404 Not Found</dt>
 <dd>The object the client requested could not be found.
 </dd>
-<dt>405 Method Not Allow</dt>
+<dt>405 Method Not Allowed</dt>
 <dd>The request method is not allowed on this object.
 	This status can be returned if a client tries to READ and attachment of an object without attachment.
 	
@@ -1133,6 +1147,7 @@ Client error 4xx</h3>
 <dt>412 Precondition Failed</dt>
 <dd>If the request did contain a condition and condition is not satisfied, then the server MUST return this status.
 	Conditional request are not supported yet, but might be in the future.
+	This status can also be returned if a new object should be created but the parent object does not exist.
 	
 </dd>
 <dt>413 Request Entity Too Large</dt>
@@ -1148,7 +1163,33 @@ Client error 4xx</h3>
 <a name="rfc.section.5.5.5"></a><h3>5.5.5.&nbsp;
 Server Error 5xx</h3>
 
-<p>TODO
+<p>The 5xx status codes indicate an error in the server.
+      </p>
+<blockquote class="text"><dl>
+<dt>500 Internal Server Error</dt>
+<dd>The server could not process the request due to an internal error.
+	
+</dd>
+<dt>501 Not Implemented</dt>
+<dd>The server does not support the requested functionality.
+	
+</dd>
+<dt>502 Bad Gateway</dt>
+<dd>The server tried to forward the request, but was unsuccessful.
+	This might be because the authentication failed, the remote server rejected the connection or other reasons.
+	If the remote server can not be reached at all, 504 SHOULD be returned instead.
+	
+</dd>
+<dt>503 Service Unavailable</dt>
+<dd>The server can currently not process any requests but will likly be able to in the near future.
+	
+</dd>
+<dt>504 Gateway Timeout</dt>
+<dd>The server tried to forward the request but could not reach the upstream server at all.
+	This can be a permanent problem and indicate that the requested object does not exist on any remote server at all.
+	
+</dd>
+</dl></blockquote><p>
       
 </p>
 <a name="msg-fowarding"></a><br /><hr />
@@ -1158,7 +1199,7 @@ Forwarding</h3>
 
 <p>If a request applies to a resource that is not stored by the home server of the user, the server can forward it to a server that does store it.
     In this case, the server MUST insert an additional "From" header that contains the full username of the user that sent the request.
-    Similar, when a server sents a response to a forwarded request, an additional "To" header is added.
+    Similar, when a server sends a response to a forwarded request, an additional "To" header is added.
     This also applies if a notification is to be sent to a user of a different provider.
     
 </p>
@@ -1295,7 +1336,7 @@ Mapping</h3>
 Session management</h3>
 
 <p>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a BIND request.
-      With this cookie, the client is able to make authenticated requests.
+      With this cookie, the client MUST be able to make authenticated requests.
       
 </p>
 <a name="policies"></a><br /><hr />
@@ -1304,7 +1345,7 @@ Session management</h3>
 Policies</h3>
 
 <p>Besides implementing the technical specification of the protocol, the server has to enforce a set of policies.
-  These policies describe how the server interprets the objects to enforces access control and send notifications for subscriptions.
+  These policies describe how the server interprets the objects to enforc access control and send notifications for subscriptions.
   They also define constraints on certain attributes of objects and constraints on whether or not a message should be forwarded.
   
 </p>
@@ -1315,10 +1356,10 @@ Access control</h3>
 
 <p>As stated in <a class='info' href='#data-structure-fields'>Section&nbsp;3.2<span> (</span><span class='info'>Object attributes</span><span>)</span></a>, each object can save access control information.
     A valid entry in the access control list consists of the identifier of a user or a group of users and a list of rights.
-    Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “acl-write” right.
+    Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “write” right in the "acl" key.
     Because the objects are part of a tree, we can use inheritance to set access rights for a whole subtree by setting the appropriate access control information on the root of the subtree.
     This way the rights on an object are the sum of the rights on this object and all it’s ancestors.
-    To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-acl-write”.
+    To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-write”.
     The server must enforce access control for an object in the following way.
     </p>
 <ol class="text">
@@ -1340,7 +1381,12 @@ Access control</h3>
 <a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
 Groups</h3>
 
-<p>TODO
+<p>To be able to set rights for a group of people, the user must first be able to define groups and store them at a well known place on the server.
+    Each group is only valid for the tree that it is defined in.
+    The server MUST look for group definitions in objects at the location "&lt;user@domain&gt;/config/groups".
+    Each object underneath this object can contain a group definition and the group name is the name of the object.
+    To be a valid group definition, the object MUST contain an object in its "data" attribute and this inner object MUST contain a "users" attribute with an array value.
+    The array then contains the full names of all users in this group.
     
 </p>
 <a name="pol-subscriptions"></a><br /><hr />
@@ -1361,9 +1407,7 @@ Subscriptions</h3>
       The distance between two objects is 0 if they are the same object, 1 if one is the parent of the other and so on.
       
 </li>
-<li>Go to the parent of the current object and repeat from step 1.
-      unless the
-      current object is the root object
+<li>Go to the parent of the current object and repeat from step 1. unless the current object is the root object.
       
 </li>
 </ol><p>

@@ -67,7 +67,7 @@ Table of Contents
    2.  Overview . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
      2.1.  User and providers . . . . . . . . . . . . . . . . . . . .  6
      2.2.  Trees, Objects and Attachments . . . . . . . . . . . . . .  6
-     2.3.  Network topology . . . . . . . . . . . . . . . . . . . . .  6
+     2.3.  Network topology . . . . . . . . . . . . . . . . . . . . .  7
      2.4.  Messages . . . . . . . . . . . . . . . . . . . . . . . . .  7
      2.5.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . .  7
    3.  Data structure . . . . . . . . . . . . . . . . . . . . . . . .  8
@@ -99,12 +99,12 @@ Table of Contents
        5.5.3.  Redirection 3xx  . . . . . . . . . . . . . . . . . . . 19
        5.5.4.  Client error 4xx . . . . . . . . . . . . . . . . . . . 20
        5.5.5.  Server Error 5xx . . . . . . . . . . . . . . . . . . . 20
-     5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 20
-   6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
-     6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 21
-       6.1.1.  Connection Initiation  . . . . . . . . . . . . . . . . 21
-       6.1.2.  Format . . . . . . . . . . . . . . . . . . . . . . . . 21
-       6.1.3.  Serialization  . . . . . . . . . . . . . . . . . . . . 23
+     5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 21
+   6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+     6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 22
+       6.1.1.  Connection Initiation  . . . . . . . . . . . . . . . . 22
+       6.1.2.  Format . . . . . . . . . . . . . . . . . . . . . . . . 22
+       6.1.3.  Serialization  . . . . . . . . . . . . . . . . . . . . 24
 
 
 
@@ -113,24 +113,24 @@ Maurer                 Expires September 26, 2015               [Page 2]
 Internet-Draft                    FOSP                        March 2015
 
 
-     6.2.  HTTP binding . . . . . . . . . . . . . . . . . . . . . . . 23
-       6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 23
-       6.2.2.  Session management . . . . . . . . . . . . . . . . . . 23
-   7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
-     7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 24
-     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 24
-     7.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 24
-     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 25
-     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 25
-       7.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 25
-       7.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 26
-     7.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 26
-     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 26
-   8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 27
-     8.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
-     8.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 27
-   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 28
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 29
+     6.2.  HTTP binding . . . . . . . . . . . . . . . . . . . . . . . 24
+       6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 24
+       6.2.2.  Session management . . . . . . . . . . . . . . . . . . 24
+   7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+     7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 25
+     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+     7.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 26
+     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 26
+     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 26
+       7.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 27
+       7.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 27
+     7.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 27
+     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 27
+   8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+     8.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+     8.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 29
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 31
 
 
 
@@ -283,6 +283,11 @@ Internet-Draft                    FOSP                        March 2015
 
 2.  Overview
 
+   This section provides a short overview.  It is intended to
+   familiarize with the concepts of FOSP.  It does not contain
+   additional information that is not covered in the rest of the
+   document and can be skipped.
+
 2.1.  User and providers
 
    In the FOSP world, data is created by users.  Users store their
@@ -321,13 +326,8 @@ Internet-Draft                    FOSP                        March 2015
    an attachment.  The attachement is addressed in the same way as the
    object but is modified using special requests.
 
-2.3.  Network topology
 
-   FOSP follows the client-server paradigm.  The network topology is
-   similar to the SMTP or XMPP network.  A provider operates one or more
-   server that handle the domain of the provider.  A user can use a
-   client to connect to a server of a provide where he or she is
-   registered and request data.
+
 
 
 
@@ -336,6 +336,14 @@ Maurer                 Expires September 26, 2015               [Page 6]
 
 Internet-Draft                    FOSP                        March 2015
 
+
+2.3.  Network topology
+
+   FOSP follows the client-server paradigm.  The network topology is
+   similar to the SMTP or XMPP network.  A provider operates one or more
+   server that handle the domain of the provider.  A user can use a
+   client to connect to a server of a provide where he or she is
+   registered and request data.
 
    The server can connect to a server of a different provider to forward
    request it can not process itself.  This is the case when the request
@@ -380,20 +388,16 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-
-
-
-
-
-
-
-
 Maurer                 Expires September 26, 2015               [Page 7]
 
 Internet-Draft                    FOSP                        March 2015
 
 
 3.  Data structure
+
+   FOSP allows users to store structured data in objects and everything
+   else in attachments, which each belong to an object.  The objects are
+   all part of a tree and each user owns one such tree.
 
 3.1.  Objects
 
@@ -407,10 +411,6 @@ Internet-Draft                    FOSP                        March 2015
    to the JSON specification.  In the rest of the document we will refer
    to a key-value pair of an object either as an attribute or a field of
    an object.
-
-
-
-
 
 
 
@@ -476,6 +476,11 @@ Internet-Draft                    FOSP                        March 2015
          }
        }
      },
+     "attachment": {
+       "name": "hatter.jpg",
+       "type": "image/jpeg",
+       "size": 140385
+     },
      "type": "text/plain",
      "data": "Just plain text"
    }
@@ -492,11 +497,6 @@ Internet-Draft                    FOSP                        March 2015
    described here.  Currently we define the following attributes and
    their values:
 
-      The "owner" field is set by the server on creation of the object
-      and contains the identifier of the user who created the object as
-      a string.  It determines the ownership of this object and is used
-      when enforcing access rights.  The user MUST NOT be able to set
-      the field to a different value.
 
 
 
@@ -504,6 +504,12 @@ Maurer                 Expires September 26, 2015               [Page 9]
 
 Internet-Draft                    FOSP                        March 2015
 
+
+      The "owner" field is set by the server on creation of the object
+      and contains the identifier of the user who created the object as
+      a string.  It determines the ownership of this object and is used
+      when enforcing access rights.  The user MUST NOT be able to set
+      the field to a different value.
 
       The "btime" (birth time) field is set by the server to the date of
       creation of the object.  It is saved as a string, formatted
@@ -547,12 +553,6 @@ Internet-Draft                    FOSP                        March 2015
 
       The value of the "users" and "groups" field is an object.  In
       these objects, each key identifies a user or a group and the
-      related value is a set of rights.
-
-   The "subscriptions" field stores information about subscriptions.  It
-   is read by the server to determine which users have to be notified on
-   changes to an object.
-
 
 
 
@@ -560,6 +560,12 @@ Maurer                 Expires September 26, 2015              [Page 10]
 
 Internet-Draft                    FOSP                        March 2015
 
+
+      related value is a set of rights.
+
+   The "subscriptions" field stores information about subscriptions.  It
+   is read by the server to determine which users have to be notified on
+   changes to an object.
 
       It contains an object and each key is the identifier of a user.
 
@@ -593,12 +599,6 @@ Internet-Draft                    FOSP                        March 2015
    named like the identifier of the user.  The tree of the user is
    stored on the servers that are responsible for the domain of the
    provider where the user is registered.
-
-
-
-
-
-
 
 
 
@@ -1082,7 +1082,7 @@ Internet-Draft                    FOSP                        March 2015
 
    404 Not Found  The object the client requested could not be found.
 
-   405 Method Not Allow  The request method is not allowed on this
+   405 Method Not Allowed  The request method is not allowed on this
       object.  This status can be returned if a client tries to READ and
       attachment of an object without attachment.
 
@@ -1093,7 +1093,8 @@ Internet-Draft                    FOSP                        March 2015
    412 Precondition Failed  If the request did contain a condition and
       condition is not satisfied, then the server MUST return this
       status.  Conditional request are not supported yet, but might be
-      in the future.
+      in the future.  This status can also be returned if a new object
+      should be created but the parent object does not exist.
 
    413 Request Entity Too Large  The server might choose to accept only
       messages smaller than a certain size.  In this case, if a client
@@ -1102,7 +1103,37 @@ Internet-Draft                    FOSP                        March 2015
 
 5.5.5.  Server Error 5xx
 
-   TODO
+   The 5xx status codes indicate an error in the server.
+
+   500 Internal Server Error  The server could not process the request
+      due to an internal error.
+
+   501 Not Implemented  The server does not support the requested
+      functionality.
+
+
+
+
+
+
+Maurer                 Expires September 26, 2015              [Page 20]
+
+Internet-Draft                    FOSP                        March 2015
+
+
+   502 Bad Gateway  The server tried to forward the request, but was
+      unsuccessful.  This might be because the authentication failed,
+      the remote server rejected the connection or other reasons.  If
+      the remote server can not be reached at all, 504 SHOULD be
+      returned instead.
+
+   503 Service Unavailable  The server can currently not process any
+      requests but will likly be able to in the near future.
+
+   504 Gateway Timeout  The server tried to forward the request but
+      could not reach the upstream server at all.  This can be a
+      permanent problem and indicate that the requested object does not
+      exist on any remote server at all.
 
 5.6.  Forwarding
 
@@ -1110,13 +1141,38 @@ Internet-Draft                    FOSP                        March 2015
    server of the user, the server can forward it to a server that does
    store it.  In this case, the server MUST insert an additional "From"
    header that contains the full username of the user that sent the
-   request.  Similar, when a server sents a response to a forwarded
+   request.  Similar, when a server sends a response to a forwarded
    request, an additional "To" header is added.  This also applies if a
    notification is to be sent to a user of a different provider.
 
 
 
-Maurer                 Expires September 26, 2015              [Page 20]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                 Expires September 26, 2015              [Page 21]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1172,7 +1228,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 26, 2015              [Page 21]
+Maurer                 Expires September 26, 2015              [Page 22]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1228,7 +1284,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 26, 2015              [Page 22]
+Maurer                 Expires September 26, 2015              [Page 23]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1265,8 +1321,8 @@ Internet-Draft                    FOSP                        March 2015
 
    To support authenticated requests, a FOSP server that supports the
    HTTP binding MUST return a cookie in a success response to a BIND
-   request.  With this cookie, the client is able to make authenticated
-   requests.
+   request.  With this cookie, the client MUST be able to make
+   authenticated requests.
 
 
 
@@ -1284,7 +1340,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 26, 2015              [Page 23]
+Maurer                 Expires September 26, 2015              [Page 24]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1293,7 +1349,7 @@ Internet-Draft                    FOSP                        March 2015
 
    Besides implementing the technical specification of the protocol, the
    server has to enforce a set of policies.  These policies describe how
-   the server interprets the objects to enforces access control and send
+   the server interprets the objects to enforc access control and send
    notifications for subscriptions.  They also define constraints on
    certain attributes of objects and constraints on whether or not a
    message should be forwarded.
@@ -1305,13 +1361,13 @@ Internet-Draft                    FOSP                        March 2015
    the identifier of a user or a group of users and a list of rights.
    Manipulation of different parts of the object can require different
    rights, for example, altering access control information requires the
-   "acl-write" right.  Because the objects are part of a tree, we can
-   use inheritance to set access rights for a whole subtree by setting
-   the appropriate access control information on the root of the
-   subtree.  This way the rights on an object are the sum of the rights
-   on this object and all it's ancestors.  To still be able to have less
-   rights on a child object, rights can be prefix with "not-" to
-   explicitly remove a right, for example "not-acl-write".  The server
+   "write" right in the "acl" key.  Because the objects are part of a
+   tree, we can use inheritance to set access rights for a whole subtree
+   by setting the appropriate access control information on the root of
+   the subtree.  This way the rights on an object are the sum of the
+   rights on this object and all it's ancestors.  To still be able to
+   have less rights on a child object, rights can be prefix with "not-"
+   to explicitly remove a right, for example "not-write".  The server
    must enforce access control for an object in the following way.
 
    1.  Check if the right in question is set on the current object
@@ -1327,7 +1383,23 @@ Internet-Draft                    FOSP                        March 2015
 
 7.2.  Groups
 
-   TODO
+   To be able to set rights for a group of people, the user must first
+   be able to define groups and store them at a well known place on the
+   server.  Each group is only valid for the tree that it is defined in.
+   The server MUST look for group definitions in objects at the location
+   "<user@domain>/config/groups".  Each object underneath this object
+   can contain a group definition and the group name is the name of the
+   object.  To be a valid group definition, the object MUST contain an
+   object in its "data" attribute and this inner object MUST contain a
+   "users" attribute with an array value.  The array then contains the
+   full names of all users in this group.
+
+
+
+Maurer                 Expires September 26, 2015              [Page 25]
+
+Internet-Draft                    FOSP                        March 2015
+
 
 7.3.  Subscriptions
 
@@ -1337,14 +1409,6 @@ Internet-Draft                    FOSP                        March 2015
    subscribe to and a "depth".  The depth is used to subscribe to events
    from all child objects to a certain depth.  When a change happens on
    an object, the server must use the following algorithm to determine
-
-
-
-Maurer                 Expires September 26, 2015              [Page 24]
-
-Internet-Draft                    FOSP                        March 2015
-
-
    which users must be notified.
 
    1.  Read the "subscriptions" from the current object.
@@ -1358,7 +1422,7 @@ Internet-Draft                    FOSP                        March 2015
        same object, 1 if one is the parent of the other and so on.
 
    3.  Go to the parent of the current object and repeat from step 1.
-       unless the current object is the root object
+       unless the current object is the root object.
 
    An important aspect to consider when sending notifications that
    include the new version of the object, is that every user who will be
@@ -1385,6 +1449,14 @@ Internet-Draft                    FOSP                        March 2015
    access rights.  To enforce these access rights, a user must be
    authenticated and therefore be able to authenticate with the server.
    As a server might forward requests on behalf of a user, the remote
+
+
+
+Maurer                 Expires September 26, 2015              [Page 26]
+
+Internet-Draft                    FOSP                        March 2015
+
+
    server must also be able to verify that the server is authorized to
    forward requests for the user.  Therefore, servers must also
    authenticate each other.
@@ -1393,14 +1465,6 @@ Internet-Draft                    FOSP                        March 2015
 
    When a client connects to a server it can use the BIND request to
    authenticate itself.  The most basic way to do this is just to
-
-
-
-Maurer                 Expires September 26, 2015              [Page 25]
-
-Internet-Draft                    FOSP                        March 2015
-
-
    provide a username and a password, which SHOULD be supported by any
    server.  In the future, additional authenticaten methods will be
    added.
@@ -1441,6 +1505,14 @@ Internet-Draft                    FOSP                        March 2015
    domain "example.net", authenticates to server B and then forwards a
    request of user "alice@wonderland.lit", server B MUST close the
    connection.  The user from which the request originates MUST be
+
+
+
+Maurer                 Expires September 26, 2015              [Page 27]
+
+Internet-Draft                    FOSP                        March 2015
+
+
    specified in the "From" header of the request.
 
 
@@ -1452,7 +1524,47 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 26, 2015              [Page 26]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                 Expires September 26, 2015              [Page 28]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1508,7 +1620,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 26, 2015              [Page 27]
+Maurer                 Expires September 26, 2015              [Page 29]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1564,7 +1676,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 26, 2015              [Page 28]
+Maurer                 Expires September 26, 2015              [Page 30]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1620,5 +1732,5 @@ Author's Address
 
 
 
-Maurer                 Expires September 26, 2015              [Page 29]
+Maurer                 Expires September 26, 2015              [Page 31]
 
