@@ -2,8 +2,8 @@
 
 
 Network Working Group                                          F. Maurer
-Internet-Draft                                            September 2014
-Expires: March 5, 2015
+Internet-Draft                                            March 25, 2015
+Expires: September 26, 2015
 
 
                  The Federated Object Sharing Protocol
@@ -34,7 +34,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 5, 2015.
+   This Internet-Draft will expire on September 26, 2015.
 
 
 
@@ -52,9 +52,9 @@ Status of this Memo
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 1]
+Maurer                 Expires September 26, 2015               [Page 1]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 Table of Contents
@@ -86,54 +86,51 @@ Table of Contents
        5.2.2.  Bind . . . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.3.  Get  . . . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.4.  List . . . . . . . . . . . . . . . . . . . . . . . . . 16
-       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.6.  Patch  . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.7.  Delete . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.8.  Read . . . . . . . . . . . . . . . . . . . . . . . . . 17
-       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 17
+       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 18
-     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 18
-     5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 18
-   6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
-     6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 19
-       6.1.1.  Connection Initiation  . . . . . . . . . . . . . . . . 19
-       6.1.2.  Format . . . . . . . . . . . . . . . . . . . . . . . . 19
-       6.1.3.  Serialization  . . . . . . . . . . . . . . . . . . . . 21
-     6.2.  HTTP binding . . . . . . . . . . . . . . . . . . . . . . . 21
-       6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 21
-       6.2.2.  Session management . . . . . . . . . . . . . . . . . . 21
-   7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
-     7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 22
+     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 19
+       5.5.1.  Informal 1xx . . . . . . . . . . . . . . . . . . . . . 19
+       5.5.2.  Successful 2xx . . . . . . . . . . . . . . . . . . . . 19
+       5.5.3.  Redirection 3xx  . . . . . . . . . . . . . . . . . . . 19
+       5.5.4.  Client error 4xx . . . . . . . . . . . . . . . . . . . 20
+       5.5.5.  Server Error 5xx . . . . . . . . . . . . . . . . . . . 20
+     5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 20
+   6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+     6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 21
+       6.1.1.  Connection Initiation  . . . . . . . . . . . . . . . . 21
+       6.1.2.  Format . . . . . . . . . . . . . . . . . . . . . . . . 21
+       6.1.3.  Serialization  . . . . . . . . . . . . . . . . . . . . 23
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 2]
+Maurer                 Expires September 26, 2015               [Page 2]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
-     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 22
-     7.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 22
-     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 23
-     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 23
-       7.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 23
-       7.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 24
-     7.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 24
-     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 24
-   8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 25
-     8.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
-     8.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 25
-   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 26
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 27
-
-
-
-
-
-
-
-
+     6.2.  HTTP binding . . . . . . . . . . . . . . . . . . . . . . . 23
+       6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 23
+       6.2.2.  Session management . . . . . . . . . . . . . . . . . . 23
+   7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+     7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 24
+     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+     7.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 24
+     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 25
+     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 25
+       7.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 25
+       7.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 26
+     7.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 26
+     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 26
+   8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+     8.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+     8.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 27
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 29
 
 
 
@@ -164,9 +161,12 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 3]
+
+
+
+Maurer                 Expires September 26, 2015               [Page 3]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 1.  Introduction
@@ -220,9 +220,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 4]
+Maurer                 Expires September 26, 2015               [Page 4]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    provider  An entity that provides storage space on the Internet for
@@ -276,9 +276,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 5]
+Maurer                 Expires September 26, 2015               [Page 5]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 2.  Overview
@@ -332,9 +332,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 6]
+Maurer                 Expires September 26, 2015               [Page 6]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    The server can connect to a server of a different provider to forward
@@ -388,9 +388,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 7]
+Maurer                 Expires September 26, 2015               [Page 7]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 3.  Data structure
@@ -444,9 +444,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 8]
+Maurer                 Expires September 26, 2015               [Page 8]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    {
@@ -500,9 +500,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                 [Page 9]
+Maurer                 Expires September 26, 2015               [Page 9]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
       The "btime" (birth time) field is set by the server to the date of
@@ -556,9 +556,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 10]
+Maurer                 Expires September 26, 2015              [Page 10]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
       It contains an object and each key is the identifier of a user.
@@ -612,9 +612,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 11]
+Maurer                 Expires September 26, 2015              [Page 11]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
       +--------------------+
@@ -668,9 +668,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 12]
+Maurer                 Expires September 26, 2015              [Page 12]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 4.  Network Topology
@@ -724,9 +724,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 13]
+Maurer                 Expires September 26, 2015              [Page 13]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    +--------------+    +--------------+
@@ -780,9 +780,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 14]
+Maurer                 Expires September 26, 2015              [Page 14]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 5.  Messages
@@ -836,16 +836,18 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 15]
+Maurer                 Expires September 26, 2015              [Page 15]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    The request types are described in the following sections.
 
 5.2.1.  Info
 
-   TODO
+   There will likely be a request called INFO or OPTIONS to discover the
+   capabilities of the server.  However, as of now, it is not yet clear
+   what is needed and therefore the definition is postponed.
 
 5.2.2.  Bind
 
@@ -884,18 +886,22 @@ Internet-Draft                    FOSP                    September 2014
    If successfull, the response contains an array of names of the child
    objects.
 
+
+
+
+
+
+
+Maurer                 Expires September 26, 2015              [Page 16]
+
+Internet-Draft                    FOSP                        March 2015
+
+
 5.2.5.  Create
 
    The CREATE request is used to store new objects on the server.  The
    resource identifier is the desired location for the new object.  The
    body containes the object to store.
-
-
-
-Maurer                    Expires March 5, 2015                [Page 16]
-
-Internet-Draft                    FOSP                    September 2014
-
 
    On success, an empty success response is returned and the object is
    stored at the given location.
@@ -936,6 +942,17 @@ Internet-Draft                    FOSP                    September 2014
 
    The success response body contains the raw bytes of the attachment.
 
+
+
+
+
+
+
+Maurer                 Expires September 26, 2015              [Page 17]
+
+Internet-Draft                    FOSP                        March 2015
+
+
 5.2.9.  Write
 
    The WRITE request is used to write to the attachment.  The resource
@@ -943,15 +960,6 @@ Internet-Draft                    FOSP                    September 2014
    written.  The body contains the raw bytes of the attachment.
 
    The success response is empty.
-
-
-
-
-
-Maurer                    Expires March 5, 2015                [Page 17]
-
-Internet-Draft                    FOSP                    September 2014
-
 
 5.3.  Response
 
@@ -968,6 +976,10 @@ Internet-Draft                    FOSP                    September 2014
    would contain the raw bytes of the attachment.
 
    The status code is explained in Section 5.5.
+
+   An FAILED response SHOULD contain an object describing the error that
+   occured.  The object should contain a "message" attribute with a
+   string value that explains the error.
 
 5.4.  Notification
 
@@ -986,7 +998,109 @@ Internet-Draft                    FOSP                    September 2014
 
    When and to who notifications are sent is explained in Section 7.3.
 
+
+
+
+
+
+
+Maurer                 Expires September 26, 2015              [Page 18]
+
+Internet-Draft                    FOSP                        March 2015
+
+
 5.5.  Status codes
+
+   The status codes reuse and extend the status codes used in HTTP.
+   They are wildly known and also used in similar fashion in other
+   protocols.  The status codes are also divided into the same classes,
+   with the same meaning.  Not all status codes of HTTP are used, but
+   all are reserved and MUST NOT be used for custom statuses.
+
+5.5.1.  Informal 1xx
+
+   The 1xx status codes are not used at the moment.  A client MUST
+   ignore any such responses and continue to wait for a final response.
+
+5.5.2.  Successful 2xx
+
+   The 2xx status codes indicate that the request was successful.
+
+   200 OK  The request has succeeded.
+
+   201 Created  The request has succeeded and a new object has been
+      created.
+
+   204 No Content  The request has succeeded but no content is returned.
+      This can be for example the case when a DELETE request has been
+      sent.
+
+5.5.3.  Redirection 3xx
+
+   The 3xx status codes indicate that the requested object can be found
+   elsewhere.
+
+   301 Moved Permanently  The object was moved permanently and is now
+      found at the location indicated in the "Location" header.  Moving
+      objects is not yet supported but might be in the future.  Clients
+      SHOULD be able to understand this status and in case of a GET,
+      LIST or READ request MAY resent the request with the new location.
+      However, a client MUST never automatically resent the request if
+      the request alters the object, e.g. is a CREATE, PATCH, DELETE or
+      WRITE request.
+
+   304 Not Modified  If the request did contain a condition that checks
+      for the modification date and the object did not change, the
+      server SHOULD respond with this status code.  Conditional requests
+      are not supported yet, but might be in the future.
+
+
+
+
+
+
+
+Maurer                 Expires September 26, 2015              [Page 19]
+
+Internet-Draft                    FOSP                        March 2015
+
+
+5.5.4.  Client error 4xx
+
+   The 4xx status codes indicate that the client made an error.
+
+   400 Bad Request  The request could not be parsed by the server due to
+      malformed syntax.
+
+   401 Unauthorized  The client tried to send a request that needs
+      authentication but is not yet authenticated.  The client must make
+      a successful BIND request bevor retrying this request.
+
+   403 Forbidden  The client does not have the necessary permissions.
+      If the server MUST only return this status if the client is
+      already authenticated.
+
+   404 Not Found  The object the client requested could not be found.
+
+   405 Method Not Allow  The request method is not allowed on this
+      object.  This status can be returned if a client tries to READ and
+      attachment of an object without attachment.
+
+   409 Conflict  The request could not be completed due to a conflict
+      with an resource.  This status MUST be returned by the server if
+      the client tries to create an object that already exists.
+
+   412 Precondition Failed  If the request did contain a condition and
+      condition is not satisfied, then the server MUST return this
+      status.  Conditional request are not supported yet, but might be
+      in the future.
+
+   413 Request Entity Too Large  The server might choose to accept only
+      messages smaller than a certain size.  In this case, if a client
+      tries to send a larger message, the server CAN respond with this
+      status and drop the request.
+
+5.5.5.  Server Error 5xx
 
    TODO
 
@@ -1002,11 +1116,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-
-
-Maurer                    Expires March 5, 2015                [Page 18]
+Maurer                 Expires September 26, 2015              [Page 20]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 6.  Bindings
@@ -1060,9 +1172,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 19]
+Maurer                 Expires September 26, 2015              [Page 21]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    message       = request / response / notification
@@ -1116,9 +1228,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 20]
+Maurer                 Expires September 26, 2015              [Page 22]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 6.1.3.  Serialization
@@ -1172,9 +1284,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 21]
+Maurer                 Expires September 26, 2015              [Page 23]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 7.  Policies
@@ -1228,9 +1340,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 22]
+Maurer                 Expires September 26, 2015              [Page 24]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    which users must be notified.
@@ -1284,9 +1396,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 23]
+Maurer                 Expires September 26, 2015              [Page 25]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
    provide a username and a password, which SHOULD be supported by any
@@ -1340,9 +1452,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 24]
+Maurer                 Expires September 26, 2015              [Page 26]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 8.  Discovery
@@ -1396,9 +1508,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 25]
+Maurer                 Expires September 26, 2015              [Page 27]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 9.  References
@@ -1452,9 +1564,9 @@ Internet-Draft                    FOSP                    September 2014
 
 
 
-Maurer                    Expires March 5, 2015                [Page 26]
+Maurer                 Expires September 26, 2015              [Page 28]
 
-Internet-Draft                    FOSP                    September 2014
+Internet-Draft                    FOSP                        March 2015
 
 
 Author's Address
@@ -1508,5 +1620,5 @@ Author's Address
 
 
 
-Maurer                    Expires March 5, 2015                [Page 27]
+Maurer                 Expires September 26, 2015              [Page 29]
 

@@ -143,8 +143,8 @@
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">F. Maurer</td></tr>
-<tr><td class="header">Internet-Draft</td><td class="header">September 2014</td></tr>
-<tr><td class="header">Expires: March 5, 2015</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">March 25, 2015</td></tr>
+<tr><td class="header">Expires: September 26, 2015</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />The Federated Object Sharing Protocol<br />fosp-00</h1>
 
@@ -174,7 +174,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on March 5, 2015.</p>
+This Internet-Draft will expire on September 26, 2015.</p>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -248,6 +248,16 @@ Response<br />
 Notification<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes">5.5.</a>&nbsp;
 Status codes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes-100">5.5.1.</a>&nbsp;
+Informal 1xx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes-200">5.5.2.</a>&nbsp;
+Successful 2xx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes-300">5.5.3.</a>&nbsp;
+Redirection 3xx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-codes-400">5.5.4.</a>&nbsp;
+Client error 4xx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-status-code-500">5.5.5.</a>&nbsp;
+Server Error 5xx<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-fowarding">5.6.</a>&nbsp;
 Forwarding<br />
 <a href="#bindings">6.</a>&nbsp;
@@ -852,7 +862,8 @@ Request</h3>
 <a name="rfc.section.5.2.1"></a><h3>5.2.1.&nbsp;
 Info</h3>
 
-<p>TODO
+<p>There will likely be a request called INFO or OPTIONS to discover the capabilities of the server.
+      However, as of now, it is not yet clear what is needed and therefore the definition is postponed.
 </p>
 <a name="msg-request-bind"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -992,6 +1003,10 @@ Response</h3>
 <p>The status code is explained in&nbsp;<a class='info' href='#msg-status-codes'>Section&nbsp;5.5<span> (</span><span class='info'>Status codes</span><span>)</span></a>.
     
 </p>
+<p>An FAILED response SHOULD contain an object describing the error that occured.
+    The object should contain a "message" attribute with a string value that explains the error.
+    
+</p>
 <a name="msg-type-notification"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5.4"></a><h3>5.4.&nbsp;
@@ -1021,8 +1036,120 @@ Notification</h3>
 <a name="rfc.section.5.5"></a><h3>5.5.&nbsp;
 Status codes</h3>
 
-<p>TODO
+<p>The status codes reuse and extend the status codes used in HTTP.
+    They are wildly known and also used in similar fashion in other protocols.
+    The status codes are also divided into the same classes, with the same meaning.
+    Not all status codes of HTTP are used, but all are reserved and MUST NOT be used for custom statuses.
     
+</p>
+<a name="msg-status-codes-100"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.5.1"></a><h3>5.5.1.&nbsp;
+Informal 1xx</h3>
+
+<p>The 1xx status codes are not used at the moment.
+      A client MUST ignore any such responses and continue to wait for a final response.
+      
+</p>
+<a name="msg-status-codes-200"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.5.2"></a><h3>5.5.2.&nbsp;
+Successful 2xx</h3>
+
+<p>The 2xx status codes indicate that the request was successful.
+      </p>
+<blockquote class="text"><dl>
+<dt>200 OK</dt>
+<dd>The request has succeeded.
+</dd>
+<dt>201 Created</dt>
+<dd>The request has succeeded and a new object has been created.
+</dd>
+<dt>204 No Content</dt>
+<dd>The request has succeeded but no content is returned.
+	This can be for example the case when a DELETE request has been sent.
+	
+</dd>
+</dl></blockquote><p>
+      
+</p>
+<a name="msg-status-codes-300"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.5.3"></a><h3>5.5.3.&nbsp;
+Redirection 3xx</h3>
+
+<p>The 3xx status codes indicate that the requested object can be found elsewhere.
+      </p>
+<blockquote class="text"><dl>
+<dt>301 Moved Permanently</dt>
+<dd>The object was moved permanently and is now found at the location indicated in the "Location" header.
+	Moving objects is not yet supported but might be in the future.
+	Clients SHOULD be able to understand this status and in case of a GET, LIST or READ request MAY resent the request with the new location.
+	However, a client MUST never automatically resent the request if the request alters the object, e.g. is a CREATE, PATCH, DELETE or WRITE request.
+	
+</dd>
+<dt>304 Not Modified</dt>
+<dd>If the request did contain a condition that checks for the modification date and the object did not change, the server SHOULD respond with this status code.
+	Conditional requests are not supported yet, but might be in the future.
+	
+</dd>
+</dl></blockquote><p>
+      
+</p>
+<a name="msg-status-codes-400"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.5.4"></a><h3>5.5.4.&nbsp;
+Client error 4xx</h3>
+
+<p>The 4xx status codes indicate that the client made an error.
+      </p>
+<blockquote class="text"><dl>
+<dt>400 Bad Request</dt>
+<dd>The request could not be parsed by the server due to malformed syntax.
+</dd>
+<dt>401 Unauthorized</dt>
+<dd>The client tried to send a request that needs authentication but is not yet authenticated.
+	The client must make a successful BIND request bevor retrying this request.
+	
+</dd>
+<dt>403 Forbidden</dt>
+<dd>The client does not have the necessary permissions.
+	If the server MUST only return this status if the client is already authenticated.
+	
+</dd>
+<dt>404 Not Found</dt>
+<dd>The object the client requested could not be found.
+</dd>
+<dt>405 Method Not Allow</dt>
+<dd>The request method is not allowed on this object.
+	This status can be returned if a client tries to READ and attachment of an object without attachment.
+	
+</dd>
+<dt>409 Conflict</dt>
+<dd>The request could not be completed due to a conflict with an resource.
+	This status MUST be returned by the server if the client tries to create an object that already exists.
+	
+</dd>
+<dt>412 Precondition Failed</dt>
+<dd>If the request did contain a condition and condition is not satisfied, then the server MUST return this status.
+	Conditional request are not supported yet, but might be in the future.
+	
+</dd>
+<dt>413 Request Entity Too Large</dt>
+<dd>The server might choose to accept only messages smaller than a certain size.
+	In this case, if a client tries to send a larger message, the server CAN respond with this status and drop the request.
+	
+</dd>
+</dl></blockquote><p>
+      
+</p>
+<a name="msg-status-code-500"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.5.5"></a><h3>5.5.5.&nbsp;
+Server Error 5xx</h3>
+
+<p>TODO
+      
 </p>
 <a name="msg-fowarding"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
