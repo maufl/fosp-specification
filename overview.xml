@@ -2,16 +2,16 @@
 <section anchor="overview" title="Overview">
   <t>This section provides a short overview.
   It is intended to familiarize with the concepts of FOSP.
-  It does not contain additional information that is not covered in the rest of the document and can be skipped.
+  It does not contain information that is not covered in the rest of the document and can be skipped.
   </t>
   <section anchor="overview-user-and-provider" title="User and providers">
-    <t>In the FOSP world, data is created by users.
+    <t>FOSP concerns itself with data created by users.
     Users store their content on the servers of providers and can share it by setting the appropriate access rights for other users.
     Each user is registered with one provider.
     The user has an unique name at the provider that together with the domain name of the provider forms his or her identifier, similar to an Email address.
     However users can still share their content with friends that are registered with different providers.
     </t>
-    <t>Providers are companies or individuals that provide storage for users.
+    <t>Providers are companies or individuals that provide storage to users.
     A provider is identified by a fully qualified domain name.
     Similar to Email and XMPP, everybody can be a provider by simply hosting his or her own FOSP server.
     The servers of different providers communicate to allow users of different providers to share data.
@@ -20,23 +20,23 @@
   <section anchor="overview-data-structure" title="Trees, Objects and Attachments">
     <t>The basic data units that can be stored on the server have a well defined structure and we call them objects.
     We chose this name because they are objects in the sense of the JSON specification.
-    Other familiar terms for a JSON object might be dictionary, hashmap of associative array.
+    Other familiar terms for a JSON object might be dictionary, hash map of associative array.
     They consist of key-value pairs where each key is a string and each value is one of the values allowed by JSON.
-    Most of the key-value pairs have a special meaning, for example there is a key-value pair that stores the access conrol list.
+    Most of the key-value pairs have a special meaning, for example there is a key-value pair that stores the access control list.
     </t>
     <t>All objects are part of a tree.
     For each user, one such tree exists and the root object of the tree is named like the user.
-    Each object can thus be uniquely identified by its path, e.g. alice@wonderlant.lit/social/me.
+    Each object can thus be uniquely identified by its path, e.g. alice@wonderland.lit/social/me.
     </t>
     <t>To store data that can not be expressed in JSON, each object can have an attachment.
-    The attachement is addressed in the same way as the object but is modified using special requests.
+    The attachment has the same resource name as the object but is modified using special requests.
     </t>
   </section>
   <section anchor="overview-network-topology" title="Network topology">
     <t>FOSP follows the client-server paradigm.
     The network topology is similar to the SMTP or XMPP network.
     A provider operates one or more server that handle the domain of the provider.
-    A user can use a client to connect to a server of a provide where he or she is registered and request data.
+    A user can use a client to connect to a server of a provider where he or she is registered and request data.
     </t>
     <t>The server can connect to a server of a different provider to forward request it can not process itself.
     This is the case when the request concerns an object that is not stored by this server because it belongs to a user of a different provider.
@@ -55,11 +55,11 @@
     </t>
   </section>
   <section anchor="overview-bindings" title="Bindings">
-    <t>The messages are transported using existing transport protocols.
+    <t>The messages are transported using existing protocols.
     A definition of how FOSP messages are transported through an existing protocol is called binding.
     </t>
     <t>The currently defined binding is the WebSocket binding.
-    An HTTP binding, which will not support all FOSP features, is also worked on.
+    An HTTP binding, which will not support all FOSP features, is also being worked on.
     </t>
   </section>
 </section>

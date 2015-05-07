@@ -24,24 +24,24 @@
       The user MUST NOT be able to set the field to a different value.
       </t>
       <t>The “btime” (birth time) field is set by the server to the date of creation of the object.
-      It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
+      It is stored as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
       The user MUST NOT be able to set the field to a different value.
       </t>
       <t>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
-      It is saved just like “btime”.
+      It is stored just like “btime”.
       In the future it might be used to allow client side caching similar to ETags in HTTP.
       The user MUST NOT be able to set the field to a different value.
       </t>
-      <t>The “data” field is where the user should save the payload and may contain any valid value.
+      <t>The “data” field is where the user should store the payload and may contain any valid value.
       The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
-      These two fields are the only fields where the user can save arbitrary data.
-      The server MUST allow the user to store any data in this fields.
+      These two fields are the only fields where the user can store arbitrary data.
+      The server MUST allow the user to store any data in these fields.
       </t>
     </list>
     </t>
     <t>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
     </t>
-    <t anchor="data-structure-fields-acl">The “acl” field saves information about access rights in form of an object.
+    <t anchor="data-structure-fields-acl">The “acl” field stores information about access rights in form of an object.
     It is read by the server to enforce access control.
     <list>
       <t>The acl object can have the following fields: “owner”, “users”, “groups”, “other” </t>
@@ -92,10 +92,10 @@
   </section>
   <section anchor="data-structure-attachments" title="Attachments">
     <t>As files, like pictures and documents, are also shared via social networks, FOSP supports saving binary files.
-    For each object, one file can be saved as an attachment.
+    For each object, one file can be stored as an attachment.
     This way, files can be addressed with the same schema and the objects they are attached to can provide the meta-data.
     If an object has a belonging file, it is extended by a new attribute named “attachment”.
-    In this attribute, the "size", file "name", and MIME "type" of the file is saved.
+    In this attribute, the "size", file "name", and MIME "type" of the file is stored.
     The attached file is read and written using special requests.
     </t>
   </section>

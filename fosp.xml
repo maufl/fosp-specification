@@ -14,11 +14,9 @@
     <area>Internet</area>
     <keyword>FOSP</keyword>
     <abstract>
-      <t>This document describes the Federated Object Sharing Protocol (FOSP).
-      FOSP is a protocol that allows sharing arbitrary data,
+      <t>Federated Object Sharing Protocol (FOSP) is an application-level protocol that allows sharing arbitrary data,
       setting access rights on the shared data and receiving notifications on changes.
-      Furthermore, all features of FOSP can be used in a federated network,
-      e.g. between multiple independned providers.
+      It can be used in a federated network, e.g. between multiple independent providers.
       It was designed to be the most simple solution that combines all these features.</t>
     </abstract>
   </front>

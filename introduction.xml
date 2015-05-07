@@ -12,8 +12,9 @@
       <t>Notify users when data is added, removed or has changed.</t>
     </list>
     </t>
-    <t>Furthermore, some non-functional requirements are imposed.
-    The protocol needs to be data agnostic and should support structured, unstructured and metadata.
+    <t>All these features must be available in a federated network.
+    Furthermore, some non-functional requirements are imposed.
+    The protocol needs to be data agnostic and should support structured, unstructured and meta-data.
     It also must be as simple as possible, e.g. it must be easy to implement and it should be possible to write easy to deploy applications for it.
     </t>
   </section>
@@ -45,7 +46,7 @@
       It facilitates accessing the data of the user that is stored on the server.
       </t>
       <t hangText="message">A message is the basic unit of communication in FOSP.
-      Messages come in three different flavours.
+      Messages come in three different flavors.
       </t>
       <t hangText="request">A request is a message sent from a client to a server.
       It is used to retrieve or alter data.
@@ -63,6 +64,7 @@
       </t>
       <t hangText="tree">The objects of a users form a tree structure.
       Each object has exactly one parent object, except for the root object.
+      There exists exactly one tree per user.
       </t>
     </list>
     </t>
