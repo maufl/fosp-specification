@@ -2,8 +2,8 @@
 
 
 Network Working Group                                          F. Maurer
-Internet-Draft                                            March 26, 2015
-Expires: September 27, 2015
+Internet-Draft                                                March 2015
+Expires: September 2, 2015
 
 
                  The Federated Object Sharing Protocol
@@ -11,12 +11,12 @@ Expires: September 27, 2015
 
 Abstract
 
-   This document describes the Federated Object Sharing Protocol (FOSP).
-   FOSP is a protocol that allows sharing arbitrary data, setting access
-   rights on the shared data and receiving notifications on changes.
-   Furthermore, all features of FOSP can be used in a federated network,
-   e.g. between multiple independned providers.  It was designed to be
-   the most simple solution that combines all these features.
+   Federated Object Sharing Protocol (FOSP) is an application-level
+   protocol that allows sharing arbitrary data, setting access rights on
+   the shared data and receiving notifications on changes.  It can be
+   used in a federated network, e.g. between multiple independent
+   providers.  It was designed to be the most simple solution that
+   combines all these features.
 
 Status of this Memo
 
@@ -34,7 +34,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 27, 2015.
+   This Internet-Draft will expire on September 2, 2015.
 
 
 
@@ -52,7 +52,7 @@ Status of this Memo
 
 
 
-Maurer                 Expires September 27, 2015               [Page 1]
+Maurer                  Expires September 2, 2015               [Page 1]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -67,7 +67,7 @@ Table of Contents
    2.  Overview . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
      2.1.  User and providers . . . . . . . . . . . . . . . . . . . .  6
      2.2.  Trees, Objects and Attachments . . . . . . . . . . . . . .  6
-     2.3.  Network topology . . . . . . . . . . . . . . . . . . . . .  7
+     2.3.  Network topology . . . . . . . . . . . . . . . . . . . . .  6
      2.4.  Messages . . . . . . . . . . . . . . . . . . . . . . . . .  7
      2.5.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . .  7
    3.  Data structure . . . . . . . . . . . . . . . . . . . . . . . .  8
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Maurer                 Expires September 27, 2015               [Page 2]
+Maurer                  Expires September 2, 2015               [Page 2]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -118,14 +118,14 @@ Internet-Draft                    FOSP                        March 2015
        6.2.2.  Session management . . . . . . . . . . . . . . . . . . 24
    7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
      7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 25
-     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 26
      7.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 26
-     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 26
-     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 26
+     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 27
+     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 27
        7.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 27
        7.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 27
      7.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 27
-     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 27
+     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 28
    8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 29
      8.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
      8.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 29
@@ -164,7 +164,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015               [Page 3]
+Maurer                  Expires September 2, 2015               [Page 3]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -188,9 +188,10 @@ Internet-Draft                    FOSP                        March 2015
 
    3.  Notify users when data is added, removed or has changed.
 
+   All these features must be available in a federated network.
    Furthermore, some non-functional requirements are imposed.  The
    protocol needs to be data agnostic and should support structured,
-   unstructured and metadata.  It also must be as simple as possible,
+   unstructured and meta-data.  It also must be as simple as possible,
    e.g. it must be easy to implement and it should be possible to write
    easy to deploy applications for it.
 
@@ -219,8 +220,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-
-Maurer                 Expires September 27, 2015               [Page 4]
+Maurer                  Expires September 2, 2015               [Page 4]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -240,7 +240,7 @@ Internet-Draft                    FOSP                        March 2015
       is stored on the server.
 
    message  A message is the basic unit of communication in FOSP.
-      Messages come in three different flavours.
+      Messages come in three different flavors.
 
    request  A request is a message sent from a client to a server.  It
       is used to retrieve or alter data.
@@ -259,7 +259,8 @@ Internet-Draft                    FOSP                        March 2015
       with an object.  Each object can only have one attachment.
 
    tree  The objects of a users form a tree structure.  Each object has
-      exactly one parent object, except for the root object.
+      exactly one parent object, except for the root object.  There
+      exists exactly one tree per user.
 
 
 
@@ -275,8 +276,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-
-Maurer                 Expires September 27, 2015               [Page 5]
+Maurer                  Expires September 2, 2015               [Page 5]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -285,12 +285,12 @@ Internet-Draft                    FOSP                        March 2015
 
    This section provides a short overview.  It is intended to
    familiarize with the concepts of FOSP.  It does not contain
-   additional information that is not covered in the rest of the
-   document and can be skipped.
+   information that is not covered in the rest of the document and can
+   be skipped.
 
 2.1.  User and providers
 
-   In the FOSP world, data is created by users.  Users store their
+   FOSP concerns itself with data created by users.  Users store their
    content on the servers of providers and can share it by setting the
    appropriate access rights for other users.  Each user is registered
    with one provider.  The user has an unique name at the provider that
@@ -299,50 +299,46 @@ Internet-Draft                    FOSP                        March 2015
    share their content with friends that are registered with different
    providers.
 
-   Providers are companies or individuals that provide storage for
-   users.  A provider is identified by a fully qualified domain name.
-   Similar to Email and XMPP, everybody can be a provider by simply
-   hosting his or her own FOSP server.  The servers of different
-   providers communicate to allow users of different providers to share
-   data.
+   Providers are companies or individuals that provide storage to users.
+   A provider is identified by a fully qualified domain name.  Similar
+   to Email and XMPP, everybody can be a provider by simply hosting his
+   or her own FOSP server.  The servers of different providers
+   communicate to allow users of different providers to share data.
 
 2.2.  Trees, Objects and Attachments
 
    The basic data units that can be stored on the server have a well
    defined structure and we call them objects.  We chose this name
    because they are objects in the sense of the JSON specification.
-   Other familiar terms for a JSON object might be dictionary, hashmap
+   Other familiar terms for a JSON object might be dictionary, hash map
    of associative array.  They consist of key-value pairs where each key
    is a string and each value is one of the values allowed by JSON.
    Most of the key-value pairs have a special meaning, for example there
-   is a key-value pair that stores the access conrol list.
+   is a key-value pair that stores the access control list.
 
    All objects are part of a tree.  For each user, one such tree exists
    and the root object of the tree is named like the user.  Each object
    can thus be uniquely identified by its path, e.g.
-   alice@wonderlant.lit/social/me.
+   alice@wonderland.lit/social/me.
 
    To store data that can not be expressed in JSON, each object can have
-   an attachment.  The attachement is addressed in the same way as the
+   an attachment.  The attachment has the same resource name as the
    object but is modified using special requests.
-
-
-
-
-
-
-
-Maurer                 Expires September 27, 2015               [Page 6]
-
-Internet-Draft                    FOSP                        March 2015
-
 
 2.3.  Network topology
 
    FOSP follows the client-server paradigm.  The network topology is
    similar to the SMTP or XMPP network.  A provider operates one or more
+
+
+
+Maurer                  Expires September 2, 2015               [Page 6]
+
+Internet-Draft                    FOSP                        March 2015
+
+
    server that handle the domain of the provider.  A user can use a
-   client to connect to a server of a provide where he or she is
+   client to connect to a server of a provider where he or she is
    registered and request data.
 
    The server can connect to a server of a different provider to forward
@@ -368,12 +364,13 @@ Internet-Draft                    FOSP                        March 2015
 
 2.5.  Bindings
 
-   The messages are transported using existing transport protocols.  A
-   definition of how FOSP messages are transported through an existing
-   protocol is called binding.
+   The messages are transported using existing protocols.  A definition
+   of how FOSP messages are transported through an existing protocol is
+   called binding.
 
    The currently defined binding is the WebSocket binding.  An HTTP
-   binding, which will not support all FOSP features, is also worked on.
+   binding, which will not support all FOSP features, is also being
+   worked on.
 
 
 
@@ -388,7 +385,10 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015               [Page 7]
+
+
+
+Maurer                  Expires September 2, 2015               [Page 7]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -444,7 +444,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015               [Page 8]
+Maurer                  Expires September 2, 2015               [Page 8]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -500,7 +500,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015               [Page 9]
+Maurer                  Expires September 2, 2015               [Page 9]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -512,28 +512,28 @@ Internet-Draft                    FOSP                        March 2015
       the field to a different value.
 
       The "btime" (birth time) field is set by the server to the date of
-      creation of the object.  It is saved as a string, formatted
+      creation of the object.  It is stored as a string, formatted
       according to the ISO 8601 standard and must always be in the UTC
       time zone.  The user MUST NOT be able to set the field to a
       different value.
 
       Similar the "mtime" (modify time) is set to the current date each
       time the object is altered and is not to be set by the users
-      directly.  It is saved just like "btime".  In the future it might
+      directly.  It is stored just like "btime".  In the future it might
       be used to allow client side caching similar to ETags in HTTP.
       The user MUST NOT be able to set the field to a different value.
 
-      The "data" field is where the user should save the payload and may
-      contain any valid value.  The "type" field should contain a string
-      that describes the content type of the "data" field, similar to
-      MIME types.  These two fields are the only fields where the user
-      can save arbitrary data.  The server MUST allow the user to store
-      any data in this fields.
+      The "data" field is where the user should store the payload and
+      may contain any valid value.  The "type" field should contain a
+      string that describes the content type of the "data" field,
+      similar to MIME types.  These two fields are the only fields where
+      the user can store arbitrary data.  The server MUST allow the user
+      to store any data in these fields.
 
    Furthermore, there are the three fields "acl", "subscriptions" and
    "attachment" that contain more complex objects.
 
-   The "acl" field saves information about access rights in form of an
+   The "acl" field stores information about access rights in form of an
    object.  It is read by the server to enforce access control.
 
       The acl object can have the following fields: "owner", "users",
@@ -556,7 +556,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 10]
+Maurer                  Expires September 2, 2015              [Page 10]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -612,7 +612,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 11]
+Maurer                  Expires September 2, 2015              [Page 11]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -641,12 +641,12 @@ Internet-Draft                    FOSP                        March 2015
 
    As files, like pictures and documents, are also shared via social
    networks, FOSP supports saving binary files.  For each object, one
-   file can be saved as an attachment.  This way, files can be addressed
-   with the same schema and the objects they are attached to can provide
-   the meta-data.  If an object has a belonging file, it is extended by
-   a new attribute named "attachment".  In this attribute, the "size",
-   file "name", and MIME "type" of the file is saved.  The attached file
-   is read and written using special requests.
+   file can be stored as an attachment.  This way, files can be
+   addressed with the same schema and the objects they are attached to
+   can provide the meta-data.  If an object has a belonging file, it is
+   extended by a new attribute named "attachment".  In this attribute,
+   the "size", file "name", and MIME "type" of the file is stored.  The
+   attached file is read and written using special requests.
 
 3.5.  Provisioned Objects
 
@@ -668,7 +668,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 12]
+Maurer                  Expires September 2, 2015              [Page 12]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -724,7 +724,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 13]
+Maurer                  Expires September 2, 2015              [Page 13]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -780,7 +780,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 14]
+Maurer                  Expires September 2, 2015              [Page 14]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -836,7 +836,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 15]
+Maurer                  Expires September 2, 2015              [Page 15]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -892,7 +892,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 16]
+Maurer                  Expires September 2, 2015              [Page 16]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -948,7 +948,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 17]
+Maurer                  Expires September 2, 2015              [Page 17]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1004,7 +1004,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 18]
+Maurer                  Expires September 2, 2015              [Page 18]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1060,7 +1060,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 19]
+Maurer                  Expires September 2, 2015              [Page 19]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1116,7 +1116,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 20]
+Maurer                  Expires September 2, 2015              [Page 20]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1172,7 +1172,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 21]
+Maurer                  Expires September 2, 2015              [Page 21]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1228,7 +1228,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 22]
+Maurer                  Expires September 2, 2015              [Page 22]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1284,7 +1284,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 23]
+Maurer                  Expires September 2, 2015              [Page 23]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1340,7 +1340,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 24]
+Maurer                  Expires September 2, 2015              [Page 24]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1381,6 +1381,32 @@ Internet-Draft                    FOSP                        March 2015
 
    5.  If the current object is already the root object, deny access
 
+   The supported keys are the following:
+
+   data  determines whether a user can read the "data", "type", "btime",
+      "mtime" and "owner" fields and whether he or she can write the
+      "data" and "type" fields.
+
+   acl  determines whether a user can read and write the "acl" field.
+
+   subscriptions  determines whether a user can read the subscriptions
+      field and whether he or she can add an entry with his or her
+      username.
+
+
+
+
+Maurer                  Expires September 2, 2015              [Page 25]
+
+Internet-Draft                    FOSP                        March 2015
+
+
+   attachment  determines whether a user can read or write the
+      attachment and the "attachment" field.
+
+   children  determines whether a user can list, add or remove child
+      objects.
+
 7.2.  Groups
 
    To be able to set rights for a group of people, the user must first
@@ -1393,13 +1419,6 @@ Internet-Draft                    FOSP                        March 2015
    object in its "data" attribute and this inner object MUST contain a
    "users" attribute with an array value.  The array then contains the
    full names of all users in this group.
-
-
-
-Maurer                 Expires September 27, 2015              [Page 25]
-
-Internet-Draft                    FOSP                        March 2015
-
 
 7.3.  Subscriptions
 
@@ -1430,6 +1449,14 @@ Internet-Draft                    FOSP                        March 2015
    Therefore, the server has to calculate the view of the object per
    user to prevent leaking of data a user might not be allowed to see.
 
+
+
+
+Maurer                  Expires September 2, 2015              [Page 26]
+
+Internet-Draft                    FOSP                        March 2015
+
+
 7.4.  Attachments
 
    As explained in Section 3.4, each object can have a file as
@@ -1449,14 +1476,6 @@ Internet-Draft                    FOSP                        March 2015
    access rights.  To enforce these access rights, a user must be
    authenticated and therefore be able to authenticate with the server.
    As a server might forward requests on behalf of a user, the remote
-
-
-
-Maurer                 Expires September 27, 2015              [Page 26]
-
-Internet-Draft                    FOSP                        March 2015
-
-
    server must also be able to verify that the server is authorized to
    forward requests for the user.  Therefore, servers must also
    authenticate each other.
@@ -1486,6 +1505,14 @@ Internet-Draft                    FOSP                        March 2015
    either be done by the user via a web formular or the accounts can be
    provisioned, for example in a coporate network from a directory
    server.  In the future, a possibility of creating and account via an
+
+
+
+Maurer                  Expires September 2, 2015              [Page 27]
+
+Internet-Draft                    FOSP                        March 2015
+
+
    CREATE request might be specified.
 
 7.7.  Message forwarding
@@ -1505,14 +1532,6 @@ Internet-Draft                    FOSP                        March 2015
    domain "example.net", authenticates to server B and then forwards a
    request of user "alice@wonderland.lit", server B MUST close the
    connection.  The user from which the request originates MUST be
-
-
-
-Maurer                 Expires September 27, 2015              [Page 27]
-
-Internet-Draft                    FOSP                        March 2015
-
-
    specified in the "From" header of the request.
 
 
@@ -1545,26 +1564,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Maurer                 Expires September 27, 2015              [Page 28]
+Maurer                  Expires September 2, 2015              [Page 28]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1620,7 +1620,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 29]
+Maurer                  Expires September 2, 2015              [Page 29]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1676,7 +1676,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                 Expires September 27, 2015              [Page 30]
+Maurer                  Expires September 2, 2015              [Page 30]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1732,5 +1732,5 @@ Author's Address
 
 
 
-Maurer                 Expires September 27, 2015              [Page 31]
+Maurer                  Expires September 2, 2015              [Page 31]
 

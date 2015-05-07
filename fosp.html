@@ -143,18 +143,16 @@
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">F. Maurer</td></tr>
-<tr><td class="header">Internet-Draft</td><td class="header">March 26, 2015</td></tr>
-<tr><td class="header">Expires: September 27, 2015</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">March 2015</td></tr>
+<tr><td class="header">Expires: September 2, 2015</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />The Federated Object Sharing Protocol<br />fosp-00</h1>
 
 <h3>Abstract</h3>
 
-<p>This document describes the Federated Object Sharing Protocol (FOSP).
-      FOSP is a protocol that allows sharing arbitrary data,
+<p>Federated Object Sharing Protocol (FOSP) is an application-level protocol that allows sharing arbitrary data,
       setting access rights on the shared data and receiving notifications on changes.
-      Furthermore, all features of FOSP can be used in a federated network,
-      e.g. between multiple independned providers.
+      It can be used in a federated network, e.g. between multiple independent providers.
       It was designed to be the most simple solution that combines all these features.
 </p>
 <h3>Status of this Memo</h3>
@@ -174,7 +172,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on September 27, 2015.</p>
+This Internet-Draft will expire on September 2, 2015.</p>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -336,8 +334,9 @@ Purpose</h3>
 </ol><p>
     
 </p>
-<p>Furthermore, some non-functional requirements are imposed.
-    The protocol needs to be data agnostic and should support structured, unstructured and metadata.
+<p>All these features must be available in a federated network.
+    Furthermore, some non-functional requirements are imposed.
+    The protocol needs to be data agnostic and should support structured, unstructured and meta-data.
     It also must be as simple as possible, e.g. it must be easy to implement and it should be possible to write easy to deploy applications for it.
     
 </p>
@@ -389,7 +388,7 @@ Terminology</h3>
 </dd>
 <dt>message</dt>
 <dd>A message is the basic unit of communication in FOSP.
-      Messages come in three different flavours.
+      Messages come in three different flavors.
       
 </dd>
 <dt>request</dt>
@@ -419,6 +418,7 @@ Terminology</h3>
 <dt>tree</dt>
 <dd>The objects of a users form a tree structure.
       Each object has exactly one parent object, except for the root object.
+      There exists exactly one tree per user.
       
 </dd>
 </dl></blockquote><p>
@@ -431,7 +431,7 @@ Overview</h3>
 
 <p>This section provides a short overview.
   It is intended to familiarize with the concepts of FOSP.
-  It does not contain additional information that is not covered in the rest of the document and can be skipped.
+  It does not contain information that is not covered in the rest of the document and can be skipped.
   
 </p>
 <a name="overview-user-and-provider"></a><br /><hr />
@@ -439,14 +439,14 @@ Overview</h3>
 <a name="rfc.section.2.1"></a><h3>2.1.&nbsp;
 User and providers</h3>
 
-<p>In the FOSP world, data is created by users.
+<p>FOSP concerns itself with data created by users.
     Users store their content on the servers of providers and can share it by setting the appropriate access rights for other users.
     Each user is registered with one provider.
     The user has an unique name at the provider that together with the domain name of the provider forms his or her identifier, similar to an Email address.
     However users can still share their content with friends that are registered with different providers.
     
 </p>
-<p>Providers are companies or individuals that provide storage for users.
+<p>Providers are companies or individuals that provide storage to users.
     A provider is identified by a fully qualified domain name.
     Similar to Email and XMPP, everybody can be a provider by simply hosting his or her own FOSP server.
     The servers of different providers communicate to allow users of different providers to share data.
@@ -459,18 +459,18 @@ Trees, Objects and Attachments</h3>
 
 <p>The basic data units that can be stored on the server have a well defined structure and we call them objects.
     We chose this name because they are objects in the sense of the JSON specification.
-    Other familiar terms for a JSON object might be dictionary, hashmap of associative array.
+    Other familiar terms for a JSON object might be dictionary, hash map of associative array.
     They consist of key-value pairs where each key is a string and each value is one of the values allowed by JSON.
-    Most of the key-value pairs have a special meaning, for example there is a key-value pair that stores the access conrol list.
+    Most of the key-value pairs have a special meaning, for example there is a key-value pair that stores the access control list.
     
 </p>
 <p>All objects are part of a tree.
     For each user, one such tree exists and the root object of the tree is named like the user.
-    Each object can thus be uniquely identified by its path, e.g. alice@wonderlant.lit/social/me.
+    Each object can thus be uniquely identified by its path, e.g. alice@wonderland.lit/social/me.
     
 </p>
 <p>To store data that can not be expressed in JSON, each object can have an attachment.
-    The attachement is addressed in the same way as the object but is modified using special requests.
+    The attachment has the same resource name as the object but is modified using special requests.
     
 </p>
 <a name="overview-network-topology"></a><br /><hr />
@@ -481,7 +481,7 @@ Network topology</h3>
 <p>FOSP follows the client-server paradigm.
     The network topology is similar to the SMTP or XMPP network.
     A provider operates one or more server that handle the domain of the provider.
-    A user can use a client to connect to a server of a provide where he or she is registered and request data.
+    A user can use a client to connect to a server of a provider where he or she is registered and request data.
     
 </p>
 <p>The server can connect to a server of a different provider to forward request it can not process itself.
@@ -511,12 +511,12 @@ Messages</h3>
 <a name="rfc.section.2.5"></a><h3>2.5.&nbsp;
 Bindings</h3>
 
-<p>The messages are transported using existing transport protocols.
+<p>The messages are transported using existing protocols.
     A definition of how FOSP messages are transported through an existing protocol is called binding.
     
 </p>
 <p>The currently defined binding is the WebSocket binding.
-    An HTTP binding, which will not support all FOSP features, is also worked on.
+    An HTTP binding, which will not support all FOSP features, is also being worked on.
     
 </p>
 <a name="data-structure"></a><br /><hr />
@@ -603,20 +603,20 @@ Object attributes</h3>
       
 </p>
 <p>The “btime” (birth time) field is set by the server to the date of creation of the object.
-      It is saved as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
+      It is stored as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
       The user MUST NOT be able to set the field to a different value.
       
 </p>
 <p>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
-      It is saved just like “btime”.
+      It is stored just like “btime”.
       In the future it might be used to allow client side caching similar to ETags in HTTP.
       The user MUST NOT be able to set the field to a different value.
       
 </p>
-<p>The “data” field is where the user should save the payload and may contain any valid value.
+<p>The “data” field is where the user should store the payload and may contain any valid value.
       The “type” field should contain a string that describes the content type of the “data” field, similar to MIME types.
-      These two fields are the only fields where the user can save arbitrary data.
-      The server MUST allow the user to store any data in this fields.
+      These two fields are the only fields where the user can store arbitrary data.
+      The server MUST allow the user to store any data in these fields.
       
 </p>
 </blockquote><p>
@@ -625,7 +625,7 @@ Object attributes</h3>
 <p>Furthermore, there are the three fields “acl”, “subscriptions” and “attachment” that contain more complex objects.
     
 </p>
-<p>The “acl” field saves information about access rights in form of an object.
+<p>The “acl” field stores information about access rights in form of an object.
     It is read by the server to enforce access control.
     </p>
 <blockquote class="text">
@@ -726,10 +726,10 @@ alice@wonderland.lit/social/me
 Attachments</h3>
 
 <p>As files, like pictures and documents, are also shared via social networks, FOSP supports saving binary files.
-    For each object, one file can be saved as an attachment.
+    For each object, one file can be stored as an attachment.
     This way, files can be addressed with the same schema and the objects they are attached to can provide the meta-data.
     If an object has a belonging file, it is extended by a new attribute named “attachment”.
-    In this attribute, the "size", file "name", and MIME "type" of the file is saved.
+    In this attribute, the "size", file "name", and MIME "type" of the file is stored.
     The attached file is read and written using special requests.
     
 </p>
@@ -1379,6 +1379,25 @@ Access control</h3>
 <li>If the current object is already the root object, deny access
 </li>
 </ol><p>
+    The supported keys are the following:
+    </p>
+<blockquote class="text"><dl>
+<dt>data</dt>
+<dd>determines whether a user can read the "data", "type", "btime", "mtime" and "owner" fields and whether he or she can write the "data" and "type" fields.
+</dd>
+<dt>acl</dt>
+<dd>determines whether a user can read and write the "acl" field.
+</dd>
+<dt>subscriptions</dt>
+<dd>determines whether a user can read the subscriptions field and whether he or she can add an entry with his or her username.
+</dd>
+<dt>attachment</dt>
+<dd>determines whether a user can read or write the attachment and the "attachment" field.
+</dd>
+<dt>children</dt>
+<dd>determines whether a user can list, add or remove child objects.
+</dd>
+</dl></blockquote><p>
     
 </p>
 <a name="pol-groups"></a><br /><hr />

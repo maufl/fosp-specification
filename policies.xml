@@ -19,6 +19,14 @@
       <t>If is is not set, go to the parent object and repeat from step 1.</t>
       <t>If the current object is already the root object, deny access</t>
     </list>
+    The supported keys are the following:
+    <list style="hanging">
+      <t hangText="data">determines whether a user can read the "data", "type", "btime", "mtime" and "owner" fields and whether he or she can write the "data" and "type" fields.</t>
+      <t hangText="acl">determines whether a user can read and write the "acl" field.</t>
+      <t hangText="subscriptions">determines whether a user can read the subscriptions field and whether he or she can add an entry with his or her username.</t>
+      <t hangText="attachment">determines whether a user can read or write the attachment and the "attachment" field.</t>
+      <t hangText="children">determines whether a user can list, add or remove child objects.</t>
+    </list>
     </t>
   </section>
   <section anchor="pol-groups" title="Groups">
