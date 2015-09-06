@@ -1508,11 +1508,20 @@ Access control</h3>
 Groups</h3>
 
 <p>To be able to set rights for a group of people, the user must first be able to define groups and store them at a well known place on the server.
-    Each group is only valid for the tree that it is defined in.
-    The server MUST look for group definitions in objects at the location "&lt;user@domain&gt;/config/groups".
-    Each object underneath this object can contain a group definition and the group name is the name of the object.
-    To be a valid group definition, the object MUST contain an object in its "data" attribute and this inner object MUST contain a "users" attribute with an array value.
-    The array then contains the full names of all users in this group.
+    Right now, each group is only valid for the tree that it is defined in.
+    
+</p>
+<p>The group name in the ACL MUST start with a "/".
+    It denotes the path to the group object, relative to the tree of the current object.
+    For example, a group could be "/config/groups/close-friends".
+    The server would then retrieve the object "&lt;user@domain&gt;/config/groups/close-friends", to find out the members of the group.
+    
+</p>
+<p>A group object is just a regular FOSP object.
+    The "type" field MUST contain the string "x-group".
+    The "data" field contains the group definition.
+    It MUST contain a "members" field which contains an array.
+    The array holds all fully qualified names of users in this group.
     
 </p>
 <a name="pol-subscriptions"></a><br /><hr />

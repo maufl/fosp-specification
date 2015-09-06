@@ -66,8 +66,6 @@ Here we collect all topics that have to be discussed and then order them.
   * Subscriptions
   * Attachments
   * Authentication
-    * Users
-    * Servers
   * Message forwarding
 * Discovery
 * Security Considerations
@@ -82,3 +80,4 @@ Here we collect all topics that have to be discussed and then order them.
 * Describe owner and groups in ACL policies
 * Name connection negotiation: Discover/Connect/Info
 * Add examples
+* JSON schemas

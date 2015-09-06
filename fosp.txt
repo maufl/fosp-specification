@@ -128,11 +128,11 @@ Internet-Draft                    FOSP                    September 2015
      8.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 29
      8.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 29
      8.6.  Message forwarding . . . . . . . . . . . . . . . . . . . . 29
-   9.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 30
-     9.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
-     9.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 30
-   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 31
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 32
+   9.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+     9.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+     9.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 31
+   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 33
 
 
 
@@ -1523,14 +1523,21 @@ Internet-Draft                    FOSP                    September 2015
 
    To be able to set rights for a group of people, the user must first
    be able to define groups and store them at a well known place on the
-   server.  Each group is only valid for the tree that it is defined in.
-   The server MUST look for group definitions in objects at the location
-   "<user@domain>/config/groups".  Each object underneath this object
-   can contain a group definition and the group name is the name of the
-   object.  To be a valid group definition, the object MUST contain an
-   object in its "data" attribute and this inner object MUST contain a
-   "users" attribute with an array value.  The array then contains the
-   full names of all users in this group.
+   server.  Right now, each group is only valid for the tree that it is
+   defined in.
+
+   The group name in the ACL MUST start with a "/".  It denotes the path
+   to the group object, relative to the tree of the current object.  For
+   example, a group could be "/config/groups/close-friends".  The server
+   would then retrieve the object
+   "<user@domain>/config/groups/close-friends", to find out the members
+   of the group.
+
+   A group object is just a regular FOSP object.  The "type" field MUST
+   contain the string "x-group".  The "data" field contains the group
+   definition.  It MUST contain a "members" field which contains an
+   array.  The array holds all fully qualified names of users in this
+   group.
 
 8.3.  Subscriptions
 
@@ -1555,19 +1562,18 @@ Internet-Draft                    FOSP                    September 2015
    3.  Go to the parent of the current object and repeat from step 1.
        unless the current object is the root object.
 
-   An important aspect to consider when sending notifications that
-   include the new version of the object, is that every user who will be
-   notified might be allowed to only see different parts of the object.
-   Therefore, the server has to calculate the view of the object per
-   user to prevent leaking of data a user might not be allowed to see.
-
-
 
 
 Maurer                    Expires March 9, 2016                [Page 28]
 
 Internet-Draft                    FOSP                    September 2015
 
+
+   An important aspect to consider when sending notifications that
+   include the new version of the object, is that every user who will be
+   notified might be allowed to only see different parts of the object.
+   Therefore, the server has to calculate the view of the object per
+   user to prevent leaking of data a user might not be allowed to see.
 
 8.4.  Attachments
 
@@ -1611,6 +1617,14 @@ Internet-Draft                    FOSP                    September 2015
    domain "example.net", authenticates to server B and then forwards a
    request of user "alice@wonderland.lit", server B MUST close the
    connection.  The user from which the request originates MUST be
+
+
+
+Maurer                    Expires March 9, 2016                [Page 29]
+
+Internet-Draft                    FOSP                    September 2015
+
+
    specified in the "From" header of the request.
 
 
@@ -1620,7 +1634,49 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                    Expires March 9, 2016                [Page 29]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 9, 2016                [Page 30]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1676,7 +1732,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                    Expires March 9, 2016                [Page 30]
+Maurer                    Expires March 9, 2016                [Page 31]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1732,7 +1788,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                    Expires March 9, 2016                [Page 31]
+Maurer                    Expires March 9, 2016                [Page 32]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1788,5 +1844,5 @@ Author's Address
 
 
 
-Maurer                    Expires March 9, 2016                [Page 32]
+Maurer                    Expires March 9, 2016                [Page 33]
 
