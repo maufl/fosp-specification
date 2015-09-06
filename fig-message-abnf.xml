@@ -6,7 +6,7 @@ message       = request / response / notification
 request       = request-type SP ( resource-id / "*" )
                 SP sequence-number CRLF headers [ CRLF body ]
 
-request-type  = "INFO" / "BIND" / "CREATE" / "GET" / "LIST"
+request-type  = "OPTIONS" / "AUTH" / "CREATE" / "GET" / "LIST"
                 / "PATCH" / "DELETE" / "READ" / "WRITE"
 
 response      = response-type SP response-status
@@ -18,31 +18,19 @@ notification  = event-type SP resource-id CRLF headers [ CRLF body ]
 
 event-type    = "CREATED" / "UPDATED" / "DELETED"
 
+resource-id   = iunreserved "@" ihost ipath-absolute
+
 headers       = *( header CRLF )
 
-header        = header-key ":" SP header-value
+header        = header-key ":" header-value
 
-header-key    = ALPHA *( ALPHANUM / "-" ) ( ALPHANUM )
+header-key    = ALPHA *( ALPHANUM / "-" ) ALPHANUM
 
-header-value  = 1*( ALPHANUM / "/" / "-" / "<" / ">" / "="
-                / "+" / "_" / ";" / "!" / "~" / "*" / "." )
-
-resource-id   = user-name "@" domain [ path ]
-
-user-name     = ALPHA *( ALPHANUM / "_" / "-" / "+" / "." )
-                ( ALPHANUM )
-
-domain        = domain-part *( "." domain-part ) [ "." ]
-
-domain-part   = ALPHANUM / ( ALPHANUM *( ALPHANUM / "-" / "_" )
-                  ALPHANUM )
-
-path          = "/" / 1*( "/" path-part )
-
-path-part     = 1*( ALPHANUM / "\" / "." / "+" / "*" / "-" / "_"
-                / ";" / ":" / "!" / "~" / "=" / "<" / ">" )
+header-value  = 1*VCHAR
 
 ALPHANUM      = ALPHA / DIGIT
+
+body          = *OCTET
 		]]></artwork>
 	<postamble />
 </figure>

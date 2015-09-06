@@ -55,7 +55,7 @@ Here we collect all topics that have to be discussed and then order them.
     * Session management
     * Format
     * Serialization
-* Authentication and Registration
+* Authentication and registration
   * Anonymous
   * SASL
   * Server to server
@@ -68,9 +68,11 @@ Here we collect all topics that have to be discussed and then order them.
   * Authentication
   * Message forwarding
 * Discovery
-* Security Considerations
+* Security considerations
 
  Open questions and tasks
 * Finalize ABNF
 * Add examples
 * JSON schemas
+* Add references
+* Security Considrations

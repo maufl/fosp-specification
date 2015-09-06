@@ -17,17 +17,15 @@
     </section>
     <section anchor="bindings-ws-format" title="Format">
       <t>The FOSP messages is formatted similar to a HTTP request/response.
-      </t>
-      <t>WARNING: To simplify the definition for the moment, only ASCII characters are used.
-      This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported.
-      Also the header definition will be subject to change after determining acceptable characters.
-      For the resource identifier, we will probably refer to the IRI definition in the future.
+      The ABNF definition reuses existing definitions from the IRI definition, in particular "iunreserved", "ihost" and "ipath-absolute".
       </t>
       <?rfc include="fig-message-abnf.xml"?>
+      <t>The definitions might be relaxed in the future.
+      </t>
     </section>
     <section anchor="bindings-ws-serialization" title="Serialization">
       <t>Messages are serialized into a blob of bytes and sent inside a single WebSocket message.
-      Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or raw bytes.
+      Most of the message is text and MUST be UTF-8 encoded, only the body is either a valid JSON object, UTF-8 encoded, or raw bytes.
       The second case occurs when an attachment is up- or downloaded.
       The beginning and end, e.g. the length of a message must be determined from lenght of the WebSocket message.
       </t>
@@ -42,6 +40,8 @@
     A client SHOULD NOT issue FOSP requests over plain HTTP.
     A server SHOULD NOT allow HTTP based requests other then for testing and debugging purposes.
     </t>
+    <t>This binding is not finalized and SHOULD NOT be implemented except for the further development of this binding.
+    </t>
     <section anchor="bingings-http-mapping" title="Mapping">
       <t>Each FOSP request is transported as an HTTP request.
       The request identifier is used as the HTTP method.
@@ -51,7 +51,7 @@
       </t>
     </section>
     <section anchor="bindings-http-session-management" title="Session management">
-      <t>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a BIND request.
+      <t>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a AUTH request.
       With this cookie, the client MUST be able to make authenticated requests.
       </t>
     </section>

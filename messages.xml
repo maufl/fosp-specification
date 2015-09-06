@@ -202,7 +202,7 @@
       <list style="hanging">
 	<t hangText="400 Bad Request">The request could not be parsed by the server due to malformed syntax.</t>
 	<t hangText="401 Unauthorized">The client tried to send a request that needs authentication but is not yet authenticated.
-	The client must make a successful BIND request bevor retrying this request.
+	The client must make a successful AUTH request bevor retrying this request.
 	</t>
 	<t hangText="403 Forbidden">The client does not have the necessary permissions.
 	If the server MUST only return this status if the client is already authenticated.
