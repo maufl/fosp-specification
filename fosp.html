@@ -224,8 +224,8 @@ Types<br />
 Request<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-info">5.2.1.</a>&nbsp;
 Info<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-bind">5.2.2.</a>&nbsp;
-Bind<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-auth">5.2.2.</a>&nbsp;
+Auth<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-get">5.2.3.</a>&nbsp;
 Get<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-list">5.2.4.</a>&nbsp;
@@ -274,33 +274,39 @@ HTTPS binding<br />
 Mapping<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-http-session-management">6.2.2.</a>&nbsp;
 Session management<br />
-<a href="#policies">7.</a>&nbsp;
-Policies<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">7.1.</a>&nbsp;
-Access control<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-groups">7.2.</a>&nbsp;
-Groups<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-subscriptions">7.3.</a>&nbsp;
-Subscriptions<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-attachments">7.4.</a>&nbsp;
-Attachments<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth">7.5.</a>&nbsp;
+<a href="#authentication">7.</a>&nbsp;
 Authentication<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-user">7.5.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#auth-anonymous">7.1.</a>&nbsp;
+Anonymous<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#auth-sasl">7.2.</a>&nbsp;
+SASL<br />
+<a href="#policies">8.</a>&nbsp;
+Policies<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">8.1.</a>&nbsp;
+Access control<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-groups">8.2.</a>&nbsp;
+Groups<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-subscriptions">8.3.</a>&nbsp;
+Subscriptions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-attachments">8.4.</a>&nbsp;
+Attachments<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth">8.5.</a>&nbsp;
+Authentication<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-user">8.5.1.</a>&nbsp;
 Users<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-server">7.5.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-server">8.5.2.</a>&nbsp;
 Servers<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-registrations">7.6.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-registrations">8.6.</a>&nbsp;
 Registration<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forwarding">7.7.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forwarding">8.7.</a>&nbsp;
 Message forwarding<br />
-<a href="#discovery">8.</a>&nbsp;
+<a href="#discovery">9.</a>&nbsp;
 Discovery<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#discovery-dns">8.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#discovery-dns">9.1.</a>&nbsp;
 DNS<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#discovery-well-known">8.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#discovery-well-known">9.2.</a>&nbsp;
 Well known<br />
-<a href="#rfc.references1">9.</a>&nbsp;
+<a href="#rfc.references1">10.</a>&nbsp;
 References<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Author's Address<br />
@@ -638,7 +644,7 @@ Object attributes</h3>
       Currently allowed values for the key are “acl”, “data”, “subscriptions“, “children“.
       The permissions can be “read”, “write“ and “delete”.
       They can also be prefixed with “not-“ to revoke a right, which is necessary because rights are inherited.
-      This will be further explained in&nbsp;<a class='info' href='#access-control'>Section&nbsp;7.1<span> (</span><span class='info'>Access control</span><span>)</span></a>.
+      This will be further explained in&nbsp;<a class='info' href='#access-control'>Section&nbsp;8.1<span> (</span><span class='info'>Access control</span><span>)</span></a>.
       
 </p>
 <p>The value of the “users” and “groups” field is an object.
@@ -659,7 +665,7 @@ Object attributes</h3>
 <p>The value of “events” is an array of strings which identify an event, the value of “depth” is an integer between -1 and infinity 
 </p>
 </blockquote><p>
-    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.3<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+    How this field is evaluated by the server is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;8.3<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
     
 </p>
 <p>The “attachment” field is only present if this object has an attachment.
@@ -879,15 +885,15 @@ Info</h3>
 <p>There will likely be a request called INFO or OPTIONS to discover the capabilities of the server.
       However, as of now, it is not yet clear what is needed and therefore the definition is postponed.
 </p>
-<a name="msg-request-bind"></a><br /><hr />
+<a name="msg-request-auth"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5.2.2"></a><h3>5.2.2.&nbsp;
-Bind</h3>
+Auth</h3>
 
-<p>The BIND request is used to authenticate the client.
-      The body MUST contain an object with the "method" attribute that specifies the used authentication method.
-      The possible methods of authentication are not final yet, however every server SHOULD support a simple authentication by name and password.
-      In this case the object also contains a "user" and "password" attribute containing the full user name and the password.
+<p>The AUTH request is used to authenticate the client.
+      The authentication uses the SASL framework.
+      How SASL messages are transported is defined in <a class='info' href='#authentication'>Section&nbsp;7<span> (</span><span class='info'>Authentication</span><span>)</span></a>.
+      Multiple requests might be needed to successfully authenticate, depending on the mechanism.
       
 </p>
 <p>
@@ -1042,7 +1048,7 @@ Notification</h3>
     Otherwise it should contain the new version of the object.
     
 </p>
-<p>When and to who notifications are sent is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;7.3<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
+<p>When and to who notifications are sent is explained in&nbsp;<a class='info' href='#pol-subscriptions'>Section&nbsp;8.3<span> (</span><span class='info'>Subscriptions</span><span>)</span></a>.
     
 </p>
 <a name="msg-status-codes"></a><br /><hr />
@@ -1097,15 +1103,20 @@ Redirection 3xx</h3>
 <blockquote class="text"><dl>
 <dt>301 Moved Permanently</dt>
 <dd>The object was moved permanently and is now found at the location indicated in the "Location" header.
-	Moving objects is not yet supported but might be in the future.
-	Clients SHOULD be able to understand this status and in case of a GET, LIST or READ request MAY resent the request with the new location.
-	However, a client MUST never automatically resent the request if the request alters the object, e.g. is a CREATE, PATCH, DELETE or WRITE request.
-	
+        Moving objects is not yet supported but might be in the future.
+        Clients SHOULD be able to understand this status and in case of a GET, LIST or READ request MAY resent the request with the new location.
+        However, a client MUST never automatically resent the request if the request alters the object, e.g. is a CREATE, PATCH, DELETE or WRITE request.
+        
 </dd>
 <dt>304 Not Modified</dt>
 <dd>If the request did contain a condition that checks for the modification date and the object did not change, the server SHOULD respond with this status code.
-	Conditional requests are not supported yet, but might be in the future.
-	
+        Conditional requests are not supported yet, but might be in the future.
+        
+</dd>
+<dt>310 Additional data needed</dt>
+<dd>This status code can only be returned while authenticating.
+        If the used SASL mechanism requires the server to return a challenge before continuing authentication, this response code MUST be returned.
+        
 </dd>
 </dl></blockquote><p>
       
@@ -1229,7 +1240,7 @@ WebSocket binding</h3>
 Connection Initiation</h3>
 
 <p>To send messages to a server over WebSockets, a connection has to be established first.
-      How the server address, port and URL path are determined for a given domain is discussed in&nbsp;<a class='info' href='#discovery'>Section&nbsp;8<span> (</span><span class='info'>Discovery</span><span>)</span></a>.
+      How the server address, port and URL path are determined for a given domain is discussed in&nbsp;<a class='info' href='#discovery'>Section&nbsp;9<span> (</span><span class='info'>Discovery</span><span>)</span></a>.
       In the WebSocket handshake, the Sec-WebSocket-Protocol MUST be set to "fosp".
       
 </p>
@@ -1344,9 +1355,77 @@ Session management</h3>
       With this cookie, the client MUST be able to make authenticated requests.
       
 </p>
-<a name="policies"></a><br /><hr />
+<a name="authentication"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7"></a><h3>7.&nbsp;
+Authentication</h3>
+
+<p>Currently, authentication is done, using a SASL mechanism.
+  Which mechanisms are supported can be discovered using the INFO request.
+  The PLAIN authentication mechanism SHOULD be supported by any implementation.
+  
+</p>
+<p>As encryption of the transport protocol is mandatory in production use of FOSP, the SASL security layer is not used.
+  
+</p>
+<a name="auth-anonymous"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
+Anonymous</h3>
+
+<p>A client may sent request without being authenticated.
+    All requests are then assumed to be performed by an anonymous user.
+    
+</p>
+<p>However, once the client started authentication, it SHOULD NOT sent any request except for those needed for the authentication.
+    All requests that are sent before successfully completing the authentication MUST still be performed as anonymous user.
+    
+</p>
+<a name="auth-sasl"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
+SASL</h3>
+
+<p>The service name specified by this protocol's profile is "fosp".
+    
+</p>
+<p>To initiate authentication and to exchange SASL messages, the AUTH request is used.
+    Depending on the mechanism, multiple requests might be needed to successfully authenticate.
+    In this case the server MUST respond with a not final response code in the range of 3xx.
+    The SASL messages are transported as JSON objects in the bodies of the requests and responses.
+    All SASL message objects consist of an object with a "sasl" field.
+    This field contains an object with the actual SASL message.
+    
+</p>
+<p>The authentication is initiated by the client with a AUTH request.
+    The SASL object in the body MUST contain a field called "mechanism" that specifies the SASL mechanism to be used.
+    Furthermore, it MUST contain a field called "authorization-identity" that contains the fully qualified user name of the user that should be authenticated.
+    Optionally, the object CAN contain a field called "initial-response", containing the initial response of the client, if the mechanism specifies one.
+    The initial response MUST be BASE64 encoded.
+    An empty initial response is indicated by an empty string, while no initial response is indicated by the absence of the "initial-response" field.
+    
+</p>
+<p>Depending on the mechanism and the previously exchanged messages, the server can either respond with a challenge or an authentication outcome.
+    If a challenge is returned by the server, it MUST be returned with a status code 310.
+    The body of the response then contains a SASL object with a "challenge" field that contains the challenge in BASE64 encoding.
+    If an authentication outcome is returned, it MUST be returned with a status code 200 on success or with a status code 401 on failure.
+    The body of this response contains a SASL object with a "outcome" field that contains the outcome in BASE64 encoding.
+    Additional data can be provided, BASE64 encoded, in the "additional-data" field.
+    If there is additional data but it is empty, then the field MUST be the empty string.
+    Otherwise, if there is no additional data, the field MUST NOT be present.
+    
+</p>
+<p>If the server does return a challenge with a 310 status code, the client will sent a new AUTH request.
+    The new request contains a SASL object with the "response" field, containing the SASL response, BASE64 encoded.
+    
+</p>
+<p>Once the authentication was completed successfully, all further requests are processed in the name of the authenticated user.
+    A second authentication SHOULD not be attempted on the same connection/session and a server MAY reject all further AUTH requests.
+    
+</p>
+<a name="policies"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8.&nbsp;
 Policies</h3>
 
 <p>Besides implementing the technical specification of the protocol, the server has to enforce a set of policies.
@@ -1356,7 +1435,7 @@ Policies</h3>
 </p>
 <a name="access-control"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
+<a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
 Access control</h3>
 
 <p>As stated in <a class='info' href='#data-structure-fields'>Section&nbsp;3.2<span> (</span><span class='info'>Object attributes</span><span>)</span></a>, each object can save access control information.
@@ -1402,7 +1481,7 @@ Access control</h3>
 </p>
 <a name="pol-groups"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
+<a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
 Groups</h3>
 
 <p>To be able to set rights for a group of people, the user must first be able to define groups and store them at a well known place on the server.
@@ -1415,7 +1494,7 @@ Groups</h3>
 </p>
 <a name="pol-subscriptions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.3"></a><h3>7.3.&nbsp;
+<a name="rfc.section.8.3"></a><h3>8.3.&nbsp;
 Subscriptions</h3>
 
 <p>Similar to the access control information, subscriptions can be set on objects so that a user will be notified when changes occur.
@@ -1441,7 +1520,7 @@ Subscriptions</h3>
 </p>
 <a name="pol-attachments"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.4"></a><h3>7.4.&nbsp;
+<a name="rfc.section.8.4"></a><h3>8.4.&nbsp;
 Attachments</h3>
 
 <p>As explained in <a class='info' href='#data-structure-attachments'>Section&nbsp;3.4<span> (</span><span class='info'>Attachments</span><span>)</span></a>, each object can have a file as attachment.
@@ -1453,7 +1532,7 @@ Attachments</h3>
 </p>
 <a name="pol-auth"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.5"></a><h3>7.5.&nbsp;
+<a name="rfc.section.8.5"></a><h3>8.5.&nbsp;
 Authentication</h3>
 
 <p>Most of the operations a user performs in FOSP probably require some access rights.
@@ -1464,7 +1543,7 @@ Authentication</h3>
 </p>
 <a name="pol-auth-user"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.5.1"></a><h3>7.5.1.&nbsp;
+<a name="rfc.section.8.5.1"></a><h3>8.5.1.&nbsp;
 Users</h3>
 
 <p>When a client connects to a server it can use the BIND request to authenticate itself.
@@ -1474,18 +1553,18 @@ Users</h3>
 </p>
 <a name="pol-auth-server"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.5.2"></a><h3>7.5.2.&nbsp;
+<a name="rfc.section.8.5.2"></a><h3>8.5.2.&nbsp;
 Servers</h3>
 
 <p>When a server opens a connection to another server, the authentication can be done using DNS.
       The connectiong server must provide a domain name it wants to be authenticated for.
-      The accepting server then does the server discovery process described in&nbps;<a class='info' href='#discovery-dns'>Section&nbsp;8.1<span> (</span><span class='info'>DNS</span><span>)</span></a>&nbsp; and compares the resolved IP address to the address of the connecting server.
+      The accepting server then does the server discovery process described in&nbps;<a class='info' href='#discovery-dns'>Section&nbsp;9.1<span> (</span><span class='info'>DNS</span><span>)</span></a>&nbsp; and compares the resolved IP address to the address of the connecting server.
       If the IP addresses match, the authentication is successfull.
       
 </p>
 <a name="pol-registrations"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.6"></a><h3>7.6.&nbsp;
+<a name="rfc.section.8.6"></a><h3>8.6.&nbsp;
 Registration</h3>
 
 <p>The registration of a new user account is no longer part of the FOSP protocol.
@@ -1496,7 +1575,7 @@ Registration</h3>
 </p>
 <a name="pol-msg-forwarding"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7.7"></a><h3>7.7.&nbsp;
+<a name="rfc.section.8.7"></a><h3>8.7.&nbsp;
 Message forwarding</h3>
 
 <p>In general, a server should accept forwarded messages from another server.
@@ -1514,7 +1593,7 @@ Message forwarding</h3>
 </p>
 <a name="discovery"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8"></a><h3>8.&nbsp;
+<a name="rfc.section.9"></a><h3>9.&nbsp;
 Discovery</h3>
 
 <p>To be able to connect to a server, the client has to first determine the correct address of the server.
@@ -1525,7 +1604,7 @@ Discovery</h3>
 </p>
 <a name="discovery-dns"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
+<a name="rfc.section.9.1"></a><h3>9.1.&nbsp;
 DNS</h3>
 
 <p>The discovery via DNS uses SRV records.
@@ -1539,7 +1618,7 @@ DNS</h3>
 </p>
 <a name="discovery-well-known"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
+<a name="rfc.section.9.2"></a><h3>9.2.&nbsp;
 Well known</h3>
 
 <p>When DNS lookups are not possible, the server address can also be discovered by retrieving a JSON object.
@@ -1553,7 +1632,7 @@ Well known</h3>
 </p>
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>9.&nbsp;References</h3>
+<h3>10.&nbsp;References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997 (<a href="http://www.rfc-editor.org/rfc/rfc2119.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2119.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2119.xml">XML</a>).</td></tr>

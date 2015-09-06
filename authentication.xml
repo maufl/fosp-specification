@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section anchor="authentication" title="Authentication">
+  <t>Currently, authentication is done, using a SASL mechanism.
+  Which mechanisms are supported can be discovered using the INFO request.
+  The PLAIN authentication mechanism SHOULD be supported by any implementation.
+  </t>
+  <t>As encryption of the transport protocol is mandatory in production use of FOSP, the SASL security layer is not used.
+  </t>
+  <section anchor="auth-anonymous" title="Anonymous">
+    <t>A client may sent request without being authenticated.
+    All requests are then assumed to be performed by an anonymous user.
+    </t>
+    <t>However, once the client started authentication, it SHOULD NOT sent any request except for those needed for the authentication.
+    All requests that are sent before successfully completing the authentication MUST still be performed as anonymous user.
+    </t>
+  </section>
+  <section anchor="auth-sasl" title="SASL">
+    <t>The service name specified by this protocol's profile is "fosp".
+    </t>
+    <t>To initiate authentication and to exchange SASL messages, the AUTH request is used.
+    Depending on the mechanism, multiple requests might be needed to successfully authenticate.
+    In this case the server MUST respond with a not final response code in the range of 3xx.
+    The SASL messages are transported as JSON objects in the bodies of the requests and responses.
+    All SASL message objects consist of an object with a "sasl" field.
+    This field contains an object with the actual SASL message.
+    </t>
+    <t>The authentication is initiated by the client with a AUTH request.
+    The SASL object in the body MUST contain a field called "mechanism" that specifies the SASL mechanism to be used.
+    Furthermore, it MUST contain a field called "authorization-identity" that contains the fully qualified user name of the user that should be authenticated.
+    Optionally, the object CAN contain a field called "initial-response", containing the initial response of the client, if the mechanism specifies one.
+    The initial response MUST be BASE64 encoded.
+    An empty initial response is indicated by an empty string, while no initial response is indicated by the absence of the "initial-response" field.
+    </t>
+    <t>Depending on the mechanism and the previously exchanged messages, the server can either respond with a challenge or an authentication outcome.
+    If a challenge is returned by the server, it MUST be returned with a status code 310.
+    The body of the response then contains a SASL object with a "challenge" field that contains the challenge in BASE64 encoding.
+    If an authentication outcome is returned, it MUST be returned with a status code 200 on success or with a status code 401 on failure.
+    The body of this response contains a SASL object with a "outcome" field that contains the outcome in BASE64 encoding.
+    Additional data can be provided, BASE64 encoded, in the "additional-data" field.
+    If there is additional data but it is empty, then the field MUST be the empty string.
+    Otherwise, if there is no additional data, the field MUST NOT be present.
+    </t>
+    <t>If the server does return a challenge with a 310 status code, the client will sent a new AUTH request.
+    The new request contains a SASL object with the "response" field, containing the SASL response, BASE64 encoded.
+    </t>
+    <t>Once the authentication was completed successfully, all further requests are processed in the name of the authenticated user.
+    A second authentication SHOULD not be attempted on the same connection/session and a server MAY reject all further AUTH requests.
+    </t>
+  </section>
+</section>

@@ -83,21 +83,21 @@ Table of Contents
      5.1.  Types  . . . . . . . . . . . . . . . . . . . . . . . . . . 15
      5.2.  Request  . . . . . . . . . . . . . . . . . . . . . . . . . 15
        5.2.1.  Info . . . . . . . . . . . . . . . . . . . . . . . . . 16
-       5.2.2.  Bind . . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.2.  Auth . . . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.3.  Get  . . . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.4.  List . . . . . . . . . . . . . . . . . . . . . . . . . 16
-       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 17
+       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.6.  Patch  . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.7.  Delete . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.8.  Read . . . . . . . . . . . . . . . . . . . . . . . . . 17
-       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 18
+       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 17
      5.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 18
-     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 19
+     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 18
        5.5.1.  Informal 1xx . . . . . . . . . . . . . . . . . . . . . 19
        5.5.2.  Successful 2xx . . . . . . . . . . . . . . . . . . . . 19
        5.5.3.  Redirection 3xx  . . . . . . . . . . . . . . . . . . . 19
-       5.5.4.  Client error 4xx . . . . . . . . . . . . . . . . . . . 20
+       5.5.4.  Client error 4xx . . . . . . . . . . . . . . . . . . . 19
        5.5.5.  Server Error 5xx . . . . . . . . . . . . . . . . . . . 20
      5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 21
    6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
@@ -116,24 +116,24 @@ Internet-Draft                    FOSP                        March 2015
      6.2.  HTTPS binding  . . . . . . . . . . . . . . . . . . . . . . 24
        6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 24
        6.2.2.  Session management . . . . . . . . . . . . . . . . . . 24
-   7.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
-     7.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 25
-     7.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 26
-     7.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 26
-     7.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 27
-     7.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 27
-       7.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 27
-       7.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 27
-     7.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 27
-     7.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 28
-   8.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 29
-     8.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
-     8.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 29
-   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 30
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 31
-
-
-
+   7.  Authentication . . . . . . . . . . . . . . . . . . . . . . . . 25
+     7.1.  Anonymous  . . . . . . . . . . . . . . . . . . . . . . . . 25
+     7.2.  SASL . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+   8.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+     8.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 27
+     8.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+     8.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 28
+     8.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 29
+     8.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 29
+       8.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 29
+       8.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 29
+     8.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 29
+     8.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 30
+   9.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+     9.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+     9.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 31
+   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 33
 
 
 
@@ -549,7 +549,7 @@ Internet-Draft                    FOSP                        March 2015
       "children".  The permissions can be "read", "write" and "delete".
       They can also be prefixed with "not-" to revoke a right, which is
       necessary because rights are inherited.  This will be further
-      explained in Section 7.1.
+      explained in Section 8.1.
 
       The value of the "users" and "groups" field is an object.  In
       these objects, each key identifies a user or a group and the
@@ -575,7 +575,7 @@ Internet-Draft                    FOSP                        March 2015
       event, the value of "depth" is an integer between -1 and infinity
 
    How this field is evaluated by the server is explained
-   in Section 7.3.
+   in Section 8.3.
 
    The "attachment" field is only present if this object has an
    attachment.  It contains an object with three fields.
@@ -849,15 +849,12 @@ Internet-Draft                    FOSP                        March 2015
    capabilities of the server.  However, as of now, it is not yet clear
    what is needed and therefore the definition is postponed.
 
-5.2.2.  Bind
+5.2.2.  Auth
 
-   The BIND request is used to authenticate the client.  The body MUST
-   contain an object with the "method" attribute that specifies the used
-   authentication method.  The possible methods of authentication are
-   not final yet, however every server SHOULD support a simple
-   authentication by name and password.  In this case the object also
-   contains a "user" and "password" attribute containing the full user
-   name and the password.
+   The AUTH request is used to authenticate the client.  The
+   authentication uses the SASL framework.  How SASL messages are
+   transported is defined in Section 7.  Multiple requests might be
+   needed to successfully authenticate, depending on the mechanism.
 
    The server verifies that the authentication is successfull and sents
    a success response or a failed response otherwise.  All future
@@ -886,8 +883,11 @@ Internet-Draft                    FOSP                        March 2015
    If successfull, the response contains an array of names of the child
    objects.
 
+5.2.5.  Create
 
-
+   The CREATE request is used to store new objects on the server.  The
+   resource identifier is the desired location for the new object.  The
+   body containes the object to store.
 
 
 
@@ -896,12 +896,6 @@ Maurer                  Expires September 2, 2015              [Page 16]
 
 Internet-Draft                    FOSP                        March 2015
 
-
-5.2.5.  Create
-
-   The CREATE request is used to store new objects on the server.  The
-   resource identifier is the desired location for the new object.  The
-   body containes the object to store.
 
    On success, an empty success response is returned and the object is
    stored at the given location.
@@ -942,7 +936,13 @@ Internet-Draft                    FOSP                        March 2015
 
    The success response body contains the raw bytes of the attachment.
 
+5.2.9.  Write
 
+   The WRITE request is used to write to the attachment.  The resource
+   identifier specifies the object of which the attachment should be
+   written.  The body contains the raw bytes of the attachment.
+
+   The success response is empty.
 
 
 
@@ -952,14 +952,6 @@ Maurer                  Expires September 2, 2015              [Page 17]
 
 Internet-Draft                    FOSP                        March 2015
 
-
-5.2.9.  Write
-
-   The WRITE request is used to write to the attachment.  The resource
-   identifier specifies the object of which the attachment should be
-   written.  The body contains the raw bytes of the attachment.
-
-   The success response is empty.
 
 5.3.  Response
 
@@ -996,7 +988,15 @@ Internet-Draft                    FOSP                        March 2015
    then the body of the notification must be empty.  Otherwise it should
    contain the new version of the object.
 
-   When and to who notifications are sent is explained in Section 7.3.
+   When and to who notifications are sent is explained in Section 8.3.
+
+5.5.  Status codes
+
+   The status codes reuse and extend the status codes used in HTTP.
+   They are wildly known and also used in similar fashion in other
+   protocols.  The status codes are also divided into the same classes,
+   with the same meaning.  Not all status codes of HTTP are used, but
+   all are reserved and MUST NOT be used for custom statuses.
 
 
 
@@ -1008,14 +1008,6 @@ Maurer                  Expires September 2, 2015              [Page 18]
 
 Internet-Draft                    FOSP                        March 2015
 
-
-5.5.  Status codes
-
-   The status codes reuse and extend the status codes used in HTTP.
-   They are wildly known and also used in similar fashion in other
-   protocols.  The status codes are also divided into the same classes,
-   with the same meaning.  Not all status codes of HTTP are used, but
-   all are reserved and MUST NOT be used for custom statuses.
 
 5.5.1.  Informal 1xx
 
@@ -1054,6 +1046,14 @@ Internet-Draft                    FOSP                        March 2015
       server SHOULD respond with this status code.  Conditional requests
       are not supported yet, but might be in the future.
 
+   310 Additional data needed  This status code can only be returned
+      while authenticating.  If the used SASL mechanism requires the
+      server to return a challenge before continuing authentication,
+      this response code MUST be returned.
+
+5.5.4.  Client error 4xx
+
+   The 4xx status codes indicate that the client made an error.
 
 
 
@@ -1064,10 +1064,6 @@ Maurer                  Expires September 2, 2015              [Page 19]
 
 Internet-Draft                    FOSP                        March 2015
 
-
-5.5.4.  Client error 4xx
-
-   The 4xx status codes indicate that the client made an error.
 
    400 Bad Request  The request could not be parsed by the server due to
       malformed syntax.
@@ -1111,7 +1107,11 @@ Internet-Draft                    FOSP                        March 2015
    501 Not Implemented  The server does not support the requested
       functionality.
 
-
+   502 Bad Gateway  The server tried to forward the request, but was
+      unsuccessful.  This might be because the authentication failed,
+      the remote server rejected the connection or other reasons.  If
+      the remote server can not be reached at all, 504 SHOULD be
+      returned instead.
 
 
 
@@ -1120,12 +1120,6 @@ Maurer                  Expires September 2, 2015              [Page 20]
 
 Internet-Draft                    FOSP                        March 2015
 
-
-   502 Bad Gateway  The server tried to forward the request, but was
-      unsuccessful.  This might be because the authentication failed,
-      the remote server rejected the connection or other reasons.  If
-      the remote server can not be reached at all, 504 SHOULD be
-      returned instead.
 
    503 Service Unavailable  The server can currently not process any
       requests but will likly be able to in the near future.
@@ -1144,6 +1138,12 @@ Internet-Draft                    FOSP                        March 2015
    request.  Similar, when a server sends a response to a forwarded
    request, an additional "To" header is added.  This also applies if a
    notification is to be sent to a user of a different provider.
+
+
+
+
+
+
 
 
 
@@ -1196,7 +1196,7 @@ Internet-Draft                    FOSP                        March 2015
 
    To send messages to a server over WebSockets, a connection has to be
    established first.  How the server address, port and URL path are
-   determined for a given domain is discussed in Section 8.  In the
+   determined for a given domain is discussed in Section 9.  In the
    WebSocket handshake, the Sec-WebSocket-Protocol MUST be set to
    "fosp".
 
@@ -1345,7 +1345,119 @@ Maurer                  Expires September 2, 2015              [Page 24]
 Internet-Draft                    FOSP                        March 2015
 
 
-7.  Policies
+7.  Authentication
+
+   Currently, authentication is done, using a SASL mechanism.  Which
+   mechanisms are supported can be discovered using the INFO request.
+   The PLAIN authentication mechanism SHOULD be supported by any
+   implementation.
+
+   As encryption of the transport protocol is mandatory in production
+   use of FOSP, the SASL security layer is not used.
+
+7.1.  Anonymous
+
+   A client may sent request without being authenticated.  All requests
+   are then assumed to be performed by an anonymous user.
+
+   However, once the client started authentication, it SHOULD NOT sent
+   any request except for those needed for the authentication.  All
+   requests that are sent before successfully completing the
+   authentication MUST still be performed as anonymous user.
+
+7.2.  SASL
+
+   The service name specified by this protocol's profile is "fosp".
+
+   To initiate authentication and to exchange SASL messages, the AUTH
+   request is used.  Depending on the mechanism, multiple requests might
+   be needed to successfully authenticate.  In this case the server MUST
+   respond with a not final response code in the range of 3xx.  The SASL
+   messages are transported as JSON objects in the bodies of the
+   requests and responses.  All SASL message objects consist of an
+   object with a "sasl" field.  This field contains an object with the
+   actual SASL message.
+
+   The authentication is initiated by the client with a AUTH request.
+   The SASL object in the body MUST contain a field called "mechanism"
+   that specifies the SASL mechanism to be used.  Furthermore, it MUST
+   contain a field called "authorization-identity" that contains the
+   fully qualified user name of the user that should be authenticated.
+   Optionally, the object CAN contain a field called "initial-response",
+   containing the initial response of the client, if the mechanism
+   specifies one.  The initial response MUST be BASE64 encoded.  An
+   empty initial response is indicated by an empty string, while no
+   initial response is indicated by the absence of the "initial-
+   response" field.
+
+   Depending on the mechanism and the previously exchanged messages, the
+   server can either respond with a challenge or an authentication
+   outcome.  If a challenge is returned by the server, it MUST be
+
+
+
+Maurer                  Expires September 2, 2015              [Page 25]
+
+Internet-Draft                    FOSP                        March 2015
+
+
+   returned with a status code 310.  The body of the response then
+   contains a SASL object with a "challenge" field that contains the
+   challenge in BASE64 encoding.  If an authentication outcome is
+   returned, it MUST be returned with a status code 200 on success or
+   with a status code 401 on failure.  The body of this response
+   contains a SASL object with a "outcome" field that contains the
+   outcome in BASE64 encoding.  Additional data can be provided, BASE64
+   encoded, in the "additional-data" field.  If there is additional data
+   but it is empty, then the field MUST be the empty string.  Otherwise,
+   if there is no additional data, the field MUST NOT be present.
+
+   If the server does return a challenge with a 310 status code, the
+   client will sent a new AUTH request.  The new request contains a SASL
+   object with the "response" field, containing the SASL response,
+   BASE64 encoded.
+
+   Once the authentication was completed successfully, all further
+   requests are processed in the name of the authenticated user.  A
+   second authentication SHOULD not be attempted on the same connection/
+   session and a server MAY reject all further AUTH requests.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                  Expires September 2, 2015              [Page 26]
+
+Internet-Draft                    FOSP                        March 2015
+
+
+8.  Policies
 
    Besides implementing the technical specification of the protocol, the
    server has to enforce a set of policies.  These policies describe how
@@ -1354,7 +1466,7 @@ Internet-Draft                    FOSP                        March 2015
    certain attributes of objects and constraints on whether or not a
    message should be forwarded.
 
-7.1.  Access control
+8.1.  Access control
 
    As stated in Section 3.2, each object can save access control
    information.  A valid entry in the access control list consists of
@@ -1396,7 +1508,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 25]
+Maurer                  Expires September 2, 2015              [Page 27]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1407,7 +1519,7 @@ Internet-Draft                    FOSP                        March 2015
    children  determines whether a user can list, add or remove child
       objects.
 
-7.2.  Groups
+8.2.  Groups
 
    To be able to set rights for a group of people, the user must first
    be able to define groups and store them at a well known place on the
@@ -1420,7 +1532,7 @@ Internet-Draft                    FOSP                        March 2015
    "users" attribute with an array value.  The array then contains the
    full names of all users in this group.
 
-7.3.  Subscriptions
+8.3.  Subscriptions
 
    Similar to the access control information, subscriptions can be set
    on objects so that a user will be notified when changes occur.  A
@@ -1452,12 +1564,12 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 26]
+Maurer                  Expires September 2, 2015              [Page 28]
 
 Internet-Draft                    FOSP                        March 2015
 
 
-7.4.  Attachments
+8.4.  Attachments
 
    As explained in Section 3.4, each object can have a file as
    attachment.  However, attachments will likely not be stored together
@@ -1470,7 +1582,7 @@ Internet-Draft                    FOSP                        March 2015
    be deleted and an attachment should only be readable if there is an
    attachment field in the object.
 
-7.5.  Authentication
+8.5.  Authentication
 
    Most of the operations a user performs in FOSP probably require some
    access rights.  To enforce these access rights, a user must be
@@ -1480,7 +1592,7 @@ Internet-Draft                    FOSP                        March 2015
    forward requests for the user.  Therefore, servers must also
    authenticate each other.
 
-7.5.1.  Users
+8.5.1.  Users
 
    When a client connects to a server it can use the BIND request to
    authenticate itself.  The most basic way to do this is just to
@@ -1488,17 +1600,17 @@ Internet-Draft                    FOSP                        March 2015
    server.  In the future, additional authenticaten methods will be
    added.
 
-7.5.2.  Servers
+8.5.2.  Servers
 
    When a server opens a connection to another server, the
    authentication can be done using DNS.  The connectiong server must
    provide a domain name it wants to be authenticated for.  The
    accepting server then does the server discovery process described in&
-   nbps;Section 8.1  and compares the resolved IP address to the address
+   nbps;Section 9.1  and compares the resolved IP address to the address
    of the connecting server.  If the IP addresses match, the
    authentication is successfull.
 
-7.6.  Registration
+8.6.  Registration
 
    The registration of a new user account is no longer part of the FOSP
    protocol.  In general, out-of-band registration is prefered.  It can
@@ -1508,14 +1620,14 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 27]
+Maurer                  Expires September 2, 2015              [Page 29]
 
 Internet-Draft                    FOSP                        March 2015
 
 
    CREATE request might be specified.
 
-7.7.  Message forwarding
+8.7.  Message forwarding
 
    In general, a server should accept forwarded messages from another
    server.  However it MUST authenticate the remote server first, before
@@ -1564,12 +1676,12 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 28]
+Maurer                  Expires September 2, 2015              [Page 30]
 
 Internet-Draft                    FOSP                        March 2015
 
 
-8.  Discovery
+9.  Discovery
 
    To be able to connect to a server, the client has to first determine
    the correct address of the server.  The server is determined using
@@ -1579,7 +1691,7 @@ Internet-Draft                    FOSP                        March 2015
    added as web application clients are unable to perform DNS lookups
    directly.
 
-8.1.  DNS
+9.1.  DNS
 
    The discovery via DNS uses SRV records.  Unfortunately, the current
    format of SRV records is limited as it only includes one transport
@@ -1591,7 +1703,7 @@ Internet-Draft                    FOSP                        March 2015
    hast to be performed.  Similar, to discover a HTTP based FOSP server,
    _fosp._https._tcp.wonderland.lit has to be resolved.
 
-8.2.  Well known
+9.2.  Well known
 
    When DNS lookups are not possible, the server address can also be
    discovered by retrieving a JSON object.  In accordance with [RFC5785]
@@ -1620,12 +1732,12 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 29]
+Maurer                  Expires September 2, 2015              [Page 31]
 
 Internet-Draft                    FOSP                        March 2015
 
 
-9.  References
+10.  References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -1676,7 +1788,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 30]
+Maurer                  Expires September 2, 2015              [Page 32]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1732,5 +1844,5 @@ Author's Address
 
 
 
-Maurer                  Expires September 2, 2015              [Page 31]
+Maurer                  Expires September 2, 2015              [Page 33]
 

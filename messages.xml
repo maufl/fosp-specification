@@ -42,9 +42,9 @@
     </section>
     <section anchor="msg-request-auth" title="Auth">
       <t>The AUTH request is used to authenticate the client.
-      The body MUST contain an object with the "method" attribute that specifies the used authentication method.
-      The possible methods of authentication are not final yet, however every server SHOULD support a simple authentication by name and password.
-      In this case the object also contains a "user" and "password" attribute containing the full user name and the password.
+      The authentication uses the SASL framework.
+      How SASL messages are transported is defined in <xref target="authentication" />.
+      Multiple requests might be needed to successfully authenticate, depending on the mechanism.
       </t>
       <t>
       The server verifies that the authentication is successfull and sents a success response or a failed response otherwise.
@@ -172,14 +172,17 @@
     <section anchor="msg-status-codes-300" title="Redirection 3xx">
       <t>The 3xx status codes indicate that the requested object can be found elsewhere.
       <list style="hanging">
-	<t hangText="301 Moved Permanently">The object was moved permanently and is now found at the location indicated in the "Location" header.
-	Moving objects is not yet supported but might be in the future.
-	Clients SHOULD be able to understand this status and in case of a GET, LIST or READ request MAY resent the request with the new location.
-	However, a client MUST never automatically resent the request if the request alters the object, e.g. is a CREATE, PATCH, DELETE or WRITE request.
-	</t>
-	<t hangText="304 Not Modified">If the request did contain a condition that checks for the modification date and the object did not change, the server SHOULD respond with this status code.
-	Conditional requests are not supported yet, but might be in the future.
-	</t>
+        <t hangText="301 Moved Permanently">The object was moved permanently and is now found at the location indicated in the "Location" header.
+        Moving objects is not yet supported but might be in the future.
+        Clients SHOULD be able to understand this status and in case of a GET, LIST or READ request MAY resent the request with the new location.
+        However, a client MUST never automatically resent the request if the request alters the object, e.g. is a CREATE, PATCH, DELETE or WRITE request.
+        </t>
+        <t hangText="304 Not Modified">If the request did contain a condition that checks for the modification date and the object did not change, the server SHOULD respond with this status code.
+        Conditional requests are not supported yet, but might be in the future.
+        </t>
+        <t hangText="310 Additional data needed" anchor="status-code-310">This status code can only be returned while authenticating.
+        If the used SASL mechanism requires the server to return a challenge before continuing authentication, this response code MUST be returned.
+        </t>
       </list>
       </t>
     </section>
