@@ -67,7 +67,14 @@ Here we collect all topics that have to be discussed and then order them.
   * Message forwarding
 * Discovery
 
-# Open questions
-* Auhtentication methods and registration possibilities.
+# Open questions and tasks
+* Authentication methods and registration possibilities.
+* Groups
+  * How are they stored
+  * How are they addressed
+* null and undefined are the same
+* Is DELETE recursive?
+* Finalize ABNF
+* Describe owner and groups in ACL policies
 * Name connection negotiation: Discover/Connect/Info
-* Layout for group configuration must be defined
+* Add examples
