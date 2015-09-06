@@ -20,6 +20,6 @@
     If the resource is not managed by the server the user is connected to, the server will relay the request to the responsible server.
     Hence, FOSP servers may open connections to other FOSP servers.
     </t>
-    <?rfc include="fig-network-topology.xml"?>
+    <?rfc include="figures/network-topology.xml"?>
   </section>
 </section>

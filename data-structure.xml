@@ -11,7 +11,7 @@
     When transferring objects in messages, the object is serialized according to the JSON specification.
     In the rest of the document we will refer to a key-value pair of an object either as an attribute or a field of an object.
     </t>
-    <?rfc include="fig-object.xml"?>
+    <?rfc include="figures/object.xml"?>
     <t>Each object is part of a tree of objects that belong to a user.
     Therefore, each object can be addressed by an internationalized resource identifier (IRI <xref target="RFC3987" />).
     The syntax for an object borrows from the IRI definition and is as follows.
@@ -98,7 +98,7 @@ resource-id   = 1*iunreserved "@" ihost ipath-absolute
     Consequently, all objects can have child objects.
     For each user there exists one tree of objects and the root node of this tree is named like the identifier of the user.
     The tree of the user is stored on the servers that are responsible for the domain of the provider where the user is registered.
-    <?rfc include="fig-tree.xml" ?>
+    <?rfc include="figures/tree.xml" ?>
     </t>
   </section>
   <section anchor="data-structure-attachments" title="Attachments">

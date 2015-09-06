@@ -19,7 +19,7 @@
       <t>The FOSP messages is formatted similar to a HTTP request/response.
       The ABNF definition reuses existing definitions from the IRI definition, in particular "iunreserved", "ihost" and "ipath-absolute".
       </t>
-      <?rfc include="fig-message-abnf.xml"?>
+      <?rfc include="figures/message-abnf.xml"?>
       <t>The definitions might be relaxed in the future.
       </t>
     </section>
