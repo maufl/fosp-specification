@@ -222,8 +222,8 @@ Messages<br />
 Types<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request">5.2.</a>&nbsp;
 Request<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-info">5.2.1.</a>&nbsp;
-Info<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-options">5.2.1.</a>&nbsp;
+Options<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-auth">5.2.2.</a>&nbsp;
 Auth<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#msg-request-get">5.2.3.</a>&nbsp;
@@ -875,13 +875,23 @@ Request</h3>
 </p>
 <p>The request types are described in the following sections.
 </p>
-<a name="msg-request-info"></a><br /><hr />
+<a name="msg-request-options"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5.2.1"></a><h3>5.2.1.&nbsp;
-Info</h3>
+Options</h3>
 
-<p>There will likely be a request called INFO or OPTIONS to discover the capabilities of the server.
-      However, as of now, it is not yet clear what is needed and therefore the definition is postponed.
+<p>The OPTIONS request is used to discover the capabilities of the server.
+      Currently, the only use is to detect supported SASL mechanisms.
+      When detecting capabilities of the whole server, the request URL is replaced by "*".
+      
+</p>
+<p>The server MUST return a 200 response and a body that contains information about it's capabilities.
+      The returned object MUST contain a field named "sasl" which in turn contains an object with a field named "mechanisms".
+      This field contains an array of all supported SASL mechanisms.
+      
+</p>
+<p>In the future, the OPTIONS request might be used to discover allowed operations on resources.
+      
 </p>
 <a name="msg-request-auth"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -967,6 +977,10 @@ Delete</h3>
 
 <p>The DELETE request is used to remove an object from a tree.
       The resource identifier specifies the object that should be removed.
+      
+</p>
+<p>If the object that should be deleted has children, the DELETE request MUST fail and a 409 response MUST be returned.
+      In the future, a header might be supported to enable recursive deleting of objects.
       
 </p>
 <p>If successfull, a succeeded message is returned and the object is permanently removed.
@@ -1359,7 +1373,7 @@ Session management</h3>
 Authentication and Registration</h3>
 
 <p>Currently, authentication is done, using a SASL mechanism.
-  Which mechanisms are supported can be discovered using the INFO request.
+  Which mechanisms are supported can be discovered using the OPTIONS request.
   The PLAIN authentication mechanism SHOULD be supported by any implementation.
   
 </p>
@@ -1463,8 +1477,17 @@ Access control</h3>
 
 <p>As stated in <a class='info' href='#data-structure-fields'>Section&nbsp;3.2<span> (</span><span class='info'>Object attributes</span><span>)</span></a>, each object can save access control information.
     A valid entry in the access control list consists of the identifier of a user or a group of users and a list of rights.
-    Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “write” right in the "acl" key.
-    Because the objects are part of a tree, we can use inheritance to set access rights for a whole subtree by setting the appropriate access control information on the root of the subtree.
+    The access control list contains the field "owner" which defines the rights of the object owner.
+    It also contains the field "users" that in turn contains an object.
+    In this object, each key is a fully qualified user name and the value are the rights of the user.
+    Furthermore, it contains a "groups" field that contains an object.
+    This object contains keys which correspond to a group as described in <a class='info' href='#pol-groups'>Section&nbsp;8.2<span> (</span><span class='info'>Groups</span><span>)</span></a> and contain the rights of this group.
+    At least, the access control list contains a "others" field.
+    This field contains rights for all users, even anonymous users.
+    
+</p>
+<p>Manipulation of different parts of the object can require different rights, for example, altering access control information requires the “write” right in the "acl" key.
+    Because the objects are part of a tree, we can use inheritance to set access rights for a whole subtree by setting the appropriate access control information on the root of the sub-tree.
     This way the rights on an object are the sum of the rights on this object and all it’s ancestors.
     To still be able to have less rights on a child object, rights can be prefix with “not-” to explicitly remove a right, for example “not-write”.
     The server must enforce access control for an object in the following way.
@@ -1481,7 +1504,12 @@ Access control</h3>
 <li>If the current object is already the root object, deny access
 </li>
 </ol><p>
-    The supported keys are the following:
+    For a given user, in each step, the server has to check whether the right exists either in the corresponding "users" field, a "groups" field of a group to which the user belongs or in the "others" field of the access control list.
+    Furthermore, if the user is the owner of the object which should be accessed, the "owner" field of the object and its ancestors is checked too.
+    
+</p>
+<p>
+    The following keys are supported:
     </p>
 <blockquote class="text"><dl>
 <dt>data</dt>

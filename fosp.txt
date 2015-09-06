@@ -82,22 +82,22 @@ Table of Contents
    5.  Messages . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
      5.1.  Types  . . . . . . . . . . . . . . . . . . . . . . . . . . 15
      5.2.  Request  . . . . . . . . . . . . . . . . . . . . . . . . . 15
-       5.2.1.  Info . . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.1.  Options  . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.2.  Auth . . . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.3.  Get  . . . . . . . . . . . . . . . . . . . . . . . . . 16
        5.2.4.  List . . . . . . . . . . . . . . . . . . . . . . . . . 16
-       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 16
+       5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.6.  Patch  . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.7.  Delete . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.8.  Read . . . . . . . . . . . . . . . . . . . . . . . . . 17
-       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 17
+       5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 18
-     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 18
+     5.5.  Status codes . . . . . . . . . . . . . . . . . . . . . . . 19
        5.5.1.  Informal 1xx . . . . . . . . . . . . . . . . . . . . . 19
        5.5.2.  Successful 2xx . . . . . . . . . . . . . . . . . . . . 19
        5.5.3.  Redirection 3xx  . . . . . . . . . . . . . . . . . . . 19
-       5.5.4.  Client error 4xx . . . . . . . . . . . . . . . . . . . 19
+       5.5.4.  Client error 4xx . . . . . . . . . . . . . . . . . . . 20
        5.5.5.  Server Error 5xx . . . . . . . . . . . . . . . . . . . 20
      5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 21
    6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
@@ -127,7 +127,7 @@ Internet-Draft                    FOSP                    September 2015
      8.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 28
      8.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 29
      8.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 29
-     8.6.  Message forwarding . . . . . . . . . . . . . . . . . . . . 29
+     8.6.  Message forwarding . . . . . . . . . . . . . . . . . . . . 30
    9.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 31
      9.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
      9.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 31
@@ -843,11 +843,21 @@ Internet-Draft                    FOSP                    September 2015
 
    The request types are described in the following sections.
 
-5.2.1.  Info
+5.2.1.  Options
 
-   There will likely be a request called INFO or OPTIONS to discover the
-   capabilities of the server.  However, as of now, it is not yet clear
-   what is needed and therefore the definition is postponed.
+   The OPTIONS request is used to discover the capabilities of the
+   server.  Currently, the only use is to detect supported SASL
+   mechanisms.  When detecting capabilities of the whole server, the
+   request URL is replaced by "*".
+
+   The server MUST return a 200 response and a body that contains
+   information about it's capabilities.  The returned object MUST
+   contain a field named "sasl" which in turn contains an object with a
+   field named "mechanisms".  This field contains an array of all
+   supported SASL mechanisms.
+
+   In the future, the OPTIONS request might be used to discover allowed
+   operations on resources.
 
 5.2.2.  Auth
 
@@ -880,6 +890,13 @@ Internet-Draft                    FOSP                    September 2015
    object.  The resource identifier specifies the object of which the
    children should be returned.
 
+
+
+Maurer                    Expires March 9, 2016                [Page 16]
+
+Internet-Draft                    FOSP                    September 2015
+
+
    If successfull, the response contains an array of names of the child
    objects.
 
@@ -888,14 +905,6 @@ Internet-Draft                    FOSP                    September 2015
    The CREATE request is used to store new objects on the server.  The
    resource identifier is the desired location for the new object.  The
    body containes the object to store.
-
-
-
-
-Maurer                    Expires March 9, 2016                [Page 16]
-
-Internet-Draft                    FOSP                    September 2015
-
 
    On success, an empty success response is returned and the object is
    stored at the given location.
@@ -925,6 +934,10 @@ Internet-Draft                    FOSP                    September 2015
    The DELETE request is used to remove an object from a tree.  The
    resource identifier specifies the object that should be removed.
 
+   If the object that should be deleted has children, the DELETE request
+   MUST fail and a 409 response MUST be returned.  In the future, a
+   header might be supported to enable recursive deleting of objects.
+
    If successfull, a succeeded message is returned and the object is
    permanently removed.
 
@@ -932,6 +945,14 @@ Internet-Draft                    FOSP                    September 2015
 
    The READ request is used to read the attachment.  The resource
    identifier specifies the object of which the attachment should be
+
+
+
+Maurer                    Expires March 9, 2016                [Page 17]
+
+Internet-Draft                    FOSP                    September 2015
+
+
    read.
 
    The success response body contains the raw bytes of the attachment.
@@ -943,15 +964,6 @@ Internet-Draft                    FOSP                    September 2015
    written.  The body contains the raw bytes of the attachment.
 
    The success response is empty.
-
-
-
-
-
-Maurer                    Expires March 9, 2016                [Page 17]
-
-Internet-Draft                    FOSP                    September 2015
-
 
 5.3.  Response
 
@@ -990,6 +1002,13 @@ Internet-Draft                    FOSP                    September 2015
 
    When and to who notifications are sent is explained in Section 8.3.
 
+
+
+Maurer                    Expires March 9, 2016                [Page 18]
+
+Internet-Draft                    FOSP                    September 2015
+
+
 5.5.  Status codes
 
    The status codes reuse and extend the status codes used in HTTP.
@@ -997,17 +1016,6 @@ Internet-Draft                    FOSP                    September 2015
    protocols.  The status codes are also divided into the same classes,
    with the same meaning.  Not all status codes of HTTP are used, but
    all are reserved and MUST NOT be used for custom statuses.
-
-
-
-
-
-
-
-Maurer                    Expires March 9, 2016                [Page 18]
-
-Internet-Draft                    FOSP                    September 2015
-
 
 5.5.1.  Informal 1xx
 
@@ -1046,14 +1054,6 @@ Internet-Draft                    FOSP                    September 2015
       server SHOULD respond with this status code.  Conditional requests
       are not supported yet, but might be in the future.
 
-   310 Additional data needed  This status code can only be returned
-      while authenticating.  If the used SASL mechanism requires the
-      server to return a challenge before continuing authentication,
-      this response code MUST be returned.
-
-5.5.4.  Client error 4xx
-
-   The 4xx status codes indicate that the client made an error.
 
 
 
@@ -1064,6 +1064,15 @@ Maurer                    Expires March 9, 2016                [Page 19]
 
 Internet-Draft                    FOSP                    September 2015
 
+
+   310 Additional data needed  This status code can only be returned
+      while authenticating.  If the used SASL mechanism requires the
+      server to return a challenge before continuing authentication,
+      this response code MUST be returned.
+
+5.5.4.  Client error 4xx
+
+   The 4xx status codes indicate that the client made an error.
 
    400 Bad Request  The request could not be parsed by the server due to
       malformed syntax.
@@ -1101,6 +1110,17 @@ Internet-Draft                    FOSP                    September 2015
 
    The 5xx status codes indicate an error in the server.
 
+
+
+
+
+
+
+Maurer                    Expires March 9, 2016                [Page 20]
+
+Internet-Draft                    FOSP                    September 2015
+
+
    500 Internal Server Error  The server could not process the request
       due to an internal error.
 
@@ -1112,14 +1132,6 @@ Internet-Draft                    FOSP                    September 2015
       the remote server rejected the connection or other reasons.  If
       the remote server can not be reached at all, 504 SHOULD be
       returned instead.
-
-
-
-
-Maurer                    Expires March 9, 2016                [Page 20]
-
-Internet-Draft                    FOSP                    September 2015
-
 
    503 Service Unavailable  The server can currently not process any
       requests but will likly be able to in the near future.
@@ -1138,18 +1150,6 @@ Internet-Draft                    FOSP                    September 2015
    request.  Similar, when a server sends a response to a forwarded
    request, an additional "To" header is added.  This also applies if a
    notification is to be sent to a user of a different provider.
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1348,7 +1348,7 @@ Internet-Draft                    FOSP                    September 2015
 7.  Authentication and Registration
 
    Currently, authentication is done, using a SASL mechanism.  Which
-   mechanisms are supported can be discovered using the INFO request.
+   mechanisms are supported can be discovered using the OPTIONS request.
    The PLAIN authentication mechanism SHOULD be supported by any
    implementation.
 
@@ -1471,12 +1471,22 @@ Internet-Draft                    FOSP                    September 2015
    As stated in Section 3.2, each object can save access control
    information.  A valid entry in the access control list consists of
    the identifier of a user or a group of users and a list of rights.
+   The access control list contains the field "owner" which defines the
+   rights of the object owner.  It also contains the field "users" that
+   in turn contains an object.  In this object, each key is a fully
+   qualified user name and the value are the rights of the user.
+   Furthermore, it contains a "groups" field that contains an object.
+   This object contains keys which correspond to a group as described in
+   Section 8.2 and contain the rights of this group.  At least, the
+   access control list contains a "others" field.  This field contains
+   rights for all users, even anonymous users.
+
    Manipulation of different parts of the object can require different
    rights, for example, altering access control information requires the
    "write" right in the "acl" key.  Because the objects are part of a
    tree, we can use inheritance to set access rights for a whole subtree
    by setting the appropriate access control information on the root of
-   the subtree.  This way the rights on an object are the sum of the
+   the sub-tree.  This way the rights on an object are the sum of the
    rights on this object and all it's ancestors.  To still be able to
    have less rights on a child object, rights can be prefix with "not-"
    to explicitly remove a right, for example "not-write".  The server
@@ -1493,7 +1503,22 @@ Internet-Draft                    FOSP                    September 2015
 
    5.  If the current object is already the root object, deny access
 
-   The supported keys are the following:
+   For a given user, in each step, the server has to check whether the
+   right exists either in the corresponding "users" field, a "groups"
+
+
+
+Maurer                    Expires March 9, 2016                [Page 27]
+
+Internet-Draft                    FOSP                    September 2015
+
+
+   field of a group to which the user belongs or in the "others" field
+   of the access control list.  Furthermore, if the user is the owner of
+   the object which should be accessed, the "owner" field of the object
+   and its ancestors is checked too.
+
+   The following keys are supported:
 
    data  determines whether a user can read the "data", "type", "btime",
       "mtime" and "owner" fields and whether he or she can write the
@@ -1504,14 +1529,6 @@ Internet-Draft                    FOSP                    September 2015
    subscriptions  determines whether a user can read the subscriptions
       field and whether he or she can add an entry with his or her
       username.
-
-
-
-
-Maurer                    Expires March 9, 2016                [Page 27]
-
-Internet-Draft                    FOSP                    September 2015
-
 
    attachment  determines whether a user can read or write the
       attachment and the "attachment" field.
@@ -1544,6 +1561,14 @@ Internet-Draft                    FOSP                    September 2015
    Similar to the access control information, subscriptions can be set
    on objects so that a user will be notified when changes occur.  A
    subscription consists of an identifier of a user, a list of events to
+
+
+
+Maurer                    Expires March 9, 2016                [Page 28]
+
+Internet-Draft                    FOSP                    September 2015
+
+
    subscribe to and a "depth".  The depth is used to subscribe to events
    from all child objects to a certain depth.  When a change happens on
    an object, the server must use the following algorithm to determine
@@ -1561,13 +1586,6 @@ Internet-Draft                    FOSP                    September 2015
 
    3.  Go to the parent of the current object and repeat from step 1.
        unless the current object is the root object.
-
-
-
-Maurer                    Expires March 9, 2016                [Page 28]
-
-Internet-Draft                    FOSP                    September 2015
-
 
    An important aspect to consider when sending notifications that
    include the new version of the object, is that every user who will be
@@ -1600,6 +1618,13 @@ Internet-Draft                    FOSP                    September 2015
 
    The authentication methods are described in Section 7.
 
+
+
+Maurer                    Expires March 9, 2016                [Page 29]
+
+Internet-Draft                    FOSP                    September 2015
+
+
 8.6.  Message forwarding
 
    In general, a server should accept forwarded messages from another
@@ -1617,32 +1642,7 @@ Internet-Draft                    FOSP                    September 2015
    domain "example.net", authenticates to server B and then forwards a
    request of user "alice@wonderland.lit", server B MUST close the
    connection.  The user from which the request originates MUST be
-
-
-
-Maurer                    Expires March 9, 2016                [Page 29]
-
-Internet-Draft                    FOSP                    September 2015
-
-
    specified in the "From" header of the request.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

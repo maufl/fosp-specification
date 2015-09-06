@@ -70,14 +70,7 @@ Here we collect all topics that have to be discussed and then order them.
 * Discovery
 * Security Considerations
 
-# Open questions and tasks
-* Groups
-  * How are they stored
-  * How are they addressed
-* null and undefined are the same
-* Is DELETE recursive?
+ Open questions and tasks
 * Finalize ABNF
-* Describe owner and groups in ACL policies
-* Name connection negotiation: Discover/Connect/Info
 * Add examples
 * JSON schemas

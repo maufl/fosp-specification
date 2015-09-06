@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="authentication-registration" title="Authentication and Registration">
   <t>Currently, authentication is done, using a SASL mechanism.
-  Which mechanisms are supported can be discovered using the INFO request.
+  Which mechanisms are supported can be discovered using the OPTIONS request.
   The PLAIN authentication mechanism SHOULD be supported by any implementation.
   </t>
   <t>As encryption of the transport protocol is mandatory in production use of FOSP, the SASL security layer is not used.

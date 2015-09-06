@@ -36,9 +36,17 @@
     Depending on the request, it may contain information in its body, like the object that was requested, or an attachment that was read.
     </t>
     <t>The request types are described in the following sections.</t>
-    <section anchor="msg-request-info" title="Info">
-      <t>There will likely be a request called INFO or OPTIONS to discover the capabilities of the server.
-      However, as of now, it is not yet clear what is needed and therefore the definition is postponed.</t>
+    <section anchor="msg-request-options" title="Options">
+      <t>The OPTIONS request is used to discover the capabilities of the server.
+      Currently, the only use is to detect supported SASL mechanisms.
+      When detecting capabilities of the whole server, the request URL is replaced by "*".
+      </t>
+      <t>The server MUST return a 200 response and a body that contains information about it's capabilities.
+      The returned object MUST contain a field named "sasl" which in turn contains an object with a field named "mechanisms".
+      This field contains an array of all supported SASL mechanisms.
+      </t>
+      <t>In the future, the OPTIONS request might be used to discover allowed operations on resources.
+      </t>
     </section>
     <section anchor="msg-request-auth" title="Auth">
       <t>The AUTH request is used to authenticate the client.
@@ -94,6 +102,9 @@
     <section anchor="msg-request-delete" title="Delete">
       <t>The DELETE request is used to remove an object from a tree.
       The resource identifier specifies the object that should be removed.
+      </t>
+      <t>If the object that should be deleted has children, the DELETE request MUST fail and a 409 response MUST be returned.
+      In the future, a header might be supported to enable recursive deleting of objects.
       </t>
       <t>If successfull, a succeeded message is returned and the object is permanently removed.
       </t>
