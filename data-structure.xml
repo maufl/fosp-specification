@@ -12,6 +12,15 @@
     In the rest of the document we will refer to a key-value pair of an object either as an attribute or a field of an object.
     </t>
     <?rfc include="fig-object.xml"?>
+    <t>Each object is part of a tree of objects that belong to a user.
+    Therefore, each object can be addressed by an internationalized resource identifier (IRI).
+    The syntax for an object is as follows.
+    <artwork type="abnf">
+      <![CDATA[
+resource-id   = 1*iunreserved "@" ihost ipath-absolute
+      ]]>
+    </artwork>
+    </t>
   </section>
   <section anchor="data-structure-fields" title="Object attributes">
     <t>Most attributes of an object have a well defined meaning.

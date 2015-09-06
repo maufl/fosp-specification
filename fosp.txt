@@ -72,7 +72,7 @@ Table of Contents
      2.5.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . .  7
    3.  Data structure . . . . . . . . . . . . . . . . . . . . . . . .  8
      3.1.  Objects  . . . . . . . . . . . . . . . . . . . . . . . . .  8
-     3.2.  Object attributes  . . . . . . . . . . . . . . . . . . . .  9
+     3.2.  Object attributes  . . . . . . . . . . . . . . . . . . . . 10
      3.3.  Trees  . . . . . . . . . . . . . . . . . . . . . . . . . . 11
      3.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 12
      3.5.  Provisioned Objects  . . . . . . . . . . . . . . . . . . . 12
@@ -488,14 +488,14 @@ Internet-Draft                    FOSP                    September 2015
 
                                  Figure 1
 
-3.2.  Object attributes
+   Each object is part of a tree of objects that belong to a user.
+   Therefore, each object can be addressed by an internationalized
+   resource identifier (IRI).  The syntax for an object is as follows.
 
-   Most attributes of an object have a well defined meaning.  The
-   servers have to ensure that the content of these attributes adheres
-   to the specification and that users do not make changes that are not
-   allowed.  Figure 1 shows an example of an objects with all the fields
-   described here.  Currently we define the following attributes and
-   their values:
+
+   resource-id   = 1*iunreserved "@" ihost ipath-absolute
+
+
 
 
 
@@ -504,6 +504,15 @@ Maurer                    Expires March 9, 2016                 [Page 9]
 
 Internet-Draft                    FOSP                    September 2015
 
+
+3.2.  Object attributes
+
+   Most attributes of an object have a well defined meaning.  The
+   servers have to ensure that the content of these attributes adheres
+   to the specification and that users do not make changes that are not
+   allowed.  Figure 1 shows an example of an objects with all the fields
+   described here.  Currently we define the following attributes and
+   their values:
 
       The "owner" field is set by the server on creation of the object
       and contains the identifier of the user who created the object as
@@ -544,6 +553,14 @@ Internet-Draft                    FOSP                    September 2015
       A set of rights is an object where each key identifies a certain
       scope the right applies to, and the value is a string array of
       permissions.  For example, the key "acl" means that the
+
+
+
+Maurer                    Expires March 9, 2016                [Page 10]
+
+Internet-Draft                    FOSP                    September 2015
+
+
       permissions apply to the acl field of the object.  Currently
       allowed values for the key are "acl", "data", "subscriptions",
       "children".  The permissions can be "read", "write" and "delete".
@@ -553,14 +570,6 @@ Internet-Draft                    FOSP                    September 2015
 
       The value of the "users" and "groups" field is an object.  In
       these objects, each key identifies a user or a group and the
-
-
-
-Maurer                    Expires March 9, 2016                [Page 10]
-
-Internet-Draft                    FOSP                    September 2015
-
-
       related value is a set of rights.
 
    The "subscriptions" field stores information about subscriptions.  It
@@ -599,15 +608,6 @@ Internet-Draft                    FOSP                    September 2015
    named like the identifier of the user.  The tree of the user is
    stored on the servers that are responsible for the domain of the
    provider where the user is registered.
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1250,7 +1250,7 @@ Internet-Draft                    FOSP                    September 2015
 
    event-type    = "CREATED" / "UPDATED" / "DELETED"
 
-   resource-id   = iunreserved "@" ihost ipath-absolute
+   resource-id   = 1*iunreserved "@" ihost ipath-absolute
 
    headers       = *( header CRLF )
 

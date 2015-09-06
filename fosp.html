@@ -590,6 +590,18 @@ Objects</h3>
 <p>
 </p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;1&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
+<p>Each object is part of a tree of objects that belong to a user.
+    Therefore, each object can be addressed by an internationalized resource identifier (IRI).
+    The syntax for an object is as follows.
+    </p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+
+<dfn>resource-id</dfn>   = <span class='rep'>1*</span><cite class='id'>iunreserved</cite> "<span class='str'>@</span>" <cite class='id'>ihost</cite> <cite class='id'>ipath-absolute</cite>
+
+</pre></div><p>
+
+    
+</p>
 <a name="data-structure-fields"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
@@ -1286,7 +1298,7 @@ Format</h3>
 
 <dfn>event-type</dfn>    = "<span class='str'>CREATED</span>" / "<span class='str'>UPDATED</span>" / "<span class='str'>DELETED</span>"
 
-<dfn>resource-id</dfn>   = <cite class='id'>iunreserved</cite> "<span class='str'>@</span>" <cite class='id'>ihost</cite> <cite class='id'>ipath-absolute</cite>
+<dfn>resource-id</dfn>   = <span class='rep'>1*</span><cite class='id'>iunreserved</cite> "<span class='str'>@</span>" <cite class='id'>ihost</cite> <cite class='id'>ipath-absolute</cite>
 
 <dfn>headers</dfn>       = <span class='rep'>*</span>( <cite class='id'>header</cite> <cite class='key'>CRLF</cite> )
 
