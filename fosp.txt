@@ -104,7 +104,7 @@ Table of Contents
      6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 22
        6.1.1.  Connection Initiation  . . . . . . . . . . . . . . . . 22
        6.1.2.  Format . . . . . . . . . . . . . . . . . . . . . . . . 22
-       6.1.3.  Serialization  . . . . . . . . . . . . . . . . . . . . 24
+       6.1.3.  Serialization  . . . . . . . . . . . . . . . . . . . . 23
 
 
 
@@ -1079,7 +1079,7 @@ Internet-Draft                    FOSP                    September 2015
 
    401 Unauthorized  The client tried to send a request that needs
       authentication but is not yet authenticated.  The client must make
-      a successful BIND request bevor retrying this request.
+      a successful AUTH request bevor retrying this request.
 
    403 Forbidden  The client does not have the necessary permissions.
       If the server MUST only return this status if the client is
@@ -1203,14 +1203,14 @@ Internet-Draft                    FOSP                    September 2015
 6.1.2.  Format
 
    The FOSP messages is formatted similar to a HTTP request/response.
+   The ABNF definition reuses existing definitions from the IRI
+   definition, in particular "iunreserved", "ihost" and "ipath-
+   absolute".
 
-   WARNING: To simplify the definition for the moment, only ASCII
-   characters are used.  This WILL change as the protocol itself
-   mandates the use of Unicode and the UTF-8 encoding and international
-   user and resource names MUST be supported.  Also the header
-   definition will be subject to change after determining acceptable
-   characters.  For the resource identifier, we will probably refer to
-   the IRI definition in the future.
+
+
+
+
 
 
 
@@ -1238,7 +1238,7 @@ Internet-Draft                    FOSP                    September 2015
    request       = request-type SP ( resource-id / "*" )
                    SP sequence-number CRLF headers [ CRLF body ]
 
-   request-type  = "INFO" / "BIND" / "CREATE" / "GET" / "LIST"
+   request-type  = "OPTIONS" / "AUTH" / "CREATE" / "GET" / "LIST"
                    / "PATCH" / "DELETE" / "READ" / "WRITE"
 
    response      = response-type SP response-status
@@ -1250,51 +1250,30 @@ Internet-Draft                    FOSP                    September 2015
 
    event-type    = "CREATED" / "UPDATED" / "DELETED"
 
+   resource-id   = iunreserved "@" ihost ipath-absolute
+
    headers       = *( header CRLF )
 
-   header        = header-key ":" SP header-value
+   header        = header-key ":" header-value
 
-   header-key    = ALPHA *( ALPHANUM / "-" ) ( ALPHANUM )
+   header-key    = ALPHA *( ALPHANUM / "-" ) ALPHANUM
 
-   header-value  = 1*( ALPHANUM / "/" / "-" / "<" / ">" / "="
-                   / "+" / "_" / ";" / "!" / "~" / "*" / "." )
-
-   resource-id   = user-name "@" domain [ path ]
-
-   user-name     = ALPHA *( ALPHANUM / "_" / "-" / "+" / "." )
-                   ( ALPHANUM )
-
-   domain        = domain-part *( "." domain-part ) [ "." ]
-
-   domain-part   = ALPHANUM / ( ALPHANUM *( ALPHANUM / "-" / "_" )
-                     ALPHANUM )
-
-   path          = "/" / 1*( "/" path-part )
-
-   path-part     = 1*( ALPHANUM / "\" / "." / "+" / "*" / "-" / "_"
-                   / ";" / ":" / "!" / "~" / "=" / "<" / ">" )
+   header-value  = 1*VCHAR
 
    ALPHANUM      = ALPHA / DIGIT
 
+   body          = *OCTET
+
                                  Figure 4
 
-
-
-
-
-
-
-Maurer                    Expires March 9, 2016                [Page 23]
-
-Internet-Draft                    FOSP                    September 2015
-
+   The definitions might be relaxed in the future.
 
 6.1.3.  Serialization
 
    Messages are serialized into a blob of bytes and sent inside a single
-   WebSocket message.  Most of the message is text in UTF-8 encoding,
-   only the body is either a valid JSON object, UTF-8 encoded, or raw
-   bytes.  The second case occurs when an attachment is up- or
+   WebSocket message.  Most of the message is text and MUST be UTF-8
+   encoded, only the body is either a valid JSON object, UTF-8 encoded,
+   or raw bytes.  The second case occurs when an attachment is up- or
    downloaded.  The beginning and end, e.g. the length of a message must
    be determined from lenght of the WebSocket message.
 
@@ -1302,6 +1281,13 @@ Internet-Draft                    FOSP                    September 2015
    e.g. a WRITE request, a binary WebSocket message MUST be used.
    Otherwise, when the whole message is valid UTF-8 encoded text, a text
    WebSocket message CAN be used.
+
+
+
+Maurer                    Expires March 9, 2016                [Page 23]
+
+Internet-Draft                    FOSP                    September 2015
+
 
 6.2.  HTTPS binding
 
@@ -1311,6 +1297,9 @@ Internet-Draft                    FOSP                    September 2015
    not be sent over HTTPS (at least over HTTP/1.1).  A client SHOULD NOT
    issue FOSP requests over plain HTTP.  A server SHOULD NOT allow HTTP
    based requests other then for testing and debugging purposes.
+
+   This binding is not finalized and SHOULD NOT be implemented except
+   for the further development of this binding.
 
 6.2.1.  Mapping
 
@@ -1322,9 +1311,20 @@ Internet-Draft                    FOSP                    September 2015
 6.2.2.  Session management
 
    To support authenticated requests, a FOSP server that supports the
-   HTTP binding MUST return a cookie in a success response to a BIND
+   HTTP binding MUST return a cookie in a success response to a AUTH
    request.  With this cookie, the client MUST be able to make
    authenticated requests.
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1146,7 +1146,7 @@ Client error 4xx</h3>
 </dd>
 <dt>401 Unauthorized</dt>
 <dd>The client tried to send a request that needs authentication but is not yet authenticated.
-	The client must make a successful BIND request bevor retrying this request.
+	The client must make a successful AUTH request bevor retrying this request.
 	
 </dd>
 <dt>403 Forbidden</dt>
@@ -1262,12 +1262,7 @@ Connection Initiation</h3>
 Format</h3>
 
 <p>The FOSP messages is formatted similar to a HTTP request/response.
-      
-</p>
-<p>WARNING: To simplify the definition for the moment, only ASCII characters are used.
-      This WILL change as the protocol itself mandates the use of Unicode and the UTF-8 encoding and international user and resource names MUST be supported.
-      Also the header definition will be subject to change after determining acceptable characters.
-      For the resource identifier, we will probably refer to the IRI definition in the future.
+      The ABNF definition reuses existing definitions from the IRI definition, in particular "iunreserved", "ihost" and "ipath-absolute".
       
 </p><br /><hr class="insert" />
 <a name="fosp-abnf"></a>
@@ -1279,7 +1274,7 @@ Format</h3>
 <dfn>request</dfn>       = <cite class='id'>request-type</cite> <cite class='key'>SP</cite> ( <cite class='id'>resource-id</cite> / "<span class='str'>*</span>" )
                 <cite class='key'>SP</cite> <cite class='id'>sequence-number</cite> <cite class='key'>CRLF</cite> <cite class='id'>headers</cite> [ <cite class='key'>CRLF</cite> <cite class='id'>body</cite> ]
 
-<dfn>request-type</dfn>  = "<span class='str'>INFO</span>" / "<span class='str'>BIND</span>" / "<span class='str'>CREATE</span>" / "<span class='str'>GET</span>" / "<span class='str'>LIST</span>"
+<dfn>request-type</dfn>  = "<span class='str'>OPTIONS</span>" / "<span class='str'>AUTH</span>" / "<span class='str'>CREATE</span>" / "<span class='str'>GET</span>" / "<span class='str'>LIST</span>"
                 / "<span class='str'>PATCH</span>" / "<span class='str'>DELETE</span>" / "<span class='str'>READ</span>" / "<span class='str'>WRITE</span>"
 
 <dfn>response</dfn>      = <cite class='id'>response-type</cite> <cite class='key'>SP</cite> <cite class='id'>response-status</cite>
@@ -1291,42 +1286,33 @@ Format</h3>
 
 <dfn>event-type</dfn>    = "<span class='str'>CREATED</span>" / "<span class='str'>UPDATED</span>" / "<span class='str'>DELETED</span>"
 
+<dfn>resource-id</dfn>   = <cite class='id'>iunreserved</cite> "<span class='str'>@</span>" <cite class='id'>ihost</cite> <cite class='id'>ipath-absolute</cite>
+
 <dfn>headers</dfn>       = <span class='rep'>*</span>( <cite class='id'>header</cite> <cite class='key'>CRLF</cite> )
 
-<dfn>header</dfn>        = <cite class='id'>header-key</cite> "<span class='str'>:</span>" <cite class='key'>SP</cite> <cite class='id'>header-value</cite>
+<dfn>header</dfn>        = <cite class='id'>header-key</cite> "<span class='str'>:</span>" <cite class='id'>header-value</cite>
 
-<dfn>header-key</dfn>    = <cite class='key'>ALPHA</cite> <span class='rep'>*</span>( <cite class='id'>ALPHANUM</cite> / "<span class='str'>-</span>" ) ( <cite class='id'>ALPHANUM</cite> )
+<dfn>header-key</dfn>    = <cite class='key'>ALPHA</cite> <span class='rep'>*</span>( <cite class='id'>ALPHANUM</cite> / "<span class='str'>-</span>" ) <cite class='id'>ALPHANUM</cite>
 
-<dfn>header-value</dfn>  = <span class='rep'>1*</span>( <cite class='id'>ALPHANUM</cite> / "<span class='str'>/</span>" / "<span class='str'>-</span>" / "<span class='str'>&lt;</span>" / "<span class='str'>&gt;</span>" / "<span class='str'>=</span>"
-                / "<span class='str'>+</span>" / "<span class='str'>_</span>" / "<span class='str'>;</span>" / "<span class='str'>!</span>" / "<span class='str'>~</span>" / "<span class='str'>*</span>" / "<span class='str'>.</span>" )
-
-<dfn>resource-id</dfn>   = <cite class='id'>user-name</cite> "<span class='str'>@</span>" <cite class='id'>domain</cite> [ <cite class='id'>path</cite> ]
-
-<dfn>user-name</dfn>     = <cite class='key'>ALPHA</cite> <span class='rep'>*</span>( <cite class='id'>ALPHANUM</cite> / "<span class='str'>_</span>" / "<span class='str'>-</span>" / "<span class='str'>+</span>" / "<span class='str'>.</span>" )
-                ( <cite class='id'>ALPHANUM</cite> )
-
-<dfn>domain</dfn>        = <cite class='id'>domain-part</cite> <span class='rep'>*</span>( "<span class='str'>.</span>" <cite class='id'>domain-part</cite> ) [ "<span class='str'>.</span>" ]
-
-<dfn>domain-part</dfn>   = <cite class='id'>ALPHANUM</cite> / ( <cite class='id'>ALPHANUM</cite> <span class='rep'>*</span>( <cite class='id'>ALPHANUM</cite> / "<span class='str'>-</span>" / "<span class='str'>_</span>" )
-                  <cite class='id'>ALPHANUM</cite> )
-
-<dfn>path</dfn>          = "<span class='str'>/</span>" / <span class='rep'>1*</span>( "<span class='str'>/</span>" <cite class='id'>path-part</cite> )
-
-<dfn>path-part</dfn>     = <span class='rep'>1*</span>( <cite class='id'>ALPHANUM</cite> / "<span class='str'>\</span>" / "<span class='str'>.</span>" / "<span class='str'>+</span>" / "<span class='str'>*</span>" / "<span class='str'>-</span>" / "<span class='str'>_</span>"
-                / "<span class='str'>;</span>" / "<span class='str'>:</span>" / "<span class='str'>!</span>" / "<span class='str'>~</span>" / "<span class='str'>=</span>" / "<span class='str'>&lt;</span>" / "<span class='str'>&gt;</span>" )
+<dfn>header-value</dfn>  = <span class='rep'>1*</span><cite class='key'>VCHAR</cite>
 
 <dfn>ALPHANUM</dfn>      = <cite class='key'>ALPHA</cite> / <cite class='key'>DIGIT</cite>
+
+<dfn>body</dfn>          = <span class='rep'>*</span><cite class='key'>OCTET</cite>
 </pre></div>
 <p>
 </p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;4&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
+<p>The definitions might be relaxed in the future.
+      
+</p>
 <a name="bindings-ws-serialization"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.1.3"></a><h3>6.1.3.&nbsp;
 Serialization</h3>
 
 <p>Messages are serialized into a blob of bytes and sent inside a single WebSocket message.
-      Most of the message is text in UTF-8 encoding, only the body is either a valid JSON object, UTF-8 encoded, or raw bytes.
+      Most of the message is text and MUST be UTF-8 encoded, only the body is either a valid JSON object, UTF-8 encoded, or raw bytes.
       The second case occurs when an attachment is up- or downloaded.
       The beginning and end, e.g. the length of a message must be determined from lenght of the WebSocket message.
       
@@ -1346,6 +1332,9 @@ HTTPS binding</h3>
     A server SHOULD NOT allow HTTP based requests other then for testing and debugging purposes.
     
 </p>
+<p>This binding is not finalized and SHOULD NOT be implemented except for the further development of this binding.
+    
+</p>
 <a name="bingings-http-mapping"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.2.1"></a><h3>6.2.1.&nbsp;
@@ -1363,7 +1352,7 @@ Mapping</h3>
 <a name="rfc.section.6.2.2"></a><h3>6.2.2.&nbsp;
 Session management</h3>
 
-<p>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a BIND request.
+<p>To support authenticated requests, a FOSP server that supports the HTTP binding MUST return a cookie in a success response to a AUTH request.
       With this cookie, the client MUST be able to make authenticated requests.
       
 </p>
