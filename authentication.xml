@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<section anchor="authentication" title="Authentication">
+<section anchor="authentication-registration" title="Authentication and Registration">
   <t>Currently, authentication is done, using a SASL mechanism.
   Which mechanisms are supported can be discovered using the INFO request.
   The PLAIN authentication mechanism SHOULD be supported by any implementation.
@@ -45,6 +45,22 @@
     </t>
     <t>Once the authentication was completed successfully, all further requests are processed in the name of the authenticated user.
     A second authentication SHOULD not be attempted on the same connection/session and a server MAY reject all further AUTH requests.
+    </t>
+  </section>
+  <section anchor="auth-server" title="Server to server">
+    <t>When a server opens a connection to another server, the authentication can be done using DNS.
+    The connecting server must provide a domain name it wants to be authenticated for.
+    The accepting server then does the server discovery process described in&nbps;<xref target="discovery-dns" />&nbsp; and compares the resolved IP address to the address of the connecting server.
+    If the IP addresses match, the authentication is successful.
+    </t>
+    <t>This section might be refined in the future and additional methods of server to server authentication might be added.
+    </t>
+  </section>
+  <section anchor="registrations" title="Registration">
+    <t>The registration of a new user account is no longer part of the FOSP protocol.
+    In general, out-of-band registration is prefered.
+    It can either be done by the user via a web formular or the accounts can be provisioned, for example in a coporate network from a directory server.
+    In the future, a possibility of creating and account via an CREATE request might be specified.
     </t>
   </section>
 </section>

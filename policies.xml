@@ -70,25 +70,7 @@
     As a server might forward requests on behalf of a user, the remote server must also be able to verify that the server is authorized to forward requests for the user.
     Therefore, servers must also authenticate each other.
     </t>
-    <section anchor="pol-auth-user" title="Users">
-      <t>When a client connects to a server it can use the BIND request to authenticate itself.
-      The most basic way to do this is just to provide a username and a password, which SHOULD be supported by any server.
-      In the future, additional authenticaten methods will be added.
-      </t>
-    </section>
-    <section anchor="pol-auth-server" title="Servers">
-      <t>When a server opens a connection to another server, the authentication can be done using DNS.
-      The connectiong server must provide a domain name it wants to be authenticated for.
-      The accepting server then does the server discovery process described in&nbps;<xref target="discovery-dns" />&nbsp; and compares the resolved IP address to the address of the connecting server.
-      If the IP addresses match, the authentication is successfull.
-      </t>
-    </section>
-  </section>
-  <section anchor="pol-registrations" title="Registration">
-    <t>The registration of a new user account is no longer part of the FOSP protocol.
-    In general, out-of-band registration is prefered.
-    It can either be done by the user via a web formular or the accounts can be provisioned, for example in a coporate network from a directory server.
-    In the future, a possibility of creating and account via an CREATE request might be specified.
+    <t>The authentication methods are described in <xref target="authentication-registration" />.
     </t>
   </section>
   <section anchor="pol-msg-forwarding" title="Message forwarding">

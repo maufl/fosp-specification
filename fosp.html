@@ -274,12 +274,16 @@ HTTPS binding<br />
 Mapping<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bindings-http-session-management">6.2.2.</a>&nbsp;
 Session management<br />
-<a href="#authentication">7.</a>&nbsp;
-Authentication<br />
+<a href="#authentication-registration">7.</a>&nbsp;
+Authentication and Registration<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#auth-anonymous">7.1.</a>&nbsp;
 Anonymous<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#auth-sasl">7.2.</a>&nbsp;
 SASL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#auth-server">7.3.</a>&nbsp;
+Server to server<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#registrations">7.4.</a>&nbsp;
+Registration<br />
 <a href="#policies">8.</a>&nbsp;
 Policies<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#access-control">8.1.</a>&nbsp;
@@ -292,13 +296,7 @@ Subscriptions<br />
 Attachments<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth">8.5.</a>&nbsp;
 Authentication<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-user">8.5.1.</a>&nbsp;
-Users<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-auth-server">8.5.2.</a>&nbsp;
-Servers<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-registrations">8.6.</a>&nbsp;
-Registration<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forwarding">8.7.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#pol-msg-forwarding">8.6.</a>&nbsp;
 Message forwarding<br />
 <a href="#discovery">9.</a>&nbsp;
 Discovery<br />
@@ -892,7 +890,7 @@ Auth</h3>
 
 <p>The AUTH request is used to authenticate the client.
       The authentication uses the SASL framework.
-      How SASL messages are transported is defined in <a class='info' href='#authentication'>Section&nbsp;7<span> (</span><span class='info'>Authentication</span><span>)</span></a>.
+      How SASL messages are transported is defined in <a class='info' href='#auth-sasl'>Section&nbsp;7.2<span> (</span><span class='info'>SASL</span><span>)</span></a>.
       Multiple requests might be needed to successfully authenticate, depending on the mechanism.
       
 </p>
@@ -1355,10 +1353,10 @@ Session management</h3>
       With this cookie, the client MUST be able to make authenticated requests.
       
 </p>
-<a name="authentication"></a><br /><hr />
+<a name="authentication-registration"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7"></a><h3>7.&nbsp;
-Authentication</h3>
+Authentication and Registration</h3>
 
 <p>Currently, authentication is done, using a SASL mechanism.
   Which mechanisms are supported can be discovered using the INFO request.
@@ -1421,6 +1419,31 @@ SASL</h3>
 </p>
 <p>Once the authentication was completed successfully, all further requests are processed in the name of the authenticated user.
     A second authentication SHOULD not be attempted on the same connection/session and a server MAY reject all further AUTH requests.
+    
+</p>
+<a name="auth-server"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.3"></a><h3>7.3.&nbsp;
+Server to server</h3>
+
+<p>When a server opens a connection to another server, the authentication can be done using DNS.
+    The connecting server must provide a domain name it wants to be authenticated for.
+    The accepting server then does the server discovery process described in&nbps;<a class='info' href='#discovery-dns'>Section&nbsp;9.1<span> (</span><span class='info'>DNS</span><span>)</span></a>&nbsp; and compares the resolved IP address to the address of the connecting server.
+    If the IP addresses match, the authentication is successful.
+    
+</p>
+<p>This section might be refined in the future and additional methods of server to server authentication might be added.
+    
+</p>
+<a name="registrations"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.4"></a><h3>7.4.&nbsp;
+Registration</h3>
+
+<p>The registration of a new user account is no longer part of the FOSP protocol.
+    In general, out-of-band registration is prefered.
+    It can either be done by the user via a web formular or the accounts can be provisioned, for example in a coporate network from a directory server.
+    In the future, a possibility of creating and account via an CREATE request might be specified.
     
 </p>
 <a name="policies"></a><br /><hr />
@@ -1541,41 +1564,12 @@ Authentication</h3>
     Therefore, servers must also authenticate each other.
     
 </p>
-<a name="pol-auth-user"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8.5.1"></a><h3>8.5.1.&nbsp;
-Users</h3>
-
-<p>When a client connects to a server it can use the BIND request to authenticate itself.
-      The most basic way to do this is just to provide a username and a password, which SHOULD be supported by any server.
-      In the future, additional authenticaten methods will be added.
-      
-</p>
-<a name="pol-auth-server"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8.5.2"></a><h3>8.5.2.&nbsp;
-Servers</h3>
-
-<p>When a server opens a connection to another server, the authentication can be done using DNS.
-      The connectiong server must provide a domain name it wants to be authenticated for.
-      The accepting server then does the server discovery process described in&nbps;<a class='info' href='#discovery-dns'>Section&nbsp;9.1<span> (</span><span class='info'>DNS</span><span>)</span></a>&nbsp; and compares the resolved IP address to the address of the connecting server.
-      If the IP addresses match, the authentication is successfull.
-      
-</p>
-<a name="pol-registrations"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8.6"></a><h3>8.6.&nbsp;
-Registration</h3>
-
-<p>The registration of a new user account is no longer part of the FOSP protocol.
-    In general, out-of-band registration is prefered.
-    It can either be done by the user via a web formular or the accounts can be provisioned, for example in a coporate network from a directory server.
-    In the future, a possibility of creating and account via an CREATE request might be specified.
+<p>The authentication methods are described in <a class='info' href='#authentication-registration'>Section&nbsp;7<span> (</span><span class='info'>Authentication and Registration</span><span>)</span></a>.
     
 </p>
 <a name="pol-msg-forwarding"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8.7"></a><h3>8.7.&nbsp;
+<a name="rfc.section.8.6"></a><h3>8.6.&nbsp;
 Message forwarding</h3>
 
 <p>In general, a server should accept forwarded messages from another server.

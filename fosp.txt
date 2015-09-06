@@ -116,24 +116,24 @@ Internet-Draft                    FOSP                        March 2015
      6.2.  HTTPS binding  . . . . . . . . . . . . . . . . . . . . . . 24
        6.2.1.  Mapping  . . . . . . . . . . . . . . . . . . . . . . . 24
        6.2.2.  Session management . . . . . . . . . . . . . . . . . . 24
-   7.  Authentication . . . . . . . . . . . . . . . . . . . . . . . . 25
+   7.  Authentication and Registration  . . . . . . . . . . . . . . . 25
      7.1.  Anonymous  . . . . . . . . . . . . . . . . . . . . . . . . 25
      7.2.  SASL . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+     7.3.  Server to server . . . . . . . . . . . . . . . . . . . . . 26
+     7.4.  Registration . . . . . . . . . . . . . . . . . . . . . . . 26
    8.  Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . 27
      8.1.  Access control . . . . . . . . . . . . . . . . . . . . . . 27
      8.2.  Groups . . . . . . . . . . . . . . . . . . . . . . . . . . 28
      8.3.  Subscriptions  . . . . . . . . . . . . . . . . . . . . . . 28
      8.4.  Attachments  . . . . . . . . . . . . . . . . . . . . . . . 29
      8.5.  Authentication . . . . . . . . . . . . . . . . . . . . . . 29
-       8.5.1.  Users  . . . . . . . . . . . . . . . . . . . . . . . . 29
-       8.5.2.  Servers  . . . . . . . . . . . . . . . . . . . . . . . 29
-     8.6.  Registration . . . . . . . . . . . . . . . . . . . . . . . 29
-     8.7.  Message forwarding . . . . . . . . . . . . . . . . . . . . 30
-   9.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 31
-     9.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
-     9.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 31
-   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 32
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 33
+     8.6.  Message forwarding . . . . . . . . . . . . . . . . . . . . 29
+   9.  Discovery  . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+     9.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+     9.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 30
+   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 32
+
 
 
 
@@ -853,7 +853,7 @@ Internet-Draft                    FOSP                        March 2015
 
    The AUTH request is used to authenticate the client.  The
    authentication uses the SASL framework.  How SASL messages are
-   transported is defined in Section 7.  Multiple requests might be
+   transported is defined in Section 7.2.  Multiple requests might be
    needed to successfully authenticate, depending on the mechanism.
 
    The server verifies that the authentication is successfull and sents
@@ -1345,7 +1345,7 @@ Maurer                  Expires September 2, 2015              [Page 24]
 Internet-Draft                    FOSP                        March 2015
 
 
-7.  Authentication
+7.  Authentication and Registration
 
    Currently, authentication is done, using a SASL mechanism.  Which
    mechanisms are supported can be discovered using the INFO request.
@@ -1422,27 +1422,27 @@ Internet-Draft                    FOSP                        March 2015
    second authentication SHOULD not be attempted on the same connection/
    session and a server MAY reject all further AUTH requests.
 
+7.3.  Server to server
 
+   When a server opens a connection to another server, the
+   authentication can be done using DNS.  The connecting server must
+   provide a domain name it wants to be authenticated for.  The
+   accepting server then does the server discovery process described in&
+   nbps;Section 9.1  and compares the resolved IP address to the address
+   of the connecting server.  If the IP addresses match, the
+   authentication is successful.
 
+   This section might be refined in the future and additional methods of
+   server to server authentication might be added.
 
+7.4.  Registration
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   The registration of a new user account is no longer part of the FOSP
+   protocol.  In general, out-of-band registration is prefered.  It can
+   either be done by the user via a web formular or the accounts can be
+   provisioned, for example in a coporate network from a directory
+   server.  In the future, a possibility of creating and account via an
+   CREATE request might be specified.
 
 
 
@@ -1592,42 +1592,9 @@ Internet-Draft                    FOSP                        March 2015
    forward requests for the user.  Therefore, servers must also
    authenticate each other.
 
-8.5.1.  Users
+   The authentication methods are described in Section 7.
 
-   When a client connects to a server it can use the BIND request to
-   authenticate itself.  The most basic way to do this is just to
-   provide a username and a password, which SHOULD be supported by any
-   server.  In the future, additional authenticaten methods will be
-   added.
-
-8.5.2.  Servers
-
-   When a server opens a connection to another server, the
-   authentication can be done using DNS.  The connectiong server must
-   provide a domain name it wants to be authenticated for.  The
-   accepting server then does the server discovery process described in&
-   nbps;Section 9.1  and compares the resolved IP address to the address
-   of the connecting server.  If the IP addresses match, the
-   authentication is successfull.
-
-8.6.  Registration
-
-   The registration of a new user account is no longer part of the FOSP
-   protocol.  In general, out-of-band registration is prefered.  It can
-   either be done by the user via a web formular or the accounts can be
-   provisioned, for example in a coporate network from a directory
-   server.  In the future, a possibility of creating and account via an
-
-
-
-Maurer                  Expires September 2, 2015              [Page 29]
-
-Internet-Draft                    FOSP                        March 2015
-
-
-   CREATE request might be specified.
-
-8.7.  Message forwarding
+8.6.  Message forwarding
 
    In general, a server should accept forwarded messages from another
    server.  However it MUST authenticate the remote server first, before
@@ -1653,30 +1620,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Maurer                  Expires September 2, 2015              [Page 30]
+Maurer                  Expires September 2, 2015              [Page 29]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1732,7 +1676,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 31]
+Maurer                  Expires September 2, 2015              [Page 30]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1788,7 +1732,7 @@ Internet-Draft                    FOSP                        March 2015
 
 
 
-Maurer                  Expires September 2, 2015              [Page 32]
+Maurer                  Expires September 2, 2015              [Page 31]
 
 Internet-Draft                    FOSP                        March 2015
 
@@ -1844,5 +1788,5 @@ Author's Address
 
 
 
-Maurer                  Expires September 2, 2015              [Page 33]
+Maurer                  Expires September 2, 2015              [Page 32]
 

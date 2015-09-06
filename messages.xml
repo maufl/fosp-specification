@@ -43,7 +43,7 @@
     <section anchor="msg-request-auth" title="Auth">
       <t>The AUTH request is used to authenticate the client.
       The authentication uses the SASL framework.
-      How SASL messages are transported is defined in <xref target="authentication" />.
+      How SASL messages are transported is defined in <xref target="auth-sasl" />.
       Multiple requests might be needed to successfully authenticate, depending on the mechanism.
       </t>
       <t>

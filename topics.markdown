@@ -55,8 +55,11 @@ Here we collect all topics that have to be discussed and then order them.
     * Session management
     * Format
     * Serialization
-* Authentication
+* Authentication and Registration
+  * Anonymous
   * SASL
+  * Server to server
+  * Registration
 * Policies
   * Access control
   * Groups
@@ -65,13 +68,11 @@ Here we collect all topics that have to be discussed and then order them.
   * Authentication
     * Users
     * Servers
-  * Registration
   * Message forwarding
 * Discovery
 * Security Considerations
 
 # Open questions and tasks
-* Authentication methods and registration possibilities.
 * Groups
   * How are they stored
   * How are they addressed
