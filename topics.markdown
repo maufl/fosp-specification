@@ -29,7 +29,7 @@ Here we collect all topics that have to be discussed and then order them.
   * Types
   * Requests
     * Info ??
-    * Bind
+    * Auth
     * Get
     * List
     * Create

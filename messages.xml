@@ -40,8 +40,8 @@
       <t>There will likely be a request called INFO or OPTIONS to discover the capabilities of the server.
       However, as of now, it is not yet clear what is needed and therefore the definition is postponed.</t>
     </section>
-    <section anchor="msg-request-bind" title="Bind">
-      <t>The BIND request is used to authenticate the client.
+    <section anchor="msg-request-auth" title="Auth">
+      <t>The AUTH request is used to authenticate the client.
       The body MUST contain an object with the "method" attribute that specifies the used authentication method.
       The possible methods of authentication are not final yet, however every server SHOULD support a simple authentication by name and password.
       In this case the object also contains a "user" and "password" attribute containing the full user name and the password.
