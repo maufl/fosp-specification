@@ -354,16 +354,19 @@ Conventions</h3>
     document are to be interpreted as described in <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>.
     
 </p>
+<p>This document also makes use of the augmented Backus-Naur Form (<a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D., Ed. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>) to formally describe the syntax of messages.
+    
+</p>
 <a name="requirements"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.1.3"></a><h3>1.3.&nbsp;
 Requirements</h3>
 
 <p>FOSP builds on existing protocols and data formats.
-    The transport protocol for FOSP messages currently is the WebSocket protocol and a HTTP binding is in the works.
+    The transport protocol for FOSP messages currently is the WebSocket protocol as defined in <a class='info' href='#RFC6455'>[RFC6455]<span> (</span><span class='info'>Fette, I. and A. Melnikov, &ldquo;The WebSocket Protocol,&rdquo; December&nbsp;2011.</span><span>)</span></a> and a HTTP (<a class='info' href='#RFC7230'>[RFC7230]<span> (</span><span class='info'>Fielding, R., Ed. and J. Reschke, Ed., &ldquo;Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing,&rdquo; June&nbsp;2014.</span><span>)</span></a>) binding is in the works.
     Other options may be added in the future.
-    Objects are serialized into the JavaScript Object Notation (JSON).
-    Besides these technical dependencies, FOSP is inspired by WebDAV and XMPP and has similarities to LDAP.
+    Objects are serialized into the JavaScript Object Notation (JSON) according to <a class='info' href='#RFC7159'>[RFC7159]<span> (</span><span class='info'>Bray, T., Ed., &ldquo;The JavaScript Object Notation (JSON) Data Interchange Format,&rdquo; March&nbsp;2014.</span><span>)</span></a>.
+    Besides these technical dependencies, FOSP is inspired by WebDAV (<a class='info' href='#RFC4918'>[RFC4918]<span> (</span><span class='info'>Dusseault, L., Ed., &ldquo;HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV),&rdquo; June&nbsp;2007.</span><span>)</span></a>) and XMPP (<a class='info' href='#RFC6120'>[RFC6120]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Core,&rdquo; March&nbsp;2011.</span><span>)</span></a>) and has similarities to LDAP (<a class='info' href='#RFC4370'>[RFC4370]<span> (</span><span class='info'>Weltman, R., &ldquo;Lightweight Directory Access Protocol (LDAP) Proxied Authorization Control,&rdquo; February&nbsp;2006.</span><span>)</span></a>).
     
 </p>
 <a name="terminology"></a><br /><hr />
@@ -591,8 +594,8 @@ Objects</h3>
 </p><table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Figure&nbsp;1&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
 <p>Each object is part of a tree of objects that belong to a user.
-    Therefore, each object can be addressed by an internationalized resource identifier (IRI).
-    The syntax for an object is as follows.
+    Therefore, each object can be addressed by an internationalized resource identifier (IRI <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>).
+    The syntax for an object borrows from the IRI definition and is as follows.
     </p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 
@@ -970,6 +973,7 @@ Patch</h3>
 <p>The PATCH request is used to update an already existing object on the server.
       The resource identifier specifies the object that should be updated.
       The body containes an object with the differences that should be applied to the object.
+      The semantics of the patch object and the algorithm to apply it are the ones defined in <a class='info' href='#RFC7396'>[RFC7396]<span> (</span><span class='info'>Hoffman, P. and J. Snell, &ldquo;JSON Merge Patch,&rdquo; October&nbsp;2014.</span><span>)</span></a>.
       
 </p>
 <p>The differences are merged into the object as follows.
@@ -979,7 +983,7 @@ Patch</h3>
       In this case the merging is done on the attribute recursivly as it is on the whole object.
       
 </p>
-<p>On success, an empty success response is returned.
+<p>On success, the updated object is returned.
       
 </p>
 <a name="msg-request-delete"></a><br /><hr />
@@ -1373,9 +1377,9 @@ Session management</h3>
 <a name="rfc.section.7"></a><h3>7.&nbsp;
 Authentication and Registration</h3>
 
-<p>Currently, authentication is done, using a SASL mechanism.
+<p>Currently, authentication is done, using a SASL (<a class='info' href='#RFC4422'>[RFC4422]<span> (</span><span class='info'>Melnikov, A., Ed. and K. Zeilenga, Ed., &ldquo;Simple Authentication and Security Layer (SASL),&rdquo; June&nbsp;2006.</span><span>)</span></a>).
   Which mechanisms are supported can be discovered using the OPTIONS request.
-  The PLAIN authentication mechanism SHOULD be supported by any implementation.
+  The PLAIN (<a class='info' href='#RFC4616'>[RFC4616]<span> (</span><span class='info'>Zeilenga, K., Ed., &ldquo;The PLAIN Simple Authentication and Security Layer (SASL) Mechanism,&rdquo; August&nbsp;2006.</span><span>)</span></a>) authentication mechanism SHOULD be supported by any implementation.
   
 </p>
 <p>As encryption of the transport protocol is mandatory in production use of FOSP, the SASL security layer is not used.
@@ -1414,7 +1418,7 @@ SASL</h3>
     The SASL object in the body MUST contain a field called "mechanism" that specifies the SASL mechanism to be used.
     Furthermore, it MUST contain a field called "authorization-identity" that contains the fully qualified user name of the user that should be authenticated.
     Optionally, the object CAN contain a field called "initial-response", containing the initial response of the client, if the mechanism specifies one.
-    The initial response MUST be BASE64 encoded.
+    The initial response MUST be BASE64 (<a class='info' href='#RFC4648'>[RFC4648]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; October&nbsp;2006.</span><span>)</span></a>) encoded.
     An empty initial response is indicated by an empty string, while no initial response is indicated by the absence of the "initial-response" field.
     
 </p>
@@ -1456,7 +1460,7 @@ Server to server</h3>
 Registration</h3>
 
 <p>The registration of a new user account is no longer part of the FOSP protocol.
-    In general, out-of-band registration is prefered.
+    In general, out-of-band registration is preferred.
     It can either be done by the user via a web formular or the accounts can be provisioned, for example in a coporate network from a directory server.
     In the future, a possibility of creating and account via an CREATE request might be specified.
     
@@ -1639,7 +1643,7 @@ Discovery</h3>
 <a name="rfc.section.9.1"></a><h3>9.1.&nbsp;
 DNS</h3>
 
-<p>The discovery via DNS uses SRV records.
+<p>The discovery via DNS uses SRV records (<a class='info' href='#RFC2052'>[RFC2052]<span> (</span><span class='info'>Gulbrandsen, A. and P. Vixie, &ldquo;A DNS RR for specifying the location of services (DNS SRV),&rdquo; October&nbsp;1996.</span><span>)</span></a>).
     Unfortunately, the current format of SRV records is limited as it only includes one transport protocol.
     DNS based discovery is therefore OPTIONAL until we are certain that the defined record format is acceptable.
     
@@ -1670,6 +1674,32 @@ Well known</h3>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997 (<a href="http://www.rfc-editor.org/rfc/rfc2119.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2119.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2119.xml">XML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5785">[RFC5785]</a></td>
 <td class="author-text">Nottingham, M. and E. Hammer-Lahav, &ldquo;<a href="http://tools.ietf.org/html/rfc5785">Defining Well-Known Uniform Resource Identifiers (URIs)</a>,&rdquo; RFC&nbsp;5785, April&nbsp;2010 (<a href="http://www.rfc-editor.org/rfc/rfc5785.txt">TXT</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC6120">[RFC6120]</a></td>
+<td class="author-text">Saint-Andre, P., &ldquo;<a href="http://www.rfc-editor.org/info/rfc6120">Extensible Messaging and Presence Protocol (XMPP): Core</a>,&rdquo; RFC&nbsp;6120, DOI&nbsp;10.17487/RFC6120, March&nbsp;2011.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC6455">[RFC6455]</a></td>
+<td class="author-text">Fette, I. and A. Melnikov, &ldquo;<a href="http://www.rfc-editor.org/info/rfc6455">The WebSocket Protocol</a>,&rdquo; RFC&nbsp;6455, DOI&nbsp;10.17487/RFC6455, December&nbsp;2011.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC7230">[RFC7230]</a></td>
+<td class="author-text">Fielding, R., Ed. and J. Reschke, Ed., &ldquo;<a href="http://www.rfc-editor.org/info/rfc7230">Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing</a>,&rdquo; RFC&nbsp;7230, DOI&nbsp;10.17487/RFC7230, June&nbsp;2014.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC7159">[RFC7159]</a></td>
+<td class="author-text">Bray, T., Ed., &ldquo;<a href="http://www.rfc-editor.org/info/rfc7159">The JavaScript Object Notation (JSON) Data Interchange Format</a>,&rdquo; RFC&nbsp;7159, DOI&nbsp;10.17487/RFC7159, March&nbsp;2014.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4918">[RFC4918]</a></td>
+<td class="author-text">Dusseault, L., Ed., &ldquo;<a href="http://www.rfc-editor.org/info/rfc4918">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>,&rdquo; RFC&nbsp;4918, DOI&nbsp;10.17487/RFC4918, June&nbsp;2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4370">[RFC4370]</a></td>
+<td class="author-text">Weltman, R., &ldquo;<a href="http://www.rfc-editor.org/info/rfc4370">Lightweight Directory Access Protocol (LDAP) Proxied Authorization Control</a>,&rdquo; RFC&nbsp;4370, DOI&nbsp;10.17487/RFC4370, February&nbsp;2006.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
+<td class="author-text">Crocker, D., Ed. and P. Overell, &ldquo;<a href="http://www.rfc-editor.org/info/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, DOI&nbsp;10.17487/RFC5234, January&nbsp;2008.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
+<td class="author-text">Duerst, M. and M. Suignard, &ldquo;<a href="http://www.rfc-editor.org/info/rfc3987">Internationalized Resource Identifiers (IRIs)</a>,&rdquo; RFC&nbsp;3987, DOI&nbsp;10.17487/RFC3987, January&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC7396">[RFC7396]</a></td>
+<td class="author-text">Hoffman, P. and J. Snell, &ldquo;<a href="http://www.rfc-editor.org/info/rfc7396">JSON Merge Patch</a>,&rdquo; RFC&nbsp;7396, DOI&nbsp;10.17487/RFC7396, October&nbsp;2014.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4422">[RFC4422]</a></td>
+<td class="author-text">Melnikov, A., Ed. and K. Zeilenga, Ed., &ldquo;<a href="http://www.rfc-editor.org/info/rfc4422">Simple Authentication and Security Layer (SASL)</a>,&rdquo; RFC&nbsp;4422, DOI&nbsp;10.17487/RFC4422, June&nbsp;2006.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4616">[RFC4616]</a></td>
+<td class="author-text">Zeilenga, K., Ed., &ldquo;<a href="http://www.rfc-editor.org/info/rfc4616">The PLAIN Simple Authentication and Security Layer (SASL) Mechanism</a>,&rdquo; RFC&nbsp;4616, DOI&nbsp;10.17487/RFC4616, August&nbsp;2006.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4648">[RFC4648]</a></td>
+<td class="author-text">Josefsson, S., &ldquo;<a href="http://www.rfc-editor.org/info/rfc4648">The Base16, Base32, and Base64 Data Encodings</a>,&rdquo; RFC&nbsp;4648, DOI&nbsp;10.17487/RFC4648, October&nbsp;2006.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2052">[RFC2052]</a></td>
+<td class="author-text">Gulbrandsen, A. and P. Vixie, &ldquo;<a href="http://www.rfc-editor.org/info/rfc2052">A DNS RR for specifying the location of services (DNS SRV)</a>,&rdquo; RFC&nbsp;2052, DOI&nbsp;10.17487/RFC2052, October&nbsp;1996.</td></tr>
 </table>
 
 <a name="rfc.authors"></a><br /><hr />

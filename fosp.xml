@@ -33,8 +33,21 @@
   </middle>
   <back>
     <references>
-      <?rfc include="reference.RFC.2119.xml" ?>
-      <?rfc include="reference.RFC.5785.xml" ?>
+      <?rfc include="bib/reference.RFC.2119.xml" ?>
+      <?rfc include="bib/reference.RFC.5785.xml" ?>
+      <?rfc include="bib/reference.RFC.6120.xml" ?>
+      <?rfc include="bib/reference.RFC.6455.xml" ?>
+      <?rfc include="bib/reference.RFC.7230.xml" ?>
+      <?rfc include="bib/reference.RFC.7159.xml" ?>
+      <?rfc include="bib/reference.RFC.4918.xml" ?>
+      <?rfc include="bib/reference.RFC.4370.xml" ?>
+      <?rfc include="bib/reference.RFC.5234.xml" ?>
+      <?rfc include="bib/reference.RFC.3987.xml" ?>
+      <?rfc include="bib/reference.RFC.7396.xml" ?>
+      <?rfc include="bib/reference.RFC.4422.xml" ?>
+      <?rfc include="bib/reference.RFC.4616.xml" ?>
+      <?rfc include="bib/reference.RFC.4648.xml" ?>
+      <?rfc include="bib/reference.RFC.2052.xml" ?>
     </references>
   </back>
 </rfc>

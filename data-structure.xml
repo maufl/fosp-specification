@@ -13,13 +13,15 @@
     </t>
     <?rfc include="fig-object.xml"?>
     <t>Each object is part of a tree of objects that belong to a user.
-    Therefore, each object can be addressed by an internationalized resource identifier (IRI).
-    The syntax for an object is as follows.
-    <artwork type="abnf">
-      <![CDATA[
+    Therefore, each object can be addressed by an internationalized resource identifier (IRI <xref target="RFC3987" />).
+    The syntax for an object borrows from the IRI definition and is as follows.
+    <figure>
+      <artwork type="abnf">
+        <![CDATA[
 resource-id   = 1*iunreserved "@" ihost ipath-absolute
-      ]]>
-    </artwork>
+        ]]>
+      </artwork>
+    </figure>
     </t>
   </section>
   <section anchor="data-structure-fields" title="Object attributes">

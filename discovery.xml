@@ -6,7 +6,7 @@
   The second approach is added as web application clients are unable to perform DNS lookups directly.
   </t>
   <section anchor="discovery-dns" title="DNS">
-    <t>The discovery via DNS uses SRV records.
+    <t>The discovery via DNS uses SRV records (<xref target="RFC2052" />).
     Unfortunately, the current format of SRV records is limited as it only includes one transport protocol.
     DNS based discovery is therefore OPTIONAL until we are certain that the defined record format is acceptable.
     </t>

@@ -63,7 +63,7 @@ Table of Contents
      1.1.  Purpose  . . . . . . . . . . . . . . . . . . . . . . . . .  4
      1.2.  Conventions  . . . . . . . . . . . . . . . . . . . . . . .  4
      1.3.  Requirements . . . . . . . . . . . . . . . . . . . . . . .  4
-     1.4.  Terminology  . . . . . . . . . . . . . . . . . . . . . . .  4
+     1.4.  Terminology  . . . . . . . . . . . . . . . . . . . . . . .  5
    2.  Overview . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
      2.1.  Users and providers  . . . . . . . . . . . . . . . . . . .  6
      2.2.  Trees, Objects and Attachments . . . . . . . . . . . . . .  6
@@ -89,7 +89,7 @@ Table of Contents
        5.2.5.  Create . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.6.  Patch  . . . . . . . . . . . . . . . . . . . . . . . . 17
        5.2.7.  Delete . . . . . . . . . . . . . . . . . . . . . . . . 17
-       5.2.8.  Read . . . . . . . . . . . . . . . . . . . . . . . . . 17
+       5.2.8.  Read . . . . . . . . . . . . . . . . . . . . . . . . . 18
        5.2.9.  Write  . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.3.  Response . . . . . . . . . . . . . . . . . . . . . . . . . 18
      5.4.  Notification . . . . . . . . . . . . . . . . . . . . . . . 18
@@ -98,7 +98,7 @@ Table of Contents
        5.5.2.  Successful 2xx . . . . . . . . . . . . . . . . . . . . 19
        5.5.3.  Redirection 3xx  . . . . . . . . . . . . . . . . . . . 19
        5.5.4.  Client error 4xx . . . . . . . . . . . . . . . . . . . 20
-       5.5.5.  Server Error 5xx . . . . . . . . . . . . . . . . . . . 20
+       5.5.5.  Server Error 5xx . . . . . . . . . . . . . . . . . . . 21
      5.6.  Forwarding . . . . . . . . . . . . . . . . . . . . . . . . 21
    6.  Bindings . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
      6.1.  WebSocket binding  . . . . . . . . . . . . . . . . . . . . 22
@@ -132,7 +132,7 @@ Internet-Draft                    FOSP                    September 2015
      9.1.  DNS  . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
      9.2.  Well known . . . . . . . . . . . . . . . . . . . . . . . . 31
    10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 32
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 33
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 34
 
 
 
@@ -201,19 +201,19 @@ Internet-Draft                    FOSP                    September 2015
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
 
+   This document also makes use of the augmented Backus-Naur Form
+   ([RFC5234]) to formally describe the syntax of messages.
+
 1.3.  Requirements
 
    FOSP builds on existing protocols and data formats.  The transport
-   protocol for FOSP messages currently is the WebSocket protocol and a
-   HTTP binding is in the works.  Other options may be added in the
-   future.  Objects are serialized into the JavaScript Object Notation
-   (JSON).  Besides these technical dependencies, FOSP is inspired by
-   WebDAV and XMPP and has similarities to LDAP.
-
-1.4.  Terminology
-
-   This document uses a number of terminologies to refer to concepts
-   found in FOSP.
+   protocol for FOSP messages currently is the WebSocket protocol as
+   defined in [RFC6455] and a HTTP ([RFC7230]) binding is in the works.
+   Other options may be added in the future.  Objects are serialized
+   into the JavaScript Object Notation (JSON) according to [RFC7159].
+   Besides these technical dependencies, FOSP is inspired by WebDAV
+   ([RFC4918]) and XMPP ([RFC6120]) and has similarities to LDAP
+   ([RFC4370]).
 
 
 
@@ -224,6 +224,11 @@ Maurer                    Expires March 9, 2016                 [Page 4]
 
 Internet-Draft                    FOSP                    September 2015
 
+
+1.4.  Terminology
+
+   This document uses a number of terminologies to refer to concepts
+   found in FOSP.
 
    provider  An entity that provides storage space on the Internet for
       the data of users.  It is identified by a fully qualified domain
@@ -261,11 +266,6 @@ Internet-Draft                    FOSP                    September 2015
    tree  The objects of a users form a tree structure.  Each object has
       exactly one parent object, except for the root object.  There
       exists exactly one tree per user.
-
-
-
-
-
 
 
 
@@ -490,11 +490,11 @@ Internet-Draft                    FOSP                    September 2015
 
    Each object is part of a tree of objects that belong to a user.
    Therefore, each object can be addressed by an internationalized
-   resource identifier (IRI).  The syntax for an object is as follows.
+   resource identifier (IRI [RFC3987]).  The syntax for an object
+   borrows from the IRI definition and is as follows.
 
 
    resource-id   = 1*iunreserved "@" ihost ipath-absolute
-
 
 
 
@@ -914,7 +914,8 @@ Internet-Draft                    FOSP                    September 2015
    The PATCH request is used to update an already existing object on the
    server.  The resource identifier specifies the object that should be
    updated.  The body containes an object with the differences that
-   should be applied to the object.
+   should be applied to the object.  The semantics of the patch object
+   and the algorithm to apply it are the ones defined in [RFC7396].
 
    The differences are merged into the object as follows.  If the
    original object does not have an attribute the differences object
@@ -927,7 +928,7 @@ Internet-Draft                    FOSP                    September 2015
    object.  In this case the merging is done on the attribute recursivly
    as it is on the whole object.
 
-   On success, an empty success response is returned.
+   On success, the updated object is returned.
 
 5.2.7.  Delete
 
@@ -941,10 +942,9 @@ Internet-Draft                    FOSP                    September 2015
    If successfull, a succeeded message is returned and the object is
    permanently removed.
 
-5.2.8.  Read
 
-   The READ request is used to read the attachment.  The resource
-   identifier specifies the object of which the attachment should be
+
+
 
 
 
@@ -953,6 +953,10 @@ Maurer                    Expires March 9, 2016                [Page 17]
 Internet-Draft                    FOSP                    September 2015
 
 
+5.2.8.  Read
+
+   The READ request is used to read the attachment.  The resource
+   identifier specifies the object of which the attachment should be
    read.
 
    The success response body contains the raw bytes of the attachment.
@@ -997,10 +1001,6 @@ Internet-Draft                    FOSP                    September 2015
 
    The notifications are sent when a request triggers an event, for
    example CREATE triggers a CREATED event.  If the event equals DELETED
-   then the body of the notification must be empty.  Otherwise it should
-   contain the new version of the object.
-
-   When and to who notifications are sent is explained in Section 8.3.
 
 
 
@@ -1008,6 +1008,11 @@ Maurer                    Expires March 9, 2016                [Page 18]
 
 Internet-Draft                    FOSP                    September 2015
 
+
+   then the body of the notification must be empty.  Otherwise it should
+   contain the new version of the object.
+
+   When and to who notifications are sent is explained in Section 8.3.
 
 5.5.  Status codes
 
@@ -1049,11 +1054,6 @@ Internet-Draft                    FOSP                    September 2015
       the request alters the object, e.g. is a CREATE, PATCH, DELETE or
       WRITE request.
 
-   304 Not Modified  If the request did contain a condition that checks
-      for the modification date and the object did not change, the
-      server SHOULD respond with this status code.  Conditional requests
-      are not supported yet, but might be in the future.
-
 
 
 
@@ -1064,6 +1064,11 @@ Maurer                    Expires March 9, 2016                [Page 19]
 
 Internet-Draft                    FOSP                    September 2015
 
+
+   304 Not Modified  If the request did contain a condition that checks
+      for the modification date and the object did not change, the
+      server SHOULD respond with this status code.  Conditional requests
+      are not supported yet, but might be in the future.
 
    310 Additional data needed  This status code can only be returned
       while authenticating.  If the used SASL mechanism requires the
@@ -1106,11 +1111,6 @@ Internet-Draft                    FOSP                    September 2015
       tries to send a larger message, the server CAN respond with this
       status and drop the request.
 
-5.5.5.  Server Error 5xx
-
-   The 5xx status codes indicate an error in the server.
-
-
 
 
 
@@ -1120,6 +1120,10 @@ Maurer                    Expires March 9, 2016                [Page 20]
 
 Internet-Draft                    FOSP                    September 2015
 
+
+5.5.5.  Server Error 5xx
+
+   The 5xx status codes indicate an error in the server.
 
    500 Internal Server Error  The server could not process the request
       due to an internal error.
@@ -1150,10 +1154,6 @@ Internet-Draft                    FOSP                    September 2015
    request.  Similar, when a server sends a response to a forwarded
    request, an additional "To" header is added.  This also applies if a
    notification is to be sent to a user of a different provider.
-
-
-
-
 
 
 
@@ -1347,10 +1347,10 @@ Internet-Draft                    FOSP                    September 2015
 
 7.  Authentication and Registration
 
-   Currently, authentication is done, using a SASL mechanism.  Which
+   Currently, authentication is done, using a SASL ([RFC4422]).  Which
    mechanisms are supported can be discovered using the OPTIONS request.
-   The PLAIN authentication mechanism SHOULD be supported by any
-   implementation.
+   The PLAIN ([RFC4616]) authentication mechanism SHOULD be supported by
+   any implementation.
 
    As encryption of the transport protocol is mandatory in production
    use of FOSP, the SASL security layer is not used.
@@ -1385,10 +1385,10 @@ Internet-Draft                    FOSP                    September 2015
    fully qualified user name of the user that should be authenticated.
    Optionally, the object CAN contain a field called "initial-response",
    containing the initial response of the client, if the mechanism
-   specifies one.  The initial response MUST be BASE64 encoded.  An
-   empty initial response is indicated by an empty string, while no
-   initial response is indicated by the absence of the "initial-
-   response" field.
+   specifies one.  The initial response MUST be BASE64 ([RFC4648])
+   encoded.  An empty initial response is indicated by an empty string,
+   while no initial response is indicated by the absence of the
+   "initial-response" field.
 
    Depending on the mechanism and the previously exchanged messages, the
    server can either respond with a challenge or an authentication
@@ -1438,7 +1438,7 @@ Internet-Draft                    FOSP                    September 2015
 7.4.  Registration
 
    The registration of a new user account is no longer part of the FOSP
-   protocol.  In general, out-of-band registration is prefered.  It can
+   protocol.  In general, out-of-band registration is preferred.  It can
    either be done by the user via a web formular or the accounts can be
    provisioned, for example in a coporate network from a directory
    server.  In the future, a possibility of creating and account via an
@@ -1693,10 +1693,10 @@ Internet-Draft                    FOSP                    September 2015
 
 9.1.  DNS
 
-   The discovery via DNS uses SRV records.  Unfortunately, the current
-   format of SRV records is limited as it only includes one transport
-   protocol.  DNS based discovery is therefore OPTIONAL until we are
-   certain that the defined record format is acceptable.
+   The discovery via DNS uses SRV records ([RFC2052]).  Unfortunately,
+   the current format of SRV records is limited as it only includes one
+   transport protocol.  DNS based discovery is therefore OPTIONAL until
+   we are certain that the defined record format is acceptable.
 
    To discover a WebSocket based FOSP server for wonderland.lit, a DNS
    lookup for _fosp._wss._tcp.wonderland.lit with the record type SRV
@@ -1746,49 +1746,105 @@ Internet-Draft                    FOSP                    September 2015
               Uniform Resource Identifiers (URIs)", RFC 5785,
               April 2010.
 
+   [RFC6120]  Saint-Andre, P., "Extensible Messaging and Presence
+              Protocol (XMPP): Core", RFC 6120, DOI 10.17487/RFC6120,
+              March 2011, <http://www.rfc-editor.org/info/rfc6120>.
 
+   [RFC6455]  Fette, I. and A. Melnikov, "The WebSocket Protocol",
+              RFC 6455, DOI 10.17487/RFC6455, December 2011,
+              <http://www.rfc-editor.org/info/rfc6455>.
 
+   [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
+              Protocol (HTTP/1.1): Message Syntax and Routing",
+              RFC 7230, DOI 10.17487/RFC7230, June 2014,
+              <http://www.rfc-editor.org/info/rfc7230>.
 
+   [RFC7159]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", RFC 7159, DOI 10.17487/RFC7159,
+              March 2014, <http://www.rfc-editor.org/info/rfc7159>.
 
+   [RFC4918]  Dusseault, L., Ed., "HTTP Extensions for Web Distributed
+              Authoring and Versioning (WebDAV)", RFC 4918,
+              DOI 10.17487/RFC4918, June 2007,
+              <http://www.rfc-editor.org/info/rfc4918>.
 
+   [RFC4370]  Weltman, R., "Lightweight Directory Access Protocol (LDAP)
+              Proxied Authorization Control", RFC 4370, DOI 10.17487/
+              RFC4370, February 2006,
+              <http://www.rfc-editor.org/info/rfc4370>.
 
+   [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234, DOI 10.17487/
+              RFC5234, January 2008,
+              <http://www.rfc-editor.org/info/rfc5234>.
 
+   [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
+              Identifiers (IRIs)", RFC 3987, DOI 10.17487/RFC3987,
+              January 2005, <http://www.rfc-editor.org/info/rfc3987>.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   [RFC7396]  Hoffman, P. and J. Snell, "JSON Merge Patch", RFC 7396,
+              DOI 10.17487/RFC7396, October 2014,
+              <http://www.rfc-editor.org/info/rfc7396>.
 
 
 
 Maurer                    Expires March 9, 2016                [Page 32]
+
+Internet-Draft                    FOSP                    September 2015
+
+
+   [RFC4422]  Melnikov, A., Ed. and K. Zeilenga, Ed., "Simple
+              Authentication and Security Layer (SASL)", RFC 4422,
+              DOI 10.17487/RFC4422, June 2006,
+              <http://www.rfc-editor.org/info/rfc4422>.
+
+   [RFC4616]  Zeilenga, K., Ed., "The PLAIN Simple Authentication and
+              Security Layer (SASL) Mechanism", RFC 4616, DOI 10.17487/
+              RFC4616, August 2006,
+              <http://www.rfc-editor.org/info/rfc4616>.
+
+   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
+              <http://www.rfc-editor.org/info/rfc4648>.
+
+   [RFC2052]  Gulbrandsen, A. and P. Vixie, "A DNS RR for specifying the
+              location of services (DNS SRV)", RFC 2052, DOI 10.17487/
+              RFC2052, October 1996,
+              <http://www.rfc-editor.org/info/rfc2052>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Maurer                    Expires March 9, 2016                [Page 33]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1844,5 +1900,5 @@ Author's Address
 
 
 
-Maurer                    Expires March 9, 2016                [Page 33]
+Maurer                    Expires March 9, 2016                [Page 34]
 

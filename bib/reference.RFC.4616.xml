@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<reference  anchor='RFC4616' target='http://www.rfc-editor.org/info/rfc4616'>
+<front>
+<title>The PLAIN Simple Authentication and Security Layer (SASL) Mechanism</title>
+<author initials='K.' surname='Zeilenga' fullname='K. Zeilenga' role='editor'><organization /></author>
+<date year='2006' month='August' />
+<abstract><t>This document defines a simple clear-text user/password Simple Authentication and Security Layer (SASL) mechanism called the PLAIN mechanism.  The PLAIN mechanism is intended to be used, in combination with data confidentiality services provided by a lower layer, in protocols that lack a simple password authentication command.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='4616'/>
+<seriesInfo name='DOI' value='10.17487/RFC4616'/>
+</reference>

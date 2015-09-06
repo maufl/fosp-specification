@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<reference  anchor='RFC7396' target='http://www.rfc-editor.org/info/rfc7396'>
+<front>
+<title>JSON Merge Patch</title>
+<author initials='P.' surname='Hoffman' fullname='P. Hoffman'><organization /></author>
+<author initials='J.' surname='Snell' fullname='J. Snell'><organization /></author>
+<date year='2014' month='October' />
+<abstract><t>This specification defines the JSON merge patch format and processing rules.  The merge patch format is primarily intended for use with the HTTP PATCH method as a means of describing a set of modifications to a target resource's content.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='7396'/>
+<seriesInfo name='DOI' value='10.17487/RFC7396'/>
+</reference>

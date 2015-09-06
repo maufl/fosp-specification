@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<reference  anchor='RFC2052' target='http://www.rfc-editor.org/info/rfc2052'>
+<front>
+<title>A DNS RR for specifying the location of services (DNS SRV)</title>
+<author initials='A.' surname='Gulbrandsen' fullname='A. Gulbrandsen'><organization /></author>
+<author initials='P.' surname='Vixie' fullname='P. Vixie'><organization /></author>
+<date year='1996' month='October' />
+<abstract><t>This document describes a DNS RR which specifies the location of the server(s) for a specific protocol and domain (like a more general form of MX).  This memo defines an Experimental Protocol for the Internet community.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='2052'/>
+<seriesInfo name='DOI' value='10.17487/RFC2052'/>
+</reference>

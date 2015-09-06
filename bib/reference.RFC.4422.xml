@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<reference  anchor='RFC4422' target='http://www.rfc-editor.org/info/rfc4422'>
+<front>
+<title>Simple Authentication and Security Layer (SASL)</title>
+<author initials='A.' surname='Melnikov' fullname='A. Melnikov' role='editor'><organization /></author>
+<author initials='K.' surname='Zeilenga' fullname='K. Zeilenga' role='editor'><organization /></author>
+<date year='2006' month='June' />
+<abstract><t>The Simple Authentication and Security Layer (SASL) is a framework for providing authentication and data security services in connection-oriented protocols via replaceable mechanisms.  It provides a structured interface between protocols and mechanisms.  The resulting framework allows new protocols to reuse existing mechanisms and allows old protocols to make use of new mechanisms.  The framework also provides a protocol for securing subsequent protocol exchanges within a data security layer.</t><t>This document describes how a SASL mechanism is structured, describes how protocols include support for SASL, and defines the protocol for carrying a data security layer over a connection.  In addition, this document defines one SASL mechanism, the EXTERNAL mechanism.</t><t>This document obsoletes RFC 2222.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='4422'/>
+<seriesInfo name='DOI' value='10.17487/RFC4422'/>
+</reference>

@@ -72,7 +72,6 @@ Here we collect all topics that have to be discussed and then order them.
 
 #Open questions and tasks
 * Security considerations
-* Properly define user names
 * Add examples
 * JSON schemas
 * Add references

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section anchor="authentication-registration" title="Authentication and Registration">
-  <t>Currently, authentication is done, using a SASL mechanism.
+  <t>Currently, authentication is done, using a SASL (<xref target="RFC4422" />).
   Which mechanisms are supported can be discovered using the OPTIONS request.
-  The PLAIN authentication mechanism SHOULD be supported by any implementation.
+  The PLAIN (<xref target="RFC4616" />) authentication mechanism SHOULD be supported by any implementation.
   </t>
   <t>As encryption of the transport protocol is mandatory in production use of FOSP, the SASL security layer is not used.
   </t>
@@ -28,7 +28,7 @@
     The SASL object in the body MUST contain a field called "mechanism" that specifies the SASL mechanism to be used.
     Furthermore, it MUST contain a field called "authorization-identity" that contains the fully qualified user name of the user that should be authenticated.
     Optionally, the object CAN contain a field called "initial-response", containing the initial response of the client, if the mechanism specifies one.
-    The initial response MUST be BASE64 encoded.
+    The initial response MUST be BASE64 (<xref target="RFC4648" />) encoded.
     An empty initial response is indicated by an empty string, while no initial response is indicated by the absence of the "initial-response" field.
     </t>
     <t>Depending on the mechanism and the previously exchanged messages, the server can either respond with a challenge or an authentication outcome.
@@ -58,7 +58,7 @@
   </section>
   <section anchor="registrations" title="Registration">
     <t>The registration of a new user account is no longer part of the FOSP protocol.
-    In general, out-of-band registration is prefered.
+    In general, out-of-band registration is preferred.
     It can either be done by the user via a web formular or the accounts can be provisioned, for example in a coporate network from a directory server.
     In the future, a possibility of creating and account via an CREATE request might be specified.
     </t>
