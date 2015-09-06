@@ -2,9 +2,9 @@
 <section anchor="overview" title="Overview">
   <t>This section provides a short overview.
   It is intended to familiarize with the concepts of FOSP.
-  It does not contain information that is not covered in the rest of the document and can be skipped.
+  It does not contain information that is not covered in the rest of the document except for the information about users and providers and can be skipped.
   </t>
-  <section anchor="overview-user-and-provider" title="User and providers">
+  <section anchor="overview-user-and-provider" title="Users and providers">
     <t>FOSP concerns itself with data created by users.
     Users store their content on the servers of providers and can share it by setting the appropriate access rights for other users.
     Each user is registered with one provider.

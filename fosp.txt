@@ -65,7 +65,7 @@ Table of Contents
      1.3.  Requirements . . . . . . . . . . . . . . . . . . . . . . .  4
      1.4.  Terminology  . . . . . . . . . . . . . . . . . . . . . . .  4
    2.  Overview . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
-     2.1.  User and providers . . . . . . . . . . . . . . . . . . . .  6
+     2.1.  Users and providers  . . . . . . . . . . . . . . . . . . .  6
      2.2.  Trees, Objects and Attachments . . . . . . . . . . . . . .  6
      2.3.  Network topology . . . . . . . . . . . . . . . . . . . . .  6
      2.4.  Messages . . . . . . . . . . . . . . . . . . . . . . . . .  7
@@ -285,10 +285,10 @@ Internet-Draft                    FOSP                    September 2015
 
    This section provides a short overview.  It is intended to
    familiarize with the concepts of FOSP.  It does not contain
-   information that is not covered in the rest of the document and can
-   be skipped.
+   information that is not covered in the rest of the document except
+   for the information about users and providers and can be skipped.
 
-2.1.  User and providers
+2.1.  Users and providers
 
    FOSP concerns itself with data created by users.  Users store their
    content on the servers of providers and can share it by setting the
