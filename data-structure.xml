@@ -34,12 +34,12 @@ resource-id   = 1*iunreserved "@" ihost ipath-absolute
       It determines the ownership of this object and is used when enforcing access rights.
       The user MUST NOT be able to set the field to a different value.
       </t>
-      <t>The “btime” (birth time) field is set by the server to the date of creation of the object.
+      <t>The “created” field is set by the server to the date of creation of the object.
       It is stored as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
       The user MUST NOT be able to set the field to a different value.
       </t>
-      <t>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
-      It is stored just like “btime”.
+      <t>Similar the “updated” field is set to the current date each time the object is altered and is not to be set by the users directly.
+      It is stored just like “created”.
       In the future it might be used to allow client side caching similar to ETags in HTTP.
       The user MUST NOT be able to set the field to a different value.
       </t>

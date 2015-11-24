@@ -2,8 +2,8 @@
 
 
 Network Working Group                                          F. Maurer
-Internet-Draft                                         September 7, 2015
-Expires: March 10, 2016
+Internet-Draft                                            September 2015
+Expires: March 4, 2016
 
 
                  The Federated Object Sharing Protocol
@@ -34,7 +34,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 10, 2016.
+   This Internet-Draft will expire on March 4, 2016.
 
 
 
@@ -52,7 +52,7 @@ Status of this Memo
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 1]
+Maurer                    Expires March 4, 2016                 [Page 1]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 2]
+Maurer                    Expires March 4, 2016                 [Page 2]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -164,7 +164,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 3]
+Maurer                    Expires March 4, 2016                 [Page 3]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -220,7 +220,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 4]
+Maurer                    Expires March 4, 2016                 [Page 4]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -276,7 +276,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 5]
+Maurer                    Expires March 4, 2016                 [Page 5]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -332,7 +332,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 6]
+Maurer                    Expires March 4, 2016                 [Page 6]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -388,7 +388,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 7]
+Maurer                    Expires March 4, 2016                 [Page 7]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -444,14 +444,14 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 8]
+Maurer                    Expires March 4, 2016                 [Page 8]
 
 Internet-Draft                    FOSP                    September 2015
 
 
    {
-     "btime": "2007-03-01T13:00:00Z",
-     "mtime": "2008-05-11T15:30:00Z",
+     "created": "2007-03-01T13:00:00Z",
+     "updated": "2008-05-11T15:30:00Z",
      "owner": "alice@wonderland.lit",
      "acl": {
        "owner": {
@@ -500,7 +500,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                 [Page 9]
+Maurer                    Expires March 4, 2016                 [Page 9]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -520,17 +520,18 @@ Internet-Draft                    FOSP                    September 2015
       when enforcing access rights.  The user MUST NOT be able to set
       the field to a different value.
 
-      The "btime" (birth time) field is set by the server to the date of
-      creation of the object.  It is stored as a string, formatted
+      The "created" (birth time) field is set by the server to the date
+      of creation of the object.  It is stored as a string, formatted
       according to the ISO 8601 standard and must always be in the UTC
       time zone.  The user MUST NOT be able to set the field to a
       different value.
 
-      Similar the "mtime" (modify time) is set to the current date each
-      time the object is altered and is not to be set by the users
-      directly.  It is stored just like "btime".  In the future it might
-      be used to allow client side caching similar to ETags in HTTP.
-      The user MUST NOT be able to set the field to a different value.
+      Similar the "updated" (modify time) is set to the current date
+      each time the object is altered and is not to be set by the users
+      directly.  It is stored just like "created".  In the future it
+      might be used to allow client side caching similar to ETags in
+      HTTP.  The user MUST NOT be able to set the field to a different
+      value.
 
       The "data" field is where the user should store the payload and
       may contain any valid value.  The "type" field should contain a
@@ -552,15 +553,15 @@ Internet-Draft                    FOSP                    September 2015
 
       A set of rights is an object where each key identifies a certain
       scope the right applies to, and the value is a string array of
-      permissions.  For example, the key "acl" means that the
 
 
 
-Maurer                   Expires March 10, 2016                [Page 10]
+Maurer                    Expires March 4, 2016                [Page 10]
 
 Internet-Draft                    FOSP                    September 2015
 
 
+      permissions.  For example, the key "acl" means that the
       permissions apply to the acl field of the object.  Currently
       allowed values for the key are "acl", "data", "subscriptions",
       "children".  The permissions can be "read", "write" and "delete".
@@ -611,8 +612,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-
-Maurer                   Expires March 10, 2016                [Page 11]
+Maurer                    Expires March 4, 2016                [Page 11]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -668,7 +668,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 12]
+Maurer                    Expires March 4, 2016                [Page 12]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -724,7 +724,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 13]
+Maurer                    Expires March 4, 2016                [Page 13]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -780,7 +780,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 14]
+Maurer                    Expires March 4, 2016                [Page 14]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -836,7 +836,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 15]
+Maurer                    Expires March 4, 2016                [Page 15]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -892,7 +892,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 16]
+Maurer                    Expires March 4, 2016                [Page 16]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -948,7 +948,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 17]
+Maurer                    Expires March 4, 2016                [Page 17]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1004,7 +1004,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 18]
+Maurer                    Expires March 4, 2016                [Page 18]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1060,7 +1060,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 19]
+Maurer                    Expires March 4, 2016                [Page 19]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1116,7 +1116,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 20]
+Maurer                    Expires March 4, 2016                [Page 20]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1172,7 +1172,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 21]
+Maurer                    Expires March 4, 2016                [Page 21]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1228,7 +1228,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 22]
+Maurer                    Expires March 4, 2016                [Page 22]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1284,7 +1284,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 23]
+Maurer                    Expires March 4, 2016                [Page 23]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1340,7 +1340,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 24]
+Maurer                    Expires March 4, 2016                [Page 24]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1396,7 +1396,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 25]
+Maurer                    Expires March 4, 2016                [Page 25]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1452,7 +1452,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 26]
+Maurer                    Expires March 4, 2016                [Page 26]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1508,7 +1508,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 27]
+Maurer                    Expires March 4, 2016                [Page 27]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1520,9 +1520,9 @@ Internet-Draft                    FOSP                    September 2015
 
    The following keys are supported:
 
-   data  determines whether a user can read the "data", "type", "btime",
-      "mtime" and "owner" fields and whether he or she can write the
-      "data" and "type" fields.
+   data  determines whether a user can read the "data", "type",
+      "created", "updated" and "owner" fields and whether he or she can
+      write the "data" and "type" fields.
 
    acl  determines whether a user can read and write the "acl" field.
 
@@ -1564,7 +1564,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 28]
+Maurer                    Expires March 4, 2016                [Page 28]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1620,7 +1620,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 29]
+Maurer                    Expires March 4, 2016                [Page 29]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1676,7 +1676,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 30]
+Maurer                    Expires March 4, 2016                [Page 30]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1732,7 +1732,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 31]
+Maurer                    Expires March 4, 2016                [Page 31]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1788,7 +1788,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 32]
+Maurer                    Expires March 4, 2016                [Page 32]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1844,7 +1844,7 @@ Internet-Draft                    FOSP                    September 2015
 
 
 
-Maurer                   Expires March 10, 2016                [Page 33]
+Maurer                    Expires March 4, 2016                [Page 33]
 
 Internet-Draft                    FOSP                    September 2015
 
@@ -1900,5 +1900,5 @@ Author's Address
 
 
 
-Maurer                   Expires March 10, 2016                [Page 34]
+Maurer                    Expires March 4, 2016                [Page 34]
 

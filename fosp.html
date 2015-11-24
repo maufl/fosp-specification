@@ -143,8 +143,8 @@
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">F. Maurer</td></tr>
-<tr><td class="header">Internet-Draft</td><td class="header">September 7, 2015</td></tr>
-<tr><td class="header">Expires: March 10, 2016</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">September 2015</td></tr>
+<tr><td class="header">Expires: March 4, 2016</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />The Federated Object Sharing Protocol<br />fosp-00</h1>
 
@@ -172,7 +172,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on March 10, 2016.</p>
+This Internet-Draft will expire on March 4, 2016.</p>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -554,8 +554,8 @@ Objects</h3>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 
 {
-  "btime": "2007-03-01T13:00:00Z",
-  "mtime": "2008-05-11T15:30:00Z",
+  "created": "2007-03-01T13:00:00Z",
+  "updated": "2008-05-11T15:30:00Z",
   "owner": "alice@wonderland.lit",
   "acl": {
     "owner": {
@@ -621,13 +621,13 @@ Object attributes</h3>
       The user MUST NOT be able to set the field to a different value.
       
 </p>
-<p>The “btime” (birth time) field is set by the server to the date of creation of the object.
+<p>The “created” (birth time) field is set by the server to the date of creation of the object.
       It is stored as a string, formatted according to the ISO 8601 standard and must always be in the UTC time zone.
       The user MUST NOT be able to set the field to a different value.
       
 </p>
-<p>Similar the “mtime” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
-      It is stored just like “btime”.
+<p>Similar the “updated” (modify time) is set to the current date each time the object is altered and is not to be set by the users directly.
+      It is stored just like “created”.
       In the future it might be used to allow client side caching similar to ETags in HTTP.
       The user MUST NOT be able to set the field to a different value.
       
@@ -1518,7 +1518,7 @@ Access control</h3>
     </p>
 <blockquote class="text"><dl>
 <dt>data</dt>
-<dd>determines whether a user can read the "data", "type", "btime", "mtime" and "owner" fields and whether he or she can write the "data" and "type" fields.
+<dd>determines whether a user can read the "data", "type", "created", "updated" and "owner" fields and whether he or she can write the "data" and "type" fields.
 </dd>
 <dt>acl</dt>
 <dd>determines whether a user can read and write the "acl" field.

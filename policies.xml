@@ -33,7 +33,7 @@
     <t>
     The following keys are supported:
     <list style="hanging">
-      <t hangText="data">determines whether a user can read the "data", "type", "btime", "mtime" and "owner" fields and whether he or she can write the "data" and "type" fields.</t>
+      <t hangText="data">determines whether a user can read the "data", "type", "created", "updated" and "owner" fields and whether he or she can write the "data" and "type" fields.</t>
       <t hangText="acl">determines whether a user can read and write the "acl" field.</t>
       <t hangText="subscriptions">determines whether a user can read the subscriptions field and whether he or she can add an entry with his or her username.</t>
       <t hangText="attachment">determines whether a user can read or write the attachment and the "attachment" field.</t>
